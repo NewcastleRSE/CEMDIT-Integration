@@ -1,0 +1,34 @@
+graph {
+	fill-color: white;
+}
+
+node {
+    size:100px, 50px;
+	fill-color: black;
+	stroke-mode: plain;
+	stroke-color: yellow;
+	text-mode: normal;
+	text-background-mode:plain;
+	stroke-mode:plain;
+	stroke-color:black;
+
+}
+
+node.Agent {
+	fill-color: SandyBrown;
+	shape: diamond;
+}
+
+node.Activity {
+    fill-color: LightBlue;
+    shape: box;
+}
+
+node.Entity {
+    fill-color: Lemonchiffon;
+    shape: circle;
+}
+
+node:clicked {
+	fill-color: red;
+}

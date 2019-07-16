@@ -1,0 +1,15 @@
+document
+bundle uuid:a24091b9-49ce-4cf9-8c61-1b97759860ae
+prefix cx <xa>
+prefix uo <http://urbanobservatory.ac.uk/>
+prefix uuid <urn:uuid:>
+
+entity(uo:Camera1,[uo:value = "JVC321634" %% cx:xb, uo:value = "Newcastle" %% cx:xb, uo:value = "28mm" %% cx:xb, uo:value = "IdontKnow" %% cx:xb, uo:value = "Westgate Street" %% cx:xb, uo:value = "14/06/2016" %% cx:xb, uo:value = "install_height" %% cx:xb, uo:value = "North" %% cx:xb])
+entity(uo:View1,[uo:value = "50" %% cx:xb, uo:value = "30" %% cx:xb])
+activity(uo:Acquisition4,-,-,[uo:value = "20180101120300" %% cx:xb, uo:value = "1024x768" %% cx:xb, uo:value = "256" %% cx:xb, uo:value = "0.9" %% cx:xb])
+entity(uo:Image4,[uo:value = "A44444.jpg" %% cx:xb])
+wasDerivedFrom(uo:View1, uo:Camera1)
+used(uo:Acquisition4,uo:View1,-)
+wasGeneratedBy(uo:Image4,uo:Acquisition4,-)
+endBundle
+endDocument

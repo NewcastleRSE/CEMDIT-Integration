@@ -1,0 +1,57 @@
+document
+prefix cx <xa>
+prefix uo <http://urbanobservatory.ac.uk/>
+prefix uuid <urn:uuid:>
+bundle uuid:5504413f-d4e8-41ba-a95b-ebedb026628a
+prefix cx <xa>
+prefix uo <http://urbanobservatory.ac.uk/>
+prefix uuid <urn:uuid:>
+
+entity(uo:View1,[uo:value = "50" %% cx:xb, uo:value = "30" %% cx:xb])
+entity(uo:Image2,[uo:value = "A22222.jpg" %% cx:xb])
+entity(uo:Camera1,[uo:value = "JVC321634" %% cx:xb, uo:value = "Newcastle" %% cx:xb, uo:value = "28mm" %% cx:xb, uo:value = "IdontKnow" %% cx:xb, uo:value = "Westgate Street" %% cx:xb, uo:value = "14/06/2016" %% cx:xb, uo:value = "install_height" %% cx:xb, uo:value = "North" %% cx:xb])
+activity(uo:Acquisition2,-,-,[uo:value = "20180101120000" %% cx:xb, uo:value = "1024x768" %% cx:xb, uo:value = "256" %% cx:xb, uo:value = "0.9" %% cx:xb])
+used(uo:Acquisition2,uo:View1,-)
+wasGeneratedBy(uo:Image2,uo:Acquisition2,-)
+wasDerivedFrom(uo:View1, uo:Camera1)
+endBundle
+bundle uuid:04f617f9-7ae3-4581-a0eb-e1061f70a950
+prefix cx <xa>
+prefix uo <http://urbanobservatory.ac.uk/>
+prefix uuid <urn:uuid:>
+
+entity(uo:View1,[uo:value = "50" %% cx:xb, uo:value = "30" %% cx:xb])
+entity(uo:Image1,[uo:value = "A11111.jpg" %% cx:xb])
+entity(uo:Camera1,[uo:value = "JVC321634" %% cx:xb, uo:value = "Newcastle" %% cx:xb, uo:value = "28mm" %% cx:xb, uo:value = "IdontKnow" %% cx:xb, uo:value = "Westgate Street" %% cx:xb, uo:value = "14/06/2016" %% cx:xb, uo:value = "install_height" %% cx:xb, uo:value = "North" %% cx:xb])
+activity(uo:Acquisition1,-,-,[uo:value = "20180101120100" %% cx:xb, uo:value = "1024x768" %% cx:xb, uo:value = "256" %% cx:xb, uo:value = "0.9" %% cx:xb])
+used(uo:Acquisition1,uo:View1,-)
+wasGeneratedBy(uo:Image1,uo:Acquisition1,-)
+wasDerivedFrom(uo:View1, uo:Camera1)
+endBundle
+bundle uuid:a24091b9-49ce-4cf9-8c61-1b97759860ae
+prefix cx <xa>
+prefix uo <http://urbanobservatory.ac.uk/>
+prefix uuid <urn:uuid:>
+
+entity(uo:View1,[uo:value = "50" %% cx:xb, uo:value = "30" %% cx:xb])
+entity(uo:Image4,[uo:value = "A44444.jpg" %% cx:xb])
+entity(uo:Camera1,[uo:value = "JVC321634" %% cx:xb, uo:value = "Newcastle" %% cx:xb, uo:value = "28mm" %% cx:xb, uo:value = "IdontKnow" %% cx:xb, uo:value = "Westgate Street" %% cx:xb, uo:value = "14/06/2016" %% cx:xb, uo:value = "install_height" %% cx:xb, uo:value = "North" %% cx:xb])
+activity(uo:Acquisition4,-,-,[uo:value = "20180101120300" %% cx:xb, uo:value = "1024x768" %% cx:xb, uo:value = "256" %% cx:xb, uo:value = "0.9" %% cx:xb])
+used(uo:Acquisition4,uo:View1,-)
+wasGeneratedBy(uo:Image4,uo:Acquisition4,-)
+wasDerivedFrom(uo:View1, uo:Camera1)
+endBundle
+bundle uuid:51b5a207-8c75-4a17-8328-09ec584cccdf
+prefix cx <xa>
+prefix uo <http://urbanobservatory.ac.uk/>
+prefix uuid <urn:uuid:>
+
+entity(uo:View1,[uo:value = "50" %% cx:xb, uo:value = "30" %% cx:xb])
+entity(uo:Image3,[uo:value = "A33333.jpg" %% cx:xb])
+entity(uo:Camera1,[uo:value = "JVC321634" %% cx:xb, uo:value = "Newcastle" %% cx:xb, uo:value = "28mm" %% cx:xb, uo:value = "IdontKnow" %% cx:xb, uo:value = "Westgate Street" %% cx:xb, uo:value = "14/06/2016" %% cx:xb, uo:value = "install_height" %% cx:xb, uo:value = "North" %% cx:xb])
+activity(uo:Acquisition3,-,-,[uo:value = "20180101120200" %% cx:xb, uo:value = "1024x768" %% cx:xb, uo:value = "256" %% cx:xb, uo:value = "0.9" %% cx:xb])
+used(uo:Acquisition3,uo:View1,-)
+wasGeneratedBy(uo:Image3,uo:Acquisition3,-)
+wasDerivedFrom(uo:View1, uo:Camera1)
+endBundle
+endDocument

@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="sources">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/batik-1.10/lib" />
+      <root url="file://$PROJECT_DIR$/lib/xerces-2_12_0" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/lib/batik-1.10/samples/tests/resources/java/sources" />
+      <root url="file://$PROJECT_DIR$/lib/xerces-2_12_0/samples" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/lib/batik-1.10/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/xerces-2_12_0" recursive="false" />
+  </library>
+</component>

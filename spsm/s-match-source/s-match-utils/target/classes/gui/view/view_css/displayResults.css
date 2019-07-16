@@ -1,0 +1,51 @@
+.button {
+	-fx-text-fill: black;
+}
+
+
+#topHbox, #bottomHbox {
+	-fx-background-color: #43D174;
+	-fx-font-size: 113%;
+	-fx-font-weight: 500;
+}
+
+
+#topHbox2 {
+	-fx-background-color: #F0F0F0;
+	-fx-font-size: 113%;
+	-fx-font-weight: 500;
+}
+
+#resultsTable .table-cell {
+    /*-fx-alignment: CENTER; */
+}
+
+#topText, #bottomText {
+	-fx-fill: #fff;
+}
+
+.label {
+	-fx-text-fill: #393939;
+	-fx-font-weight: bold;
+}
+
+.table-view {
+    -fx-focus-color: green;
+}
+
+.table-row-cell:filled:selected:focused {
+    -fx-background-color: linear-gradient(#43D174 0.0%, #40C16D 25.0%, #3AAF63 75.0%, #328F52 100.0%);
+    -fx-text-fill: white;
+}
+
+
+.table-row-cell:filled:hover {
+    -fx-background-color: #5EE78D;
+    -fx-text-fill: white;
+}
+
+
+ .text-field {
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-background-radius: 3 ;
+} 	

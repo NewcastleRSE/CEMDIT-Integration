@@ -1,0 +1,21 @@
+Testing Results for Schema_From_Query_Test_Cases.java
+
+Test 7.2.1 - dbpedia query
+Creating schema from query,
+PREFIX  dbo:  <http://dbpedia.org/ontology/> 
+PREFIX  dbp: <http://dbpedia.org/property/>   
+PREFIX  res: <http://dbpedia.org/resource/> 
+PREFIX  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX  foaf: <http://xlmns.com/foaf/0.1/> 
+PREFIX yago: <hhtp://dbpedia.org/class/yaho/> 
+
+SELECT DISTINCT *  
+WHERE { ?id rdf:type dbo:City ;
+dbo:country ?country ;
+dbo:populationTotal ?populationTotal .}
+LIMIT 20
+
+
+Expected Result: City(country,populationTotal)
+Actual Result: City(country,populationTotal)
+

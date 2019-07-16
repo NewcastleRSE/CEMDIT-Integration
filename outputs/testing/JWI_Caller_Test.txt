@@ -1,0 +1,6 @@
+Testing Results for JWI_Caller_Test_Cases.java
+
+
+Test JWI 04
+
+We have an exception (as expected) from a null word

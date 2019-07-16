@@ -1,0 +1,7 @@
+Testing Results for SPSM_Test_Cases.java
+
+Test 1.6.5
+Calling SPSM with source, conference document(nameOfAuthor) & target(s), conference review(authorName)
+Expected Result: similarity == 0.5 & numMatches == 2 
+Actual Result: similarity == 0.5 & numMatches == 2
+

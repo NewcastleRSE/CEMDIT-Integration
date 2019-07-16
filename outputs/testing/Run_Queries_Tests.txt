@@ -1,0 +1,22 @@
+Testing Results for Run_Query_Test_Cases.java
+
+Test 6.1.5 - sepa query
+Trying to run query: 
+
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX sepaidw: <http://data.sepa.org.uk/id/Water/>
+PREFIX sepaidloc: <http://data.sepa.org.uk/id/Location/>
+PREFIX sepaloc: <http://data.sepa.org.uk/ont/Location#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX sepaw: <http://data.sepa.org.uk/ont/Water#>
+
+SELECT *
+FROM <queryData/sepa/sepa_datafiles/waterBodyMeasures.n3>
+WHERE {  
+ ?id sepaw:secondaryMeasure ?secondaryMeasure ;
+ sepaw:dataSource ?dataSource ;
+ sepaw:waterBodyId ?waterBodyId
+}
+
+Query HAS run successfully.
+

@@ -1,0 +1,14 @@
+document
+prefix cx <xa>
+prefix pre_0 <http://urbanobservatory.ac.uk/uo#>
+prefix uo <http://urbanobservatory.ac.uk/>
+entity(uo:image_40e76132-de9f-4080-8d35-29a68711325c,[pre_0:value = "https://file.newcastle.urbanobservatory.ac.uk/camera-feeds/VAISALACCTV59/20190213/100609.jpg" %% cx:xb])
+entity(uo:a12345,[pre_0:value = "3" %% cx:xb])
+entity(uo:TFIV2,[pre_0:value = "TF_I_V2_ca3bf30a-2f7d-11e9-b210-d663bd873d93", uo:date="2019-03-27"])
+activity(pre_0:counting,-,-)
+agent(uo:ag1,[uo:name="Tom Kumar"])
+used(pre_0:counting,uo:TFIV2,-)
+used(pre_0:counting,uo:image_40e76132-de9f-4080-8d35-29a68711325c,-)
+wasGeneratedBy(uo:a12345,pre_0:counting,-)
+wasAttributedTo(uo:TFIV2, uo:ag1)
+endDocument

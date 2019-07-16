@@ -1,0 +1,23 @@
+{"var":
+{
+"camera": [{"@id":"uo:Camera1"}],
+"camera_id": [{"@value": "JVC321634", "@type": "xsd:string"} ],
+"camera_name": [{"@value": "Newcastle", "@type": "xsd:string"} ],
+"lens_prop": [{"@value": "28mm", "@type": "xsd:string"} ],
+"matrix_prop": [{"@value": "IdontKnow", "@type": "xsd:string"} ],
+"location": [{"@value": "Westgate Street", "@type": "xsd:string"} ],
+"install_time": [{"@value": "14/06/2016", "@type": "xsd:string"} ],
+"install_height": [ {"@value": "install_height", "@type": "xsd:double"} ],
+"orientation": [{"@value": "North", "@type": "xsd:string"} ],
+"image": [{"@id":"uo:Image1"}],
+"image_filename": [{"@value": "A11111.jpg", "@type": "xsd:string"} ],
+"view": [{"@id":"uo:View1"}],
+"x": [{"@value": "50", "@type": "xsd:int"} ],
+"y": [{"@value": "30", "@type": "xsd:int"} ],
+"acquisition": [{"@id":"uo:Acquisition1"}],
+"acquisition_date": [{"@value": "20180101120100", "@type": "xsd:string"} ],
+"resolution": [{"@value": "1024x768", "@type": "xsd:string"} ],
+"colour_depth": [{"@value": "256", "@type": "xsd:int"} ],
+"compression_rate": [{"@value": "0.9", "@type": "xsd:int"} ]},
+"context":{"ex": "http://example.org/","uo": "http://urbanobservatory.ac.uk/"}
+}

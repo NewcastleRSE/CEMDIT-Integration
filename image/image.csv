@@ -1,0 +1,6 @@
+camera,camera_id,camera_name,lens_prop,matrix_prop,location,install_time,install_height,orientation,image,image_filename,view,x,y,acquisition,acquisition_date,resolution,colour_depth,compression_rate
+prov:QUALIFIED_NAME,xsd:string,xsd:string,xsd:string,xsd:string,xsd:string,xsd:string,xsd:double,xsd:string,prov:QUALIFIED_NAME,xsd:string,prov:QUALIFIED_NAME,xsd:int,xsd:int,prov:QUALIFIED_NAME,xsd:string,xsd:string,xsd:int,xsd:int
+uo:Camera1,JVC321634,Newcastle,28mm,IdontKnow,Westgate Street,14/06/2016,3,North,uo:Image1,A11111.jpg,uo:View1,50,30,uo:Acquisition1,20180101120100,1024x768,256,0.9
+uo:Camera1,JVC321634,Newcastle,28mm,IdontKnow,Westgate Street,14/06/2016,3,North,uo:Image2,A22222.jpg,uo:View1,50,30,uo:Acquisition2,20180101120000,1024x768,256,0.9
+uo:Camera1,JVC321634,Newcastle,28mm,IdontKnow,Westgate Street,14/06/2016,3,North,uo:Image3,A33333.jpg,uo:View1,50,30,uo:Acquisition3,20180101120200,1024x768,256,0.9
+uo:Camera1,JVC321634,Newcastle,28mm,IdontKnow,Westgate Street,14/06/2016,3,North,uo:Image4,A44444.jpg,uo:View1,50,30,uo:Acquisition4,20180101120300,1024x768,256,0.9

@@ -1,0 +1,25 @@
+document
+prefix provbook <http://www.provbook.org>
+prefix cemdit <http://www.macs.hw.ac.uhennhfasdfadk/cem-dit/>
+prefix uo <http://urbanobservatory.ac.uk/>
+prefix var <http://openprovenance.org/var#>
+prefix vargen <http://openprovenance.org/vargen#>
+prefix tmpl <http://openprovenance.org/tmpl#>
+bundle vargen:templ_image
+
+	entity(var:camera,[uo:value='var:camera_id',uo:value='var:camera_name',uo:value='var:lens_prop',uo:value='var:matrix_prop',uo:value='var:location',uo:value='var:install_time',uo:value='var:install_height',uo:value='var:orientation'])
+	entity(var:view,[uo:value='var:x',uo:value='var:y',uo:value='var:pitch',uo:value='var:tilt',uo:value='var:yaw',uo:value='var:zoom'])
+	activity(var:acquisition,[uo:value='var:acquisition_date',uo:value='var:resolution',uo:value='var:colour_depth',uo:value='var:compression_rate'])
+	entity(var:image,[uo:value='var:image_filename'])
+
+	wasDerivedFrom(var:view,var:camera)
+	used(var:acquisition,var:view,-)
+	wasGeneratedBy(var:image,var:acquisition,-)
+	
+endBundle
+endDocument
+
+
+
+
+
