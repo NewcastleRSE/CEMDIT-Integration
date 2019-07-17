@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><context>
   <node id="n0" preprocessed="true">
-    <name>waterBodyPressurestest</name>
+    <name>waterBodyPressures</name>
     <label-formula>n0_0</label-formula>
     <node-formula>n0_0</node-formula>
     <tokens>
       <token id="0">
-        <text>waterbodypressurestest</text>
-        <lemma>waterbodypressurestest</lemma>
+        <text>waterbodypressures</text>
+        <lemma>waterbodypressures</lemma>
         <senses/>
       </token>
     </tokens>

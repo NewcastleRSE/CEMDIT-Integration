@@ -1,1 +1,1 @@
-waterBodyPressurestest(dataSource,identifiedDate,affectsGroundwater,waterBodyId)
+waterBodyPressures(dataSource,identifiedDate,affectsGroundwater,waterBodyId)
