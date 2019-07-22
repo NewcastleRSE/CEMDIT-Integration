@@ -1,6 +1,5 @@
 package uk.ac.ncl.cemdit.controller;
 
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.graphstream.graph.Graph;

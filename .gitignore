@@ -1,0 +1,10 @@
+.idea
+image/
+inputs/*
+jena/*
+json/*
+JWI/*
+lib/*
+old/*
+target/.
+server.properties

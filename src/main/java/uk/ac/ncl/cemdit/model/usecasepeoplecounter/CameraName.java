@@ -4,7 +4,7 @@ package uk.ac.ncl.cemdit.model.usecasepeoplecounter;
 import java.io.Serializable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.*;
 
 public class CameraName implements Serializable
 {

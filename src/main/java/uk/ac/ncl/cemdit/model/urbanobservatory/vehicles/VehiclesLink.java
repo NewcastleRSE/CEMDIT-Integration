@@ -3,9 +3,7 @@ package uk.ac.ncl.cemdit.model.urbanobservatory.vehicles;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.*;
 
 public class VehiclesLink {
 

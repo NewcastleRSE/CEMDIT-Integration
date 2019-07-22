@@ -1,9 +1,7 @@
 
 package uk.ac.ncl.cemdit.model.urbanobservatory.vehicles;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.*;
 
 public class VehiclesMeta__ {
 
