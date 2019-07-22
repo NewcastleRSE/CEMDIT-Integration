@@ -183,6 +183,9 @@ public class Run_Query {
 				ResultSetFormatter.out(System.out, ResultSetFactory.copyResults(results));
 				return results;
 			}
+		} catch (NullPointerException e) {
+			System.out.println("No result.");
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Run_Query.java: QUERY ERROR!");
