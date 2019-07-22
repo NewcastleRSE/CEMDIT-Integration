@@ -22,6 +22,10 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
      * Text area containing the original query
      */
     private JTextArea queryTextArea = new JTextArea();
+    /**
+     * Button to submit query
+     */
+    private JButton queryButton = new JButton("Run");
 
     /**
      * Panel containing the top ranked response (or else the selected response)
@@ -50,7 +54,11 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
     }
 
     private void setup() {
-        queryPanel.setLayout(new BorderLayout());
+        FlowLayout queryLayout = new FlowLayout();
+        queryLayout.setAlignment(FlowLayout.LEADING);
+        queryPanel.setLayout(queryLayout);
+        queryTextArea.setColumns(75);
+        queryButton.addActionListener(this);
         queryTextArea.setText(integrationModel.getOriginalQuery());
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
         otherPanel = new ResponsePanel(integrationModel.getOtherResponses(), this);
@@ -84,6 +92,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                         otherPanel.getBorder()));
 
         queryPanel.add(queryTextArea);
+        queryPanel.add(queryButton);
         add(queryPanel, BorderLayout.NORTH);
         add(resultPanel, BorderLayout.CENTER);
         add(otherPanel, BorderLayout.PAGE_END);
@@ -113,6 +122,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
     public void actionPerformed(ActionEvent e) {
         logger.debug(e.getActionCommand());
         switch (e.getActionCommand()) {
+            case "Run":
+                break;
             case "View Provenance":
                 if (e.getActionCommand().equals("View Provenance")) {
 
@@ -132,7 +143,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
     @Override
     public void valueChanged(ListSelectionEvent  e) {
         JList jList = (JList)e.getSource();
-        ListSelectionModel lsm = (ListSelectionModel) jList.getSelectionModel();
+        ListSelectionModel lsm = jList.getSelectionModel();
 
         for (int i = 0; i <= lsm.getMaxSelectionIndex(); i++) {
             if (lsm.isSelectedIndex(i)) {
