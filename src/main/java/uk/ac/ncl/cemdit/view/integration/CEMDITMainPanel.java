@@ -1,6 +1,7 @@
 package uk.ac.ncl.cemdit.view.integration;
 
 import org.apache.log4j.Logger;
+import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 
@@ -37,7 +38,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
      */
     private ResponsePanel otherPanel;
 
-    private IntegrationModel integrationModel = new IntegrationModel();
+    private IntegrationModel integrationModel;
 
     private IntegrationDataModel integrationDataModel;
 
@@ -96,6 +97,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         add(queryPanel, BorderLayout.NORTH);
         add(resultPanel, BorderLayout.CENTER);
         add(otherPanel, BorderLayout.PAGE_END);
+
     }
 
     public IntegrationModel getIntegrationModel() {
@@ -123,6 +125,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         logger.debug(e.getActionCommand());
         switch (e.getActionCommand()) {
             case "Run":
+                Utils.populateIntegrationModel(queryTextArea.getText(), integrationModel, integrationDataModel);
+                repaint();
                 break;
             case "View Provenance":
                 if (e.getActionCommand().equals("View Provenance")) {

@@ -13,6 +13,7 @@ public class IntegrationDataModel extends AbstractTableModel {
     public IntegrationDataModel() {
 
     }
+
     public IntegrationDataModel(ArrayList<ArrayList<Object>> data) {
         this.data = data;
     }
@@ -24,7 +25,10 @@ public class IntegrationDataModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return data.get(0).size();
+        if (data.size() > 0)
+            return data.get(0).size();
+        else
+            return 0;
     }
 
     public void setValueAt(int rowIndex, int columIndex, Object o) {
@@ -47,7 +51,7 @@ public class IntegrationDataModel extends AbstractTableModel {
 
     @Override
     public Class getColumnClass(int c) {
-        return getValueAt(0,c).getClass();
+        return getValueAt(0, c).getClass();
     }
 
     @Override

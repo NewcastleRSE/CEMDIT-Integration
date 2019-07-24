@@ -1,7 +1,6 @@
 package uk.ac.ncl.cemdit.model.integration;
 
 import org.apache.log4j.Logger;
-
 import javax.swing.*;
 import java.util.ArrayList;
 
