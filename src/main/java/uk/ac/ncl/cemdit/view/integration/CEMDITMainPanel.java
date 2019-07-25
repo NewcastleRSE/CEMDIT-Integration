@@ -36,21 +36,14 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
     /**
      * Panel containing all the returned results
      */
-    private ResponsePanel otherPanel;
-
-    private IntegrationModel integrationModel;
-
-    private IntegrationDataModel integrationDataModel;
+    private ResponsePanel responsePanel;
+    IntegrationModel integrationModel;
+    IntegrationDataModel integrationDataModel;
 
     public CEMDITMainPanel(IntegrationModel integrationModel, IntegrationDataModel integrationDataModel) {
         super();
-        this.integrationModel = integrationModel;
         this.integrationDataModel = integrationDataModel;
-        setup();
-    }
-
-    public CEMDITMainPanel() {
-        super();
+        this.integrationModel = integrationModel;
         setup();
     }
 
@@ -61,14 +54,15 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         queryTextArea.setColumns(75);
         queryButton.addActionListener(this);
         queryTextArea.setText(integrationModel.getOriginalQuery());
+        //Utils.populateIntegrationModel(queryTextArea.getText(), integrationModel, integrationDataModel);
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
-        otherPanel = new ResponsePanel(integrationModel.getOtherResponses(), this);
+        responsePanel = new ResponsePanel(integrationModel.getOtherResponses(), this);
 
         setLayout(new BorderLayout());
         setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
-                                BorderFactory.createTitledBorder("CEM-DIT Data Visualisation Screen"),
+                                BorderFactory.createTitledBorder("CEM-DIT Data Visualisation"),
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         this.getBorder()));
 
@@ -85,27 +79,18 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 BorderFactory.createTitledBorder("Top Ranked Response"),
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         resultPanel.getBorder()));
-        otherPanel.setBorder(
+        responsePanel.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
                                 BorderFactory.createTitledBorder("Other Responses"),
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
-                        otherPanel.getBorder()));
+                        responsePanel.getBorder()));
 
         queryPanel.add(queryTextArea);
         queryPanel.add(queryButton);
         add(queryPanel, BorderLayout.NORTH);
         add(resultPanel, BorderLayout.CENTER);
-        add(otherPanel, BorderLayout.PAGE_END);
-
-    }
-
-    public IntegrationModel getIntegrationModel() {
-        return integrationModel;
-    }
-
-    public void setIntegrationModel(IntegrationModel integrationModel) {
-        this.integrationModel = integrationModel;
+        add(responsePanel, BorderLayout.PAGE_END);
     }
 
     public void setProvenancePanel() {
@@ -125,7 +110,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         logger.debug(e.getActionCommand());
         switch (e.getActionCommand()) {
             case "Run":
-                Utils.populateIntegrationModel(queryTextArea.getText(), integrationModel, integrationDataModel);
+                logger.debug("Populate model.");
+                Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel, integrationDataModel);
                 repaint();
                 break;
             case "View Provenance":
@@ -154,13 +140,5 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 logger.debug("Selected: " + i);
             }
         }
-    }
-
-    public IntegrationDataModel getIntegrationDataModel() {
-        return integrationDataModel;
-    }
-
-    public void setIntegrationDataModel(IntegrationDataModel integrationDataModel) {
-        this.integrationDataModel = integrationDataModel;
     }
 }

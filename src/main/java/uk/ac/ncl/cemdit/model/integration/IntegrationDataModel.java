@@ -14,7 +14,7 @@ public class IntegrationDataModel extends AbstractTableModel {
 
     }
 
-    public IntegrationDataModel(ArrayList<ArrayList<Object>> data) {
+    public void setData(ArrayList<ArrayList<Object>> data) {
         this.data = data;
     }
 

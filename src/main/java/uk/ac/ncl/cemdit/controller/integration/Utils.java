@@ -1,5 +1,6 @@
 package uk.ac.ncl.cemdit.controller.integration;
 
+import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.QueryResults;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 
 public class Utils {
 
+    static private Logger logger = Logger.getLogger(Utils.class);
 
     static public void populateIntegrationModel(String query, IntegrationModel integrationModel, IntegrationDataModel integrationDataModel) {
         // read data for other results
@@ -39,7 +41,7 @@ public class Utils {
         row1.add(6, "6");
         data1.add(1, row1);
 
-        integrationDataModel = new IntegrationDataModel(data1);
+        integrationDataModel.setData(data1);
         integrationDataModel.setColumName(0, "Theme");
         integrationDataModel.setColumName(1, "Sensor Name");
         integrationDataModel.setColumName(2, "Sensor centroid latitude");
@@ -63,6 +65,6 @@ public class Utils {
         }
         integrationModel.setQueryResults(queryResults);
         integrationModel.setProvNFilename("/home/campus.ncl.ac.uk/njss3/Dropbox/CEM-DIT/CHAIn/Mockups/count_prov.svg");
-
+        logger.debug("Model populated.");
     }
 }

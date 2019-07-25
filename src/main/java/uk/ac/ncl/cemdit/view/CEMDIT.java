@@ -34,14 +34,11 @@ public class CEMDIT extends JFrame  implements ActionListener {
     CEMDIT() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        //Image icon = toolkit.getImage(ClassLoader.getSystemResource("Logo.png"));
-        //setIconImage(icon);
+        Image icon = toolkit.getImage(ClassLoader.getSystemResource("Logo.png"));
+        setIconImage(icon);
 
-        Utils.populateIntegrationModel("", integrationModel, integrationDataModel);
-
-
+        //Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel,integrationDataModel);
         mainPanel = new CEMDITMainPanel(integrationModel, integrationDataModel);
-        mainPanel.setIntegrationDataModel(integrationDataModel);
 
         getContentPane().add(mainPanel);
         pack();

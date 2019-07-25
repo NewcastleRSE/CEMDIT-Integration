@@ -12,16 +12,15 @@ import java.awt.event.ActionListener;
 public class ResultsPanel extends JPanel implements ActionListener {
     private Logger logger = Logger.getLogger(this.getClass());
 
-    private JButton viewProvenance = new JButton("View Provenance");
-    private JButton viewData = new JButton("View Data");
-    private JButton viewMatches = new JButton("View Matches");
+    private JButton btn_viewProvenance = new JButton("View Provenance");
+    private JButton btn_viewData = new JButton("View Data");
+    private JButton btn_viewMatches = new JButton("View Matches");
     private JPanel viewButtonsHorizontalPanel = new JPanel();
     private JPanel repairedQueryPanel = new JPanel();
     private JTextArea repairedQuery = new JTextArea(4, 80);
     private MatchPanel matchPanel = new MatchPanel();
     private ProvenancePanel provenancePanel = new ProvenancePanel();
     //private GraphStreamPanel graphStreamPanel = new GraphStreamPanel(null);
-    IntegrationDataModel integrationDataModel;
     private DataPanel dataPanel;
     private ActionListener actionListener = this;
     private JScrollPane sp_matchPanel;
@@ -30,19 +29,18 @@ public class ResultsPanel extends JPanel implements ActionListener {
 
     public ResultsPanel(IntegrationModel integrationModel, IntegrationDataModel integrationDataModel, Object eventsListener) {
         super();
-        this.integrationDataModel = integrationDataModel;
         dataPanel = new DataPanel(integrationDataModel);
         actionListener = (ActionListener) eventsListener;
         setLayout(new BorderLayout());
 
-        viewProvenance.addActionListener(actionListener);
-        viewData.addActionListener(actionListener);
-        viewMatches.addActionListener(actionListener);
+        btn_viewProvenance.addActionListener(actionListener);
+        btn_viewData.addActionListener(actionListener);
+        btn_viewMatches.addActionListener(actionListener);
 
         viewButtonsHorizontalPanel.setLayout(new FlowLayout());
-        viewButtonsHorizontalPanel.add(viewProvenance);
-        viewButtonsHorizontalPanel.add(viewData);
-        viewButtonsHorizontalPanel.add(viewMatches);
+        viewButtonsHorizontalPanel.add(btn_viewProvenance);
+        viewButtonsHorizontalPanel.add(btn_viewData);
+        viewButtonsHorizontalPanel.add(btn_viewMatches);
         viewButtonsHorizontalPanel.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
@@ -92,13 +90,13 @@ public class ResultsPanel extends JPanel implements ActionListener {
     }
 
     public void setButtons(boolean prov, boolean data, boolean matches) {
-        viewProvenance.setEnabled(!prov);
-        viewMatches.setEnabled(!matches);
-        viewData.setEnabled(!data);
+        btn_viewProvenance.setEnabled(!prov);
+        btn_viewMatches.setEnabled(!matches);
+        btn_viewData.setEnabled(!data);
         holdAll.getComponent(0).setVisible(matches);
         holdAll.getComponent(1).setVisible(prov);
         holdAll.getComponent(2).setVisible(data);
-        viewData.repaint();
+        btn_viewData.repaint();
     }
 
     @Override
