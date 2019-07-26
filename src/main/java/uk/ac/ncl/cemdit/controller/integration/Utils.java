@@ -49,7 +49,6 @@ public class Utils {
         integrationDataModel.setColumName(4, "Timestamp");
         integrationDataModel.setColumName(5, "Units");
         integrationDataModel.setColumName(6, "Count");
-        integrationDataModel.fireTableDataChanged();
 
 
         integrationModel.setOtherResponses(data);
@@ -65,6 +64,6 @@ public class Utils {
         }
         integrationModel.setQueryResults(queryResults);
         integrationModel.setProvNFilename("/home/campus.ncl.ac.uk/njss3/Dropbox/CEM-DIT/CHAIn/Mockups/count_prov.svg");
-        logger.debug("Model populated.");
+        integrationDataModel.fireTableDataChanged();
     }
 }

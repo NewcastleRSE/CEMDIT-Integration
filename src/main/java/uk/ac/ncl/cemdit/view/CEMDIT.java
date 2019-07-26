@@ -37,7 +37,7 @@ public class CEMDIT extends JFrame  implements ActionListener {
         Image icon = toolkit.getImage(ClassLoader.getSystemResource("Logo.png"));
         setIconImage(icon);
 
-        //Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel,integrationDataModel);
+//        Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel,integrationDataModel);
         mainPanel = new CEMDITMainPanel(integrationModel, integrationDataModel);
 
         getContentPane().add(mainPanel);

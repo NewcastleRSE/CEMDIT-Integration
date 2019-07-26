@@ -19,11 +19,12 @@ public class ResponsePanel extends JPanel implements ListSelectionListener {
     public ResponsePanel(ArrayList d, Object eventsListener) {
         super();
         allEventsListenener = eventsListener;
-        setLayout(new FlowLayout());
-        data = d;
-        for (int i = 0; i < d.size(); i++) {
-            listModel.addElement(data.get(i));
+        setLayout(new BorderLayout());
+
+        for (int i = 0; i < 8;i++) {
+            d.add("  ");
         }
+        populateList(d);
         resultsList = new JList(listModel); //data has type Object[]
         resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         resultsList.setLayoutOrientation(JList.VERTICAL_WRAP);
@@ -37,7 +38,16 @@ public class ResponsePanel extends JPanel implements ListSelectionListener {
         int w = 900;
         int h = jViewport.getPreferredSize().height;
         jViewport.setPreferredSize(new Dimension(w, h));
-        add(listScroller, FlowLayout.LEFT);
+        add(listScroller);
+    }
+
+    public void populateList(ArrayList d) {
+        listModel.clear();
+        data = d;
+        for (int i = 0; i < d.size(); i++) {
+            listModel.addElement(data.get(i));
+        }
+
     }
 
 
@@ -49,7 +59,8 @@ public class ResponsePanel extends JPanel implements ListSelectionListener {
             if (lsm.isSelectedIndex(i)) {
                 logger.debug("Selected: " + i);
             }
-        }        logger.debug(lsm.getMinSelectionIndex());
+        }
+        logger.debug(lsm.getMinSelectionIndex());
     }
 
 }

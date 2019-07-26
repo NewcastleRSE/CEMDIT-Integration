@@ -54,7 +54,6 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         queryTextArea.setColumns(75);
         queryButton.addActionListener(this);
         queryTextArea.setText(integrationModel.getOriginalQuery());
-        //Utils.populateIntegrationModel(queryTextArea.getText(), integrationModel, integrationDataModel);
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
         responsePanel = new ResponsePanel(integrationModel.getOtherResponses(), this);
 
@@ -107,12 +106,16 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        logger.debug(e.getActionCommand());
         switch (e.getActionCommand()) {
             case "Run":
                 logger.debug("Populate model.");
                 Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel, integrationDataModel);
-                repaint();
+                queryTextArea.setText(integrationModel.getOriginalQuery());
+                resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
+                resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
+                resultPanel.getDataPanel().
+                responsePanel.populateList(integrationModel.getOtherResponses());
+                logger.debug(integrationModel.getOtherResponses().size());
                 break;
             case "View Provenance":
                 if (e.getActionCommand().equals("View Provenance")) {

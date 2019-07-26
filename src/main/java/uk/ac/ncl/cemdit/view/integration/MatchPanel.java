@@ -21,7 +21,7 @@ public class MatchPanel extends JPanel implements ActionListener {
 
     }
 
-    public JPanel populateMatchPanel(JPanel jPanel, ArrayList<QueryResults> queryResults, Object eventsListener) {
+    public JPanel createMatchPanel(JPanel jPanel, ArrayList<QueryResults> queryResults, Object eventsListener) {
         actionListener = (ActionListener) eventsListener;
         jPanel.removeAll();
         Color color = Color.white;
@@ -51,6 +51,27 @@ public class MatchPanel extends JPanel implements ActionListener {
         }
         return jPanel;
     }
+
+    public void populateMatchPanel(ArrayList<QueryResults> queryResults) {
+        removeAll();
+        Color color = Color.white;
+
+        add(similarity);
+        for (int i = 0; i < queryResults.size(); i++) {
+            if (i%2==0) {
+                color = Color.white;
+            }
+            else {
+                color= Color.lightGray;
+            }
+            logger.debug(queryResults.get(i).getLabel());
+            DropDownRelationsWidget dropDownRelationsWidget = new DropDownRelationsWidget(queryResults.get(i), color);
+            dropDownRelationsWidget.setActionListener(actionListener);
+            add(dropDownRelationsWidget);
+
+        }
+    }
+
 
     public void setSimilarity(double similarityValue) {
         similarity.setText(similarity.getText() + similarityValue);

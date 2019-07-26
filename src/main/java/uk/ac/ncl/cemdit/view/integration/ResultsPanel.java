@@ -59,14 +59,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         repairedQuery.getBorder()));
 
-//        holdAll.setBorder(
-//                BorderFactory.createCompoundBorder(
-//                        BorderFactory.createCompoundBorder(
-//                                BorderFactory.createTitledBorder("--"),
-//                                BorderFactory.createEmptyBorder(5, 5, 5, 5)),
-//                        holdAll.getBorder()));
-
-        matchPanel = (MatchPanel) matchPanel.populateMatchPanel(matchPanel, integrationModel.getQueryResults(), actionListener);
+        matchPanel = (MatchPanel) matchPanel.createMatchPanel(matchPanel, integrationModel.getQueryResults(), actionListener);
         matchPanel.setSimilarity(integrationModel.getSimilarityScore());
         sp_matchPanel = new JScrollPane(matchPanel);
         sp_matchPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -102,5 +95,29 @@ public class ResultsPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+    }
+
+    public MatchPanel getMatchPanel() {
+        return matchPanel;
+    }
+
+    public void setMatchPanel(MatchPanel matchPanel) {
+        this.matchPanel = matchPanel;
+    }
+
+    public JTextArea getRepairedQuery() {
+        return repairedQuery;
+    }
+
+    public void setRepairedQuery(JTextArea repairedQuery) {
+        this.repairedQuery = repairedQuery;
+    }
+
+    public DataPanel getDataPanel() {
+        return dataPanel;
+    }
+
+    public void setDataPanel(DataPanel dataPanel) {
+        this.dataPanel = dataPanel;
     }
 }
