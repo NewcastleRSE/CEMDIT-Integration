@@ -21,7 +21,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
     private MatchPanel matchPanel = new MatchPanel();
     private ProvenancePanel provenancePanel = new ProvenancePanel();
     //private GraphStreamPanel graphStreamPanel = new GraphStreamPanel(null);
-    private DataPanel dataPanel;
+    private JTable dataPanel;
     private ActionListener actionListener = this;
     private JScrollPane sp_matchPanel;
     private JScrollPane sp_dataPanel;
@@ -29,7 +29,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
 
     public ResultsPanel(IntegrationModel integrationModel, IntegrationDataModel integrationDataModel, Object eventsListener) {
         super();
-        dataPanel = new DataPanel(integrationDataModel);
+        dataPanel = new JTable(integrationDataModel);
         actionListener = (ActionListener) eventsListener;
         setLayout(new BorderLayout());
 
@@ -89,7 +89,6 @@ public class ResultsPanel extends JPanel implements ActionListener {
         holdAll.getComponent(0).setVisible(matches);
         holdAll.getComponent(1).setVisible(prov);
         holdAll.getComponent(2).setVisible(data);
-        btn_viewData.repaint();
     }
 
     @Override
@@ -113,7 +112,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
         this.repairedQuery = repairedQuery;
     }
 
-    public DataPanel getDataPanel() {
+    public JTable getDataPanel() {
         return dataPanel;
     }
 

@@ -113,9 +113,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 queryTextArea.setText(integrationModel.getOriginalQuery());
                 resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
                 resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
-                resultPanel.getDataPanel().
                 responsePanel.populateList(integrationModel.getOtherResponses());
-                logger.debug(integrationModel.getOtherResponses().size());
+                logger.debug("Data rows: " + resultPanel.getDataPanel().getColumnName(0));
                 break;
             case "View Provenance":
                 if (e.getActionCommand().equals("View Provenance")) {
@@ -125,6 +124,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 break;
             case "View Data":
                 setDataPanel();
+                resultPanel.getDataPanel().revalidate();
                 this.revalidate();
                 break;
             case "View Matches":

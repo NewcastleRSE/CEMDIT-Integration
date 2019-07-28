@@ -64,6 +64,6 @@ public class Utils {
         }
         integrationModel.setQueryResults(queryResults);
         integrationModel.setProvNFilename("/home/campus.ncl.ac.uk/njss3/Dropbox/CEM-DIT/CHAIn/Mockups/count_prov.svg");
-        integrationDataModel.fireTableDataChanged();
+        integrationDataModel.fire();
     }
 }

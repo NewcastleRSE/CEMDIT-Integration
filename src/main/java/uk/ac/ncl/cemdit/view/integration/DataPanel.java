@@ -10,4 +10,8 @@ public class DataPanel extends JTable {
         setModel(integrationDataModel);
     }
 
+    public void populateDataPanel() {
+
+    }
+
 }

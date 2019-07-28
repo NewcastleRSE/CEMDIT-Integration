@@ -18,6 +18,14 @@ public class IntegrationDataModel extends AbstractTableModel {
         this.data = data;
     }
 
+    public ArrayList<ArrayList<Object>> getData() {
+        return data;
+    }
+
+    public void fire() {
+        this.fireTableDataChanged();
+    }
+
     @Override
     public int getRowCount() {
         return data.size();
@@ -33,6 +41,7 @@ public class IntegrationDataModel extends AbstractTableModel {
 
     public void setValueAt(int rowIndex, int columIndex, Object o) {
         data.get(rowIndex).add(columIndex, o);
+        fireTableDataChanged();
     }
 
     @Override
