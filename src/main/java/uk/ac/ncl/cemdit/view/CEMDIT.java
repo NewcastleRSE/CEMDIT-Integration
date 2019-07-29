@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class CEMDIT extends JFrame  implements ActionListener {
+public class CEMDIT extends JFrame  {
     private Logger logger = Logger.getLogger(this.getClass());
 
     /**
@@ -38,7 +38,7 @@ public class CEMDIT extends JFrame  implements ActionListener {
         setIconImage(icon);
 
 //        Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel,integrationDataModel);
-        mainPanel = new CEMDITMainPanel(integrationModel, integrationDataModel);
+        mainPanel = new CEMDITMainPanel();
 
         getContentPane().add(mainPanel);
         pack();
@@ -50,10 +50,5 @@ public class CEMDIT extends JFrame  implements ActionListener {
         CEMDIT mockup = new CEMDIT();
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        logger.debug(e.getActionCommand());
-     }
 }
 

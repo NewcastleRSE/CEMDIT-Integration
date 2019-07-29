@@ -49,6 +49,7 @@ public class Utils {
         integrationDataModel.setColumName(4, "Timestamp");
         integrationDataModel.setColumName(5, "Units");
         integrationDataModel.setColumName(6, "Count");
+        System.out.println("Set data.");
 
 
         integrationModel.setOtherResponses(data);

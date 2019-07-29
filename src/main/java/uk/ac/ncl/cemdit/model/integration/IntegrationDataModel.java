@@ -11,7 +11,7 @@ public class IntegrationDataModel extends AbstractTableModel {
     ArrayList<String> columnName = new ArrayList<>();
 
     public IntegrationDataModel() {
-
+        super();
     }
 
     public void setData(ArrayList<ArrayList<Object>> data) {

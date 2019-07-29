@@ -1,6 +1,7 @@
 package uk.ac.ncl.cemdit.view.integration;
 
 import org.apache.log4j.Logger;
+import uk.ac.ncl.cemdit.FileTableModel;
 import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
@@ -8,12 +9,15 @@ import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelectionListener {
-    private Logger logger = Logger.getLogger(this.getClass());
+    private Logger logger = Logger.getLogger(CEMDITMainPanel.class);
 
     /**
      * Panel containing the original query
@@ -37,17 +41,12 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
      * Panel containing all the returned results
      */
     private ResponsePanel responsePanel;
-    IntegrationModel integrationModel;
-    IntegrationDataModel integrationDataModel;
 
-    public CEMDITMainPanel(IntegrationModel integrationModel, IntegrationDataModel integrationDataModel) {
+    private IntegrationModel integrationModel = new IntegrationModel();
+    private IntegrationDataModel integrationDataModel = new IntegrationDataModel();
+
+    public CEMDITMainPanel() {
         super();
-        this.integrationDataModel = integrationDataModel;
-        this.integrationModel = integrationModel;
-        setup();
-    }
-
-    private void setup() {
         FlowLayout queryLayout = new FlowLayout();
         queryLayout.setAlignment(FlowLayout.LEADING);
         queryPanel.setLayout(queryLayout);
@@ -90,6 +89,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         add(queryPanel, BorderLayout.NORTH);
         add(resultPanel, BorderLayout.CENTER);
         add(responsePanel, BorderLayout.PAGE_END);
+        setDataPanel();
     }
 
     public void setProvenancePanel() {
@@ -109,12 +109,17 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         switch (e.getActionCommand()) {
             case "Run":
                 logger.debug("Populate model.");
-                Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel, integrationDataModel);
+                Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)", integrationModel, integrationDataModel);
+                File dir = new File(System.getProperty("user.home"));
+
+// Create a TableModel object to represent the contents of the directory
+                FileTableModel model = new FileTableModel(dir);
+                resultPanel.getDataPanel().setDataModel(model);
                 queryTextArea.setText(integrationModel.getOriginalQuery());
                 resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
                 resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
+                System.out.println(resultPanel.getDataPanel().getRowCount());
                 responsePanel.populateList(integrationModel.getOtherResponses());
-                logger.debug("Data rows: " + resultPanel.getDataPanel().getColumnName(0));
                 break;
             case "View Provenance":
                 if (e.getActionCommand().equals("View Provenance")) {
@@ -134,8 +139,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
     }
 
     @Override
-    public void valueChanged(ListSelectionEvent  e) {
-        JList jList = (JList)e.getSource();
+    public void valueChanged(ListSelectionEvent e) {
+        JList jList = (JList) e.getSource();
         ListSelectionModel lsm = jList.getSelectionModel();
 
         for (int i = 0; i <= lsm.getMaxSelectionIndex(); i++) {
