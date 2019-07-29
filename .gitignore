@@ -8,3 +8,5 @@ lib/*
 old/*
 target/.
 server.properties
+*.log
+*.iml
