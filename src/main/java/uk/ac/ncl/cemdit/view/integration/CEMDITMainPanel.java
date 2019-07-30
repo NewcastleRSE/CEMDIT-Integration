@@ -1,7 +1,6 @@
 package uk.ac.ncl.cemdit.view.integration;
 
 import org.apache.log4j.Logger;
-import uk.ac.ncl.cemdit.FileTableModel;
 import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
@@ -9,8 +8,6 @@ import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -109,16 +106,15 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         switch (e.getActionCommand()) {
             case "Run":
                 logger.debug("Populate model.");
-                Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)", integrationModel, integrationDataModel);
                 File dir = new File(System.getProperty("user.home"));
 
 // Create a TableModel object to represent the contents of the directory
-                FileTableModel model = new FileTableModel(dir);
+                IntegrationDataModel model = new IntegrationDataModel();
+                Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)", integrationModel, model);
                 resultPanel.getDataPanel().setDataModel(model);
                 queryTextArea.setText(integrationModel.getOriginalQuery());
                 resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
                 resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
-                System.out.println(resultPanel.getDataPanel().getRowCount());
                 responsePanel.populateList(integrationModel.getOtherResponses());
                 break;
             case "View Provenance":
@@ -134,6 +130,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 break;
             case "View Matches":
                 setMatchPanel();
+                this.revalidate();
                 break;
         }
     }

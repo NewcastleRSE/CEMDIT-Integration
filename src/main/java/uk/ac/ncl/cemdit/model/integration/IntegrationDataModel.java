@@ -1,70 +1,71 @@
 package uk.ac.ncl.cemdit.model.integration;
 
-import org.apache.log4j.Logger;
-
 import javax.swing.table.AbstractTableModel;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
+/**
+ * The methods in this class allow the JTable component to get * and display data about
+ * the files in a specified directory. * It represents a table with six columns: filename,
+ * size, modification date, * plus three columns for flags: directory, readable, writable.
+ **/
 public class IntegrationDataModel extends AbstractTableModel {
-    private Logger logger = Logger.getLogger(this.getClass());
-    ArrayList<ArrayList<Object>> data = new ArrayList();
-    ArrayList<String> columnName = new ArrayList<>();
+    protected File dir = new File(System.getProperty("user.home"));
+    protected ArrayList<ArrayList<Object>> data = new ArrayList();
+    protected Object[] columnClasses;
+    protected String[] columnNames = {};
 
+    // This table model works for any one given directory
     public IntegrationDataModel() {
-        super();
+        this.dir = dir;
+        // Store a list of files in the directory
     }
 
     public void setData(ArrayList<ArrayList<Object>> data) {
         this.data = data;
     }
 
-    public ArrayList<ArrayList<Object>> getData() {
-        return data;
+    public void setClasses(Class[] columnClasses) {
+        this.columnClasses = columnClasses;
     }
 
-    public void fire() {
-        this.fireTableDataChanged();
+    // These are easy methods
+    @Override
+    public int getColumnCount() {
+        ArrayList<Class> classes = new ArrayList<>();
+        for (int i = 0; i < columnNames.length; i++) {
+            classes.add(String.class);
+        }
+        columnClasses = classes.toArray();
+        return columnNames.length;
     }
 
+    // A constant for this model
     @Override
     public int getRowCount() {
         return data.size();
     }
 
-    @Override
-    public int getColumnCount() {
-        if (data.size() > 0)
-            return data.get(0).size();
-        else
-            return 0;
-    }
-
-    public void setValueAt(int rowIndex, int columIndex, Object o) {
-        data.get(rowIndex).add(columIndex, o);
-        fireTableDataChanged();
-    }
-
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        return data.get(rowIndex).get(columnIndex);
-    }
-
+    // # of files in dir
+    // Information about each column
     @Override
     public String getColumnName(int col) {
-        return columnName.get(col);
-    }
-
-    public void setColumName(int columnIndex, String col) {
-        columnName.add(columnIndex, col);
+        return columnNames[col];
     }
 
     @Override
-    public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
+    public Class getColumnClass(int col) {
+        return (Class)columnClasses[col];
     }
 
+    public void setColumnNames(String[] columnNames) {
+        this.columnNames = columnNames;
+    }
+
+    // The method that must actually return the value of each cell
     @Override
-    public boolean isCellEditable(int row, int col) {
-        return false;
+    public Object getValueAt(int row, int col) {
+        return data.get(row).get(col);
     }
 }
