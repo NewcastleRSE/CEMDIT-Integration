@@ -1,17 +1,12 @@
 package uk.ac.ncl.cemdit.view;
 
 import org.apache.log4j.Logger;
-import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.view.integration.CEMDITMainPanel;
-import uk.ac.ncl.cemdit.model.integration.QueryResults;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class CEMDIT extends JFrame  {
     private Logger logger = Logger.getLogger(this.getClass());
@@ -34,8 +29,13 @@ public class CEMDIT extends JFrame  {
     CEMDIT() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image icon = toolkit.getImage(ClassLoader.getSystemResource("Logo.png"));
-        setIconImage(icon);
+        try {
+            Image icon = toolkit.getImage(ClassLoader.getSystemResource("Logo.png"));
+
+            setIconImage(icon);
+        } catch (NullPointerException e) {
+            logger.error("Logo.png not found.");
+        }
 
 //        Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel,integrationDataModel);
         mainPanel = new CEMDITMainPanel();
