@@ -1,5 +1,6 @@
 package uk.ac.ncl.cemdit.view.integration.Widgets;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.model.integration.QueryResults;
 
@@ -7,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static java.awt.Font.MONOSPACED;
 
 public class DropDownRelationsWidget extends JPanel implements ActionListener {
     private JPanel jPanel = new JPanel();
@@ -34,13 +37,24 @@ public class DropDownRelationsWidget extends JPanel implements ActionListener {
                 color = "red";
                 break;
         }
+        setLayout(new BorderLayout());
         relList.setSelectedIndex(0);
         relList.addActionListener(this);
         jPanel.add(relList);
-        title.setText("<html>" + queryResults.getLabel() + "<font color=" + color + ">" + queryResults.getOperator()
-                + "</font>" + queryResults.getValue() + "</html>");
+        String str = "<html>" + queryResults.getLabel() + "<font color=" + color + ">" + queryResults.getOperator()
+                + "</font>" + queryResults.getValue() + "</html>";
+        title.setFont(Font.getFont(MONOSPACED));
+        title.setText(pad(str,100));
         add(title, BorderLayout.WEST);
-        add(jPanel, BorderLayout.EAST);
+        add(jPanel);
+    }
+
+    private String pad(String str, int length) {
+        int start = str.length();
+        for (int i = start; i < length; i++) {
+            str += " ";
+        }
+        return str;
     }
 
     @Override
@@ -49,4 +63,5 @@ public class DropDownRelationsWidget extends JPanel implements ActionListener {
         logger.debug(e.getActionCommand());
 
     }
+
 }
