@@ -11,14 +11,12 @@ import java.util.Date;
  * size, modification date, * plus three columns for flags: directory, readable, writable.
  **/
 public class IntegrationDataModel extends AbstractTableModel {
-    protected File dir = new File(System.getProperty("user.home"));
     protected ArrayList<ArrayList<Object>> data = new ArrayList();
     protected Object[] columnClasses;
     protected String[] columnNames = {};
 
     // This table model works for any one given directory
     public IntegrationDataModel() {
-        this.dir = dir;
         // Store a list of files in the directory
     }
 
