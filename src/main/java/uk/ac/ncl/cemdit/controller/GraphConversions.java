@@ -8,6 +8,13 @@ import uk.ac.ncl.cemdit.view.StringsAndStuff;
 
 public class GraphConversions {
 
+    /**
+     * Convert to GraphStream
+     * @param provGraph
+     * @param css
+     * @param frameTitle
+     * @return
+     */
     public static Graph PE2GS(ProvGraph provGraph, String css, String frameTitle) {
         Graph graph = new SingleGraph("Singlegraph");
 

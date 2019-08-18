@@ -151,7 +151,7 @@ public class ParsePolicy {
                             throw new InvalidCollapseElementsException();
                         }
                     } else
-                    // COLLAPSE SHORTEST PATH
+                    // SIBLING BLUR
                     //policy[0] = operator
                     //policy[1] = ID_to_blur_from
                     //policy[2] = new_ID (for collapsed node)

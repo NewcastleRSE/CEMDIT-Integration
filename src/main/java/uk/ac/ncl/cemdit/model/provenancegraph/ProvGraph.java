@@ -11,8 +11,7 @@ import java.util.*;
  * is discovered in the API.
  * Class to create a graph of relations and elements or captured provenance
  */
-public class
-ProvGraph implements Cloneable {
+public class ProvGraph implements Cloneable {
 
     /**
      * Namespaces used in the provenance
