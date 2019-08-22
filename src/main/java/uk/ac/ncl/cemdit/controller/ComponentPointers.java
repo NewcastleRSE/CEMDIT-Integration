@@ -8,8 +8,10 @@ import uk.ac.ncl.cemdit.model.provenancegraph.ProvGraph;
 import uk.ac.ncl.cemdit.view.ButtonPanel;
 import uk.ac.ncl.cemdit.view.RightHandPanes;
 import uk.ac.ncl.cemdit.view.TextPanes;
+
 import javax.swing.*;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -27,7 +29,7 @@ public class ComponentPointers {
     private ButtonPanel buttonPanel;
     private static ComponentPointers componentPointers = null;
     //private static String theme = "/themes/provn.xml";
-    static private Properties properties = new Properties();
+    static private Properties properties = null;
     static private String lastDir = "";
     private String provnfile = "Untitled";
     private String polfile = "Untitled";
@@ -53,12 +55,24 @@ public class ComponentPointers {
     private ComponentPointers() {
         try {
             css = new String(Files.readAllBytes(Paths.get(getClass().getResource("/stylesheet.css").toURI())));
+            loadProperties();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadProperties() {
+        properties  = new Properties();
+        try {
             File f = new File("server.properties");
-//            if (!(f.exists())) {
-//                OutputStream out = new FileOutputStream( f );
-//            }
+            if (!(f.exists())) {
+                OutputStream out = new FileOutputStream(f);
+            }
             InputStream is = new FileInputStream(f);
             properties.load(is);
+            System.out.println(properties.getProperty("query"));
             lastDir = getLastDir();
             if (lastDir == null) {
                 lastDir = "~";
@@ -139,7 +153,6 @@ public class ComponentPointers {
 
     /**
      * Load PROV-N file and create a provGraph structure
-     *
      */
     public void loadProvnFile(File file) {
         // set last dir to path of current file
@@ -201,17 +214,22 @@ public class ComponentPointers {
         this.provGraph = provGraph;
     }
 
-    public void setProperty(String property, String value) {
-        logger.debug("Setting property: " + property + " = " + value);
+    public static void setProperty(String property, String value) {
         properties.setProperty(property, value);
         File f = new File("server.properties");
         try {
             OutputStream out = new FileOutputStream(f);
-            logger.debug("Storing properties");
             properties.store(out, "This is an optional header comment string");
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+    }
+
+    public static String getProperty(String property) {
+        if (properties == null) {
+            loadProperties();
+        }
+        return properties.getProperty(property);
     }
 
     public static String getLastDir() {

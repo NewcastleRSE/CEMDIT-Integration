@@ -1,6 +1,7 @@
 package uk.ac.ncl.cemdit.view.integration;
 
 import org.apache.log4j.Logger;
+import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
@@ -15,7 +16,6 @@ import java.io.File;
 
 public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelectionListener {
     private Logger logger = Logger.getLogger(CEMDITMainPanel.class);
-
     /**
      * Panel containing the original query
      */
@@ -28,6 +28,9 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
      * Button to submit query
      */
     private JButton queryButton = new JButton("Run");
+
+    private JRadioButton rest = new JRadioButton("REST");
+    private JRadioButton rdf = new JRadioButton("RDF");
 
     /**
      * Panel containing the top ranked response (or else the selected response)
@@ -47,9 +50,9 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         FlowLayout queryLayout = new FlowLayout();
         queryLayout.setAlignment(FlowLayout.LEADING);
         queryPanel.setLayout(queryLayout);
-        queryTextArea.setColumns(75);
+        queryTextArea.setColumns(70);
         queryButton.addActionListener(this);
-        queryTextArea.setText(integrationModel.getOriginalQuery());
+        queryTextArea.setText(ComponentPointers.getProperty("query"));
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
         responsePanel = new ResponsePanel(integrationModel.getOtherResponses(), this);
 
@@ -81,8 +84,13 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         responsePanel.getBorder()));
 
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(rest);
+        buttonGroup.add(rdf);
         queryPanel.add(queryTextArea);
         queryPanel.add(queryButton);
+        queryPanel.add(rest);
+        queryPanel.add(rdf);
         add(queryPanel, BorderLayout.NORTH);
         add(resultPanel, BorderLayout.CENTER);
         add(responsePanel, BorderLayout.PAGE_END);
@@ -105,14 +113,22 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Run":
+                QueryType qtype = rdf.isSelected()?QueryType.RDF:QueryType.REST;
                 logger.debug("Populate model.");
+//                "sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)";
+                String query = queryTextArea.getText();
+                if (query == null || query.equals("")) {
+                    query = "sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)";
+                    queryTextArea.setText(query);
+                }
+                ComponentPointers.setProperty( "query", query);
                 File dir = new File(System.getProperty("user.home"));
 
 // Create a TableModel object to represent the contents of the directory
                 IntegrationDataModel model = new IntegrationDataModel();
-                Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)", integrationModel, model);
+                Utils.populateIntegrationModel(query, integrationModel, model, qtype);
                 resultPanel.getDataPanel().setDataModel(model);
-                queryTextArea.setText(integrationModel.getOriginalQuery());
+                //queryTextArea.setText(integrationModel.getOriginalQuery());
                 resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
                 resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
                 responsePanel.populateList(integrationModel.getOtherResponses());
