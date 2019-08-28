@@ -49,14 +49,23 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         super();
         FlowLayout queryLayout = new FlowLayout();
         queryLayout.setAlignment(FlowLayout.LEADING);
-        queryPanel.setLayout(queryLayout);
-        queryTextArea.setColumns(70);
+        queryPanel.setLayout(new FlowLayout());
+        queryTextArea.setColumns(120);
+        JScrollPane sc_queryTextArea = new JScrollPane();
+        sc_queryTextArea.add(queryTextArea);
         queryButton.addActionListener(this);
+        queryTextArea.setRows(3);
+        queryTextArea.setLineWrap(true);
         queryTextArea.setText(ComponentPointers.getProperty("query"));
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
         responsePanel = new ResponsePanel(integrationModel.getOtherResponses(), this);
 
-        setLayout(new BorderLayout());
+
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        setLayout(gridBagLayout);
+
+        //setLayout(new BorderLayout());
         setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
@@ -91,9 +100,22 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         queryPanel.add(queryButton);
         queryPanel.add(rest);
         queryPanel.add(rdf);
-        add(queryPanel, BorderLayout.NORTH);
-        add(resultPanel, BorderLayout.CENTER);
-        add(responsePanel, BorderLayout.PAGE_END);
+
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weighty = 0.20;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        add(queryPanel,gridBagConstraints);
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weighty = 0.40;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        add(resultPanel,gridBagConstraints);
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        add(responsePanel,gridBagConstraints);
         setDataPanel();
     }
 
