@@ -1,7 +1,7 @@
 package uk.ac.ncl.cemdit.model.integration;
 
 import org.apache.log4j.Logger;
-import javax.swing.*;
+import uk.ac.ncl.cemdit.view.integration.ProvenancePanel;
 import java.util.ArrayList;
 
 public class IntegrationModel {
@@ -20,7 +20,7 @@ public class IntegrationModel {
     // ProvN file
     private static String provNFilename = "";
     // Provenance Panel
-    private static JPanel provenancePanel = new JPanel();
+    private static ProvenancePanel provenancePanel = new ProvenancePanel();
 
 
 
@@ -113,11 +113,11 @@ public class IntegrationModel {
         this.provNFilename = provNFilename;
     }
 
-    public JPanel getProvenancePanel() {
+    public ProvenancePanel getProvenancePanel() {
         return provenancePanel;
     }
 
-    public void setProvenancePanel(JPanel provenancePanel) {
+    public void setProvenancePanel(ProvenancePanel provenancePanel) {
         this.provenancePanel = provenancePanel;
     }
 }
