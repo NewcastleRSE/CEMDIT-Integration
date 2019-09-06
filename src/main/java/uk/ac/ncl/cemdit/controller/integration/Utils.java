@@ -1,33 +1,20 @@
 package uk.ac.ncl.cemdit.controller.integration;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.BulkWriteOperation;
-import com.mongodb.BulkWriteResult;
-import com.mongodb.Cursor;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.ParallelScanOptions;
-import com.mongodb.ServerAddress;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import com.mongodb.client.MongoCollection;
 import org.apache.log4j.Logger;
-import org.bson.Document;
+import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.QueryResults;
+import uk.ac.ncl.cemdit.model.integration.lookupDB.LookupDB;
 import uk.ac.ncl.cemdit.view.integration.QueryType;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 public class Utils {
@@ -114,23 +101,14 @@ public class Utils {
                     String headers = rawData.get(0);
                     integrationDataModel.setColumnNames(headers.split(","));
                     for (int i = 1; i < rawData.size(); i++) {
-                        String[] info =rawData.get(i).split(",");
+                        String[] info = rawData.get(i).split(",");
                         ArrayList<Object> al_info = new ArrayList();
-                        for ( int j = 0; j < info.length; j++) {
+                        for (int j = 0; j < info.length; j++) {
                             al_info.add(info[j]);
                         }
                         data1.add(al_info);
                     }
                     integrationDataModel.setData(data1);
-                    // Get lookup database url from system.properties
-
-                    // Get query provenance template address for png file
-                    // e.g. https://openprovenance.org/store/documents/497.png
-
-                    MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-                    MongoCollection<Document> collection = database.getCollection("COLLECTION");
-
-
 
                     //integrationDataModel.setClasses(columnClasses);
                 } catch (IOException e) {
@@ -146,10 +124,55 @@ public class Utils {
         }
     }
 
+    static public void lookupProvenance(LookupType lookupType, IntegrationModel integrationModel) {
+        // LOOK UP PROVENANCE
+        // Get lookup database url from system.properties
+
+        // Get query provenance template address for png file
+        // e.g. https://openprovenance.org/store/documents/497.png
+
+        //MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        //MongoCollection<Document> collection = database.getCollection("COLLECTION");
+
+        // For now let's create a json file with the info that should go in the lookup database
+
+        switch (lookupType) {
+            // The lookup database telling us where to find the provenance is in a json file
+            case JSON:
+                String dblocation = ComponentPointers.getProperty("dblocation");
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                Gson gson = gsonBuilder.create();
+                String filename = ComponentPointers.getProperty("dblocation");
+                try {
+                    LookupDB lookupDB = gson.fromJson(new FileReader(new File(filename)), LookupDB.class);
+                    lookupDB.getCollection().forEach((document) -> {
+                        if (document.getType().equals("ProvTemplate")) {
+                            logger.debug("Image file to load: " + document.getUri());
+                            integrationModel.setProvNFilename(document.getUri());
+                            integrationModel.getProvenancePanel().loadGraph();
+                        }
+                    });
+
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            // The lookup database telling us where to find the provenance is in a MongoDB database
+            case MONGODB:
+                System.out.println("not yet implemented");
+                break;
+        }
+
+
+    }
+
     /**
      * Method to convert an input stream from the API into raw string format.
-     * @param in    Input stream to be converted.
-     * @return      Raw data string.
+     *
+     * @param in Input stream to be converted.
+     * @return Raw data string.
      */
     public static String readStream(InputStream in) {
         StringBuilder sb = new StringBuilder();
@@ -167,8 +190,9 @@ public class Utils {
 
     /**
      * Method to convert an input stream from the API into raw string format.
-     * @param in    Input stream to be converted.
-     * @return      Raw data string.
+     *
+     * @param in Input stream to be converted.
+     * @return Raw data string.
      */
     public static ArrayList<String> readStream2Array(InputStream in) {
         ArrayList<String> returns = new ArrayList<>();
