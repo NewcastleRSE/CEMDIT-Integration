@@ -1,6 +1,7 @@
 package uk.ac.ncl.cemdit.view;
 //http://localhost:8086/query/?theme=Vehicles&type=Vehicle count&sensor=PER_TRF_CNT_SL_A690D1&starttime=20190101000000&endtime=2019013123595959
 import org.apache.log4j.Logger;
+import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.view.integration.CEMDITMainPanel;
@@ -10,6 +11,7 @@ import java.awt.*;
 
 public class CEMDIT extends JFrame  {
     private Logger logger = Logger.getLogger(this.getClass());
+    ComponentPointers cp = ComponentPointers.getInstance();
 
     /**
      * The main panel containing all the other panels
@@ -43,7 +45,8 @@ public class CEMDIT extends JFrame  {
         getContentPane().add(mainPanel);
         pack();
         setVisible(true);
-        setSize(1024, 768);
+        //setSize(1024, 768);
+        setSize(getWidth(), getHeight());
     }
 
     static public void main(String[] args) {
