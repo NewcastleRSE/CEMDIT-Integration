@@ -1,0 +1,8 @@
+{
+  "Queries":[
+    {"querytype":"Vehicle Count",
+    "query":"http://localhost:8086/query/?sensor=PER_TRF_CNT_TT2NORTH4&theme=Vehicles&type=Vehicle%20Count&starttime=201901010000&endtime=20190105235959"},
+    {"querytype":"Temperature",
+    "query":""}
+  ]
+}

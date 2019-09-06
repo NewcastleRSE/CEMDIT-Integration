@@ -1,0 +1,16 @@
+{
+  "DBEntry": [
+    {
+      "query": "Vehicle Count",
+      "type": "ProvTemplate",
+      "uri": "https://openprovenance.org/store/documents/497.svg",
+      "description": ""
+    },
+    {
+      "query": "Vehicle Count",
+      "type": "Entity",
+      "uri" : "",
+      "description": "place where info on this entity can be found, for example location of the configuration file for Inception neural network used."
+    }
+  ]
+}
