@@ -72,7 +72,6 @@ public class ComponentPointers {
             }
             InputStream is = new FileInputStream(f);
             properties.load(is);
-            System.out.println(properties.getProperty("query"));
             lastDir = getLastDir();
             if (lastDir == null) {
                 lastDir = "~";
@@ -82,7 +81,7 @@ public class ComponentPointers {
 
             // Try loading properties from the file (if found)
             properties.load(is);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
