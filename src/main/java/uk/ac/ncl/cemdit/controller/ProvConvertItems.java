@@ -1,9 +1,11 @@
 package uk.ac.ncl.cemdit.controller;
 
+import org.apache.log4j.Logger;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.Document;
 
 public class ProvConvertItems {
+    static private Logger logger = Logger.getLogger(ProvConvertItems.class);
     /**
      * Use the Provenance toolbox to convert a provn file to any of the supported file types. File type exported
      * to is determined by the extension of the file.
@@ -11,10 +13,14 @@ public class ProvConvertItems {
      * @param provn_file
      * @param output_file
      */
-    static public void convertProvN(String provn_file, String output_file) throws Exception{
+    static public void convertProvN(String provn_file, String output_file) {
+        try {
             InteropFramework intF = new InteropFramework();
             Document document = intF.readDocumentFromFile(provn_file);
             intF.writeDocument(output_file, document);
+        } catch (Exception e) {
+            logger.debug(e.getMessage());
+        }
     }
 
     static public void merge(String indexfilenames, String outfile) {
