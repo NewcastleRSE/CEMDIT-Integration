@@ -10,3 +10,4 @@ target/.
 server.properties
 *.log
 *.iml
+sqlite/sqlite.db
