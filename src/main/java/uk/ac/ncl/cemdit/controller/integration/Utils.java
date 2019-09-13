@@ -11,6 +11,8 @@ import uk.ac.ncl.cemdit.model.integration.QueryResults;
 import uk.ac.ncl.cemdit.model.integration.lookupDB.LookupDB;
 import uk.ac.ncl.cemdit.view.integration.QueryType;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,7 +24,7 @@ public class Utils {
     static private Logger logger = Logger.getLogger(Utils.class);
 
 
-    static public void populateIntegrationModel(String query, IntegrationModel integrationModel, IntegrationDataModel integrationDataModel, QueryType queryType) {
+    static public void populateIntegrationModel(String query, IntegrationModel integrationModel, IntegrationDataModel integrationDataModel, QueryType queryType, Container container) {
         ArrayList<String> data = new ArrayList<>();
         ArrayList<ArrayList<Object>> data1 = new ArrayList<>();
         ArrayList<Object> row = new ArrayList<>();
@@ -109,10 +111,20 @@ public class Utils {
                         data1.add(al_info);
                     }
                     integrationDataModel.setData(data1);
+                    // It's a REST query it will only have one response
+                    ArrayList<String> onlyResponse = new ArrayList<>();
+                    onlyResponse.add(query);
+                    integrationModel.setOtherResponses(onlyResponse);
+                    // Query has to be exact so similarity score will be 100%
+                    integrationModel.setSimilarityScore(1);
 
                     //integrationDataModel.setClasses(columnClasses);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                    if (e.getMessage().equals("Connection refused: connect")) {
+                        JOptionPane.showMessageDialog(container, "Connection refused. Please make sure the REST service \n" +
+                                "is running and try running the query again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
 
                 //Populate
@@ -160,8 +172,8 @@ public class Utils {
 
                 break;
             // The lookup database telling us where to find the provenance is in a MongoDB database
-            case MONGODB:
-                System.out.println("not yet implemented");
+            case SQLITE:
+                String sqlitedb = ComponentPointers.getProperty("sqlitedb");
                 break;
         }
 
