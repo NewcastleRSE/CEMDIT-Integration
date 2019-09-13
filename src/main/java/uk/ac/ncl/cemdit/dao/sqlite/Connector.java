@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CRUD handler
@@ -51,6 +53,27 @@ public class Connector {
             e.printStackTrace();
             return null;
         }
+    }
+
+    static public String[] provenanceTemplates() {
+        String[] provtemplates = null;
+        List<String> provtemp = new ArrayList<>();
+        String query = "SELECT type FROM querytypes";
+        Connection conn = connect();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            // loop through the result set
+            while (rs.next()) {
+                provtemp.add(rs.getString("type"));
+            }
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        provtemplates = provtemp.stream().toArray(String[]::new);
+        return provtemplates;
     }
 
 
