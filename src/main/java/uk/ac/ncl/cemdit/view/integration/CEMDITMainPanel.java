@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.integration.LookupType;
 import uk.ac.ncl.cemdit.controller.integration.Utils;
+import uk.ac.ncl.cemdit.dao.sqlite.Connector;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.lookupDB.ProvQueryTypes;
@@ -97,15 +98,24 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         // For now it is just stored in a json file
         String queryTypesDB = ComponentPointers.getProperty("querydb");
         logger.trace("Where to find available query types: " + queryTypesDB);
-        // Populate a list from the json file
-        Gson gson = new Gson();
-        try {
-            ProvQueryTypes provQueryTypes = gson.fromJson(new FileReader(queryTypesDB), ProvQueryTypes.class);
-            String[] types = provQueryTypes.getTypes().toArray(new String[provQueryTypes.getTypes().size()]);
+        LookupType templateTypes = Enum.valueOf(LookupType.class, ComponentPointers.getProperty("templateLocationType").trim().toUpperCase());
+        System.out.println(templateTypes);
+        switch (templateTypes) {
+            case SQLITE:
+                provQueryType = new JComboBox<String>(Connector.provenanceTemplates());
+                break;
+            case JSON:
+                // Populate a list from the json file
+                Gson gson = new Gson();
+                try {
+                    ProvQueryTypes provQueryTypes = gson.fromJson(new FileReader(queryTypesDB), ProvQueryTypes.class);
+                    String[] types = provQueryTypes.getTypes().toArray(new String[provQueryTypes.getTypes().size()]);
 
-            provQueryType = new JComboBox<String>(types);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+                    provQueryType = new JComboBox<String>(types);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
 
         //setLayout(new BorderLayout());
@@ -192,7 +202,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 File dir = new File(System.getProperty("user.home"));
 
                 IntegrationDataModel model = new IntegrationDataModel();
-                Utils.populateIntegrationModel(query, integrationModel, model, qtype);
+                Utils.populateIntegrationModel(query, integrationModel, model, qtype, this);
                 resultPanel.getDataPanel().setDataModel(model);
                 //queryTextArea.setText(integrationModel.getOriginalQuery());
                 resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
