@@ -1,13 +1,20 @@
 package uk.ac.ncl.cemdit.view;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.dao.sqlite.Connector;
+import uk.ac.ncl.cemdit.model.integration.lookupDB.DBEntry;
+import uk.ac.ncl.cemdit.model.integration.lookupDB.LookupDB;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.sql.*;
 
 public class SQLiteTools {
     final static Logger logger = Logger.getLogger(SQLiteTools.class);
+    static String filename = "data/lookup.json";
 
     static public void main(String[] args) {
         /**
@@ -18,19 +25,42 @@ public class SQLiteTools {
         Options options = new Options();
         CommandLineParser parser = new DefaultParser();
 
-        Option i = Option.builder("c").longOpt("create").required().desc("Create database and tables").build();
-        options.addOption(i);
+        Option d = Option.builder("d").longOpt("database").desc("Create database").build();
+        options.addOption(d);
+        Option t = Option.builder("t").longOpt("tables").desc("Create tables").build();
+        options.addOption(t);
+        Option i1 = Option.builder("i1").longOpt("initialise 1").desc("Initialise table 1").build();
+        options.addOption(i1);
+        Option i2 = Option.builder("i2").longOpt("initialise 2").desc("Initialise table 2").build();
+        options.addOption(i2);
+        Option i3 = Option.builder("i3").longOpt("initialise 3").desc("Initialise table 3").build();
+        options.addOption(i3);
 
         org.apache.commons.cli.CommandLine cmd;
 
         try {
             cmd = parser.parse(options, args);
-            if (cmd.hasOption("c")) {
+            if (cmd.hasOption("d")) {
+                System.out.println("Creating database ...");
                 createDatabase();
+            }
+            if (cmd.hasOption("t")) {
+                System.out.println("Creating tables ...");
                 String[] queries = createTableSQLqueries(tables);
                 createNewTables(queries);
-//                insertTypes();
+            }
+            if (cmd.hasOption("i1")) {
+                System.out.println("insert types ...");
+                insertTypes();
+            }
+            if (cmd.hasOption("i2")) {
+                System.out.println("insert queries ...");
                 insertQueries();
+            }
+            if (cmd.hasOption("i3")) {
+
+                System.out.println("insert lookup items ...");
+                insertLookups();
             }
 
         } catch (ParseException e) {
@@ -43,7 +73,30 @@ public class SQLiteTools {
     /**
      * Insert some records into the tables just to get things going
      */
-    public static void insertInitRecords() {
+    public static void insertLookups() {
+        LookupDB lookupDB = lookupItems();
+        Connection conn = Connector.connect();
+        try {
+            conn.setAutoCommit(false);
+            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO lookup (query, type, uri, description) VALUES(?,?,?,?)");
+            lookupDB.getCollection().forEach((item) -> {
+                try {
+                    preparedStatement.setString(1, item.getQuery());
+                    preparedStatement.setString(2, item.getType());
+                    preparedStatement.setString(3, item.getUri());
+                    preparedStatement.setString(4, item.getDescription());
+                    preparedStatement.addBatch();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            });
+            int[] result = preparedStatement.executeBatch();
+            conn.commit();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -67,6 +120,19 @@ public class SQLiteTools {
         return queries;
     }
 
+    public static LookupDB lookupItems() {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson;
+        gson = builder.setPrettyPrinting().create(); // Add pretty printing for easy reading
+        try {
+            LookupDB lookupDB = gson.fromJson(new FileReader(filename), LookupDB.class);
+            return lookupDB;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void insertTypes() {
         String[] types = {"Vehicle Count", "Temperature", "humidity"};
         Connection conn = Connector.connect();
@@ -80,7 +146,6 @@ public class SQLiteTools {
                 preparedStatement.addBatch();
             }
             int[] result = preparedStatement.executeBatch();
-            System.out.println(result.length);
             conn.commit();
             conn.close();
         } catch (SQLException e) {
