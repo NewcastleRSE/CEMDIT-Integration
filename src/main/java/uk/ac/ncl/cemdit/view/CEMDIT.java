@@ -32,7 +32,7 @@ public class CEMDIT extends JFrame  {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         try {
-            Image icon = toolkit.getImage(ClassLoader.getSystemResource("Logo.png"));
+            Image icon = toolkit.getImage(ClassLoader.getSystemResource("CEMDITLogo3.png"));
 
             setIconImage(icon);
         } catch (NullPointerException e) {

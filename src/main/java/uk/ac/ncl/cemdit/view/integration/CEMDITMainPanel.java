@@ -13,12 +13,14 @@ import uk.ac.ncl.cemdit.model.integration.lookupDB.ProvQueryTypes;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintWriter;
 
 public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelectionListener {
     private Logger logger = Logger.getLogger(CEMDITMainPanel.class);
@@ -147,6 +149,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                         responsePanel.getBorder()));
 
         ButtonGroup buttonGroup = new ButtonGroup();
+        rest.setSelected(true);
         buttonGroup.add(rest);
         buttonGroup.add(rdf);
         queryPanel.add(provQueryType);
@@ -201,12 +204,16 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 ComponentPointers.setProperty("query", query);
                 File dir = new File(System.getProperty("user.home"));
 
-                IntegrationDataModel model = new IntegrationDataModel();
-                Utils.populateIntegrationModel(query, integrationModel, model, qtype, this);
-                resultPanel.getDataPanel().setDataModel(model);
+                Utils.populateIntegrationModel(query, integrationModel, integrationDataModel, qtype, this);
+                resultPanel.getDataPanel().setDataModel(integrationDataModel);
                 //queryTextArea.setText(integrationModel.getOriginalQuery());
                 resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
                 resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
+                if (resultPanel.getDataPanel().getRowCount() > 0) {
+                    resultPanel.getBtn_saveData().setEnabled(true);
+                } else {
+                    resultPanel.getBtn_saveData().setEnabled(false);
+                }
                 responsePanel.populateList(integrationModel.getOtherResponses());
                 queryExecuted = true;
                 integrationModel.getProvenancePanel().setLoaded(false);
@@ -216,7 +223,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                     if (queryExecuted) {
                         logger.trace("View Provenance");
                         String lookup = ComponentPointers.getProperty("lookupdb");
-                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel);
+                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
                         integrationModel.getProvenancePanel().loadGraph();
                         // Switch to view Provenance panel
                         setProvenancePanel();
@@ -233,6 +240,39 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
             case "View Matches":
                 setMatchPanel();
                 this.revalidate();
+                break;
+            case "Save Results":
+                final JFileChooser fc = new JFileChooser(ComponentPointers.getLastDir());
+                fc.setCurrentDirectory(new java.io.File(ComponentPointers.getLastDir()));
+//                FileNameExtensionFilter filter = new FileNameExtensionFilter("PROVN", "provn");
+//                fc.setFileFilter(filter);
+                int returnVal = fc.showOpenDialog(this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    int writeFile = 0;
+                    if (file.exists()) {
+                        writeFile = JOptionPane.showConfirmDialog(
+                                this,
+                                file.getName() + " exists. Do you want to overwrite it?",
+                                "File exists.",
+                                JOptionPane.YES_NO_OPTION);
+                    }
+                    System.out.println(writeFile);
+                    if (writeFile == 0) {
+                        try {
+                            PrintWriter pw = new PrintWriter(new File(file.getAbsolutePath()));
+                            pw.println(integrationDataModel.getColumnNamesAsCSV());
+                            int rows = integrationDataModel.getRowCount();
+                            for (int row = 0; row < rows; row++) {
+                                pw.println(integrationDataModel.getRowAsCSV(row));
+                            }
+                            pw.close();
+                        } catch (FileNotFoundException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+
                 break;
         }
     }

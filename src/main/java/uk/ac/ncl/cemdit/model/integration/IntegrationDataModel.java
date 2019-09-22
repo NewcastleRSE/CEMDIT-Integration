@@ -1,16 +1,17 @@
 package uk.ac.ncl.cemdit.model.integration;
 
+import org.apache.log4j.Logger;
+
 import javax.swing.table.AbstractTableModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * The methods in this class allow the JTable component to get * and display data about
- * the files in a specified directory. * It represents a table with six columns: filename,
- * size, modification date, * plus three columns for flags: directory, readable, writable.
+ * This model sits behind the JTable that displays the data returned by the REST query
  **/
 public class IntegrationDataModel extends AbstractTableModel {
+    final static Logger logger = Logger.getLogger(IntegrationDataModel.class);
     protected ArrayList<ArrayList<Object>> data = new ArrayList();
     protected Object[] columnClasses;
     protected String[] columnNames = {};
@@ -54,7 +55,7 @@ public class IntegrationDataModel extends AbstractTableModel {
 
     @Override
     public Class getColumnClass(int col) {
-        return (Class)columnClasses[col];
+        return (Class) columnClasses[col];
     }
 
     public void setColumnNames(String[] columnNames) {
@@ -64,6 +65,29 @@ public class IntegrationDataModel extends AbstractTableModel {
     // The method that must actually return the value of each cell
     @Override
     public Object getValueAt(int row, int col) {
-        return data.get(row).get(col);
+        if (getRowCount() > 0 && getColumnCount() > 0) {
+            return data.get(row).get(col);
+        } else
+            return null;
+    }
+
+    public String getRowAsCSV(int row) {
+        String returnValue = "";
+        for (int col = 0; col < getColumnCount(); col++) {
+            returnValue += getValueAt(row, col);
+            if (col < getColumnCount() - 1)
+                returnValue += ",";
+        }
+        return returnValue;
+    }
+
+    public String getColumnNamesAsCSV() {
+        String returnValue = "";
+        for (int col = 0; col < getColumnCount(); col++) {
+            returnValue += getColumnName(col);
+            if (col < getColumnCount() - 1)
+                returnValue += ",";
+        }
+        return returnValue;
     }
 }

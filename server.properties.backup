@@ -1,8 +1,12 @@
 #This is an optional header comment string
 #Fri Sep 06 14:35:40 BST 2019
-dblocation=data/lookup.json
 lastdir=~
-query=http\://localhost\:8086/query?sensor\=PER_TRF_CNT_VAISALACCTV2394&theme\=Vehicles&type\=Vehicle%20Count&starttime\=20190101000000&endtime\=20190101235959
+#query=http\://localhost\:8086/query?sensor\=PER_TRF_CNT_VAISALACCTV2394&theme\=Vehicles&type\=Vehicle%20Count&starttime\=20190101000000&endtime\=20190101235959
+#query=http://localhost:8086/query/?sensor=PER_EMOTE_1201&theme=Weather&type=Temperature&starttime=201901010000&endtime=20190101235959
+query=http\://localhost\:8086/query/?sensor\=PER_EMOTE_1201&theme\=Weather&type\=Temperature&starttime\=201901010000&endtime\=20190115235959
 querydb=data/querytypes.json
 mongodb=localhost\:270127
+dblocation=data/lookup.json
+querydb=data/querytypes.json
 lookupdb=JSON
+sqlitedb=d:/Idea/CEMDIT-Integration/sqlite/sqlite.db

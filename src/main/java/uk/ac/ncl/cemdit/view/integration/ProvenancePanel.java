@@ -92,11 +92,12 @@ public class ProvenancePanel extends JPanel {
             in = new URL(svgFile).openStream();
             logger.trace("Saving file as " + tmpFile);
             Files.copy(in, Paths.get(tmpFile), StandardCopyOption.REPLACE_EXISTING);
+            logger.trace("Load " + tmpFile + " to SVGCanvas");
+            svgCanvas.setURI(tmpFile);
+            Files.delete(Paths.get(tmpFile));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.trace("Load " + tmpFile + " to SVGCanvas");
-        svgCanvas.setURI(tmpFile);
 
         // Spawn new frame for displaying graph
         if (!loaded) {

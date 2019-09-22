@@ -76,5 +76,32 @@ public class Connector {
         return provtemplates;
     }
 
+    /**
+     * Retrieve the entry from the lookup table which contains the URI to the provenance template
+     * @param type the type of the provenance template e.g. Vehicle Count
+     * @return The URI of the provenance template
+     */
+    static public String retrieveTemplateFromProvStore(String type) {
+        String provtemplate = null;
+        List<String> provtemp = new ArrayList<>();
+        String query = "SELECT uri FROM lookup WHERE query='" + type + "' AND type='ProvTemplate'";
+        System.out.println("Query: " + query);
+        Connection conn = connect();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            // loop through the result set
+            while (rs.next()) {
+                provtemp.add(rs.getString("uri"));
+            }
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        provtemplate = provtemp.get(0);
+        return provtemplate;
+    }
+
 
 }

@@ -16,13 +16,15 @@ public class ResultsPanel extends JPanel implements ActionListener {
     private JButton btn_viewProvenance = new JButton("View Provenance");
     private JButton btn_viewData = new JButton("View Data");
     private JButton btn_viewMatches = new JButton("View Matches");
+    private JButton btn_saveData = new JButton("Save Results");
     private JPanel viewButtonsHorizontalPanel = new JPanel();
     private JPanel repairedQueryPanel = new JPanel();
     private JTextArea repairedQuery = new JTextArea(4, 80);
     private MatchPanel matchPanel = new MatchPanel();
     private ProvenancePanel provenancePanel = new ProvenancePanel();
     //private GraphStreamPanel graphStreamPanel = new GraphStreamPanel(null);
-    private DataPanel dataPanel = new DataPanel();;
+    private DataPanel dataPanel = new DataPanel();
+    ;
     private ActionListener actionListener = this;
     private JScrollPane sp_matchPanel;
     private JScrollPane sp_dataPanel;
@@ -37,11 +39,13 @@ public class ResultsPanel extends JPanel implements ActionListener {
         btn_viewProvenance.addActionListener(actionListener);
         btn_viewData.addActionListener(actionListener);
         btn_viewMatches.addActionListener(actionListener);
+        btn_saveData.addActionListener(actionListener);
 
         viewButtonsHorizontalPanel.setLayout(new FlowLayout());
         viewButtonsHorizontalPanel.add(btn_viewProvenance);
         viewButtonsHorizontalPanel.add(btn_viewData);
         viewButtonsHorizontalPanel.add(btn_viewMatches);
+        viewButtonsHorizontalPanel.add(btn_saveData);
         viewButtonsHorizontalPanel.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
@@ -74,10 +78,11 @@ public class ResultsPanel extends JPanel implements ActionListener {
         sp_dataPanel.setPreferredSize(new Dimension(900, 250));
         logger.debug("Length of query results: " + integrationModel.getQueryResults().size());
 
-       holdAll.setLayout(new VerticalFlowLayout());
-        holdAll.add(sp_matchPanel,0);
+        holdAll.setLayout(new VerticalFlowLayout());
+        holdAll.add(sp_matchPanel, 0);
         holdAll.add(provenancePanel, 1);
         holdAll.add(sp_dataPanel, 2);
+        btn_saveData.setEnabled(false);
         add(viewButtonsHorizontalPanel, BorderLayout.NORTH);
         add(repairedQueryPanel, BorderLayout.CENTER);
         add(holdAll, BorderLayout.SOUTH);
@@ -110,4 +115,13 @@ public class ResultsPanel extends JPanel implements ActionListener {
     public DataPanel getDataPanel() {
         return dataPanel;
     }
+
+    public JButton getBtn_saveData() {
+        return btn_saveData;
+    }
+
+    public void setBtn_saveData(JButton btn_saveData) {
+        this.btn_saveData = btn_saveData;
+    }
+
 }

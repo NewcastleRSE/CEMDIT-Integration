@@ -1,5 +1,8 @@
 package uk.ac.ncl.cemdit.model.integration;
 
+/**
+ *
+ */
 public class QueryResults {
     private String label;
     private String operator;

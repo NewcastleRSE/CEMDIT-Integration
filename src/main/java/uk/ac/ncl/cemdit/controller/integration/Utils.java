@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
+import uk.ac.ncl.cemdit.dao.sqlite.Connector;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.QueryResults;
@@ -31,6 +32,7 @@ public class Utils {
         ArrayList<Object> row1 = new ArrayList<>();
         String[] columnNames;
         Class[] columnClasses;
+        ArrayList<QueryResults> queryResults = new ArrayList<>();
 
         switch (queryType) {
             case RDF:
@@ -81,42 +83,61 @@ public class Utils {
                 String[] operators = {"=", ">", "=", "=", "X", ">", ">", ">", "=", "=", "=", "=", "=", "="};
                 String[] targetLabel = {"Sensor", "Vehicles", "theme", "sensor_names", "", "sensor_centroid_latitude", "sensor_centroid_longitude", "count", "timestamp", "untis", "untis", "untis", "untis", "untis"};
                 integrationModel.setSimilarityScore(0.7);
-                ArrayList<QueryResults> queryResults = new ArrayList<>();
+                queryResults.clear();
                 for (int i = 0; i < sourceLabel.length; i++) {
                     QueryResults queryResult = new QueryResults(sourceLabel[i], operators[i], targetLabel[i]);
                     queryResults.add(queryResult);
                 }
                 integrationModel.setQueryResults(queryResults);
                 integrationModel.setProvNFilename("/home/campus.ncl.ac.uk/njss3/Dropbox/CEM-DIT/CHAIn/Mockups/count_prov.svg");
-//        integrationDataModel.fire();
                 break;
             case REST:
                 //Do REST query
                 try {
+                    // Establish connection to TerminalSensor (Urban Observatory Proxy)
+                    queryResults.clear();
                     URL url = new URL(query);
                     HttpURLConnection con = null;
                     con = (HttpURLConnection) url.openConnection();
-
+                    // Retrieve data using query entered in TextField
                     ArrayList<String> rawData = readStream2Array(con.getInputStream());
                     data.add(query);
+                    // Since it is REST there is only one query
                     integrationModel.setTopRankedQuery(query);
+                    // The first line of the retrieved data contains the headers
                     String headers = rawData.get(0);
                     integrationDataModel.setColumnNames(headers.split(","));
                     for (int i = 1; i < rawData.size(); i++) {
-                        String[] info = rawData.get(i).split(",");
-                        ArrayList<Object> al_info = new ArrayList();
-                        for (int j = 0; j < info.length; j++) {
-                            al_info.add(info[j]);
+                        String line = rawData.get(i);
+                        if (!line.equals("")) {
+                            String[] info = line.split(",");
+                            ArrayList<Object> al_info = new ArrayList();
+                            for (int j = 0; j < info.length; j++) {
+                                al_info.add(info[j]);
+                            }
+                            data1.add(al_info);
                         }
-                        data1.add(al_info);
                     }
                     integrationDataModel.setData(data1);
-                    // It's a REST query it will only have one response
-                    ArrayList<String> onlyResponse = new ArrayList<>();
-                    onlyResponse.add(query);
-                    integrationModel.setOtherResponses(onlyResponse);
+                    // It's a REST query it will only have one response. Use that query as
+                    // first entry in Other Responses JList
+                    ArrayList<String> onlyOneResponse = new ArrayList<>();
+                    onlyOneResponse.add(query);
+                    integrationModel.setOtherResponses(onlyOneResponse);
                     // Query has to be exact so similarity score will be 100%
-                    integrationModel.setSimilarityScore(1);
+                    integrationModel.setSimilarityScore(0.9);
+                    // Since it is REST the source and the target will be the same and the operator will be = for all
+                    sourceLabel = headers.split(",");
+                    targetLabel = headers.split(",");
+                    //ArrayList<QueryResults> queryResults1 = new ArrayList<>();
+                    for (int i = 0; i < sourceLabel.length; i++) {
+                        QueryResults queryResult = new QueryResults(sourceLabel[i], "=", targetLabel[i]);
+                        queryResults.add(queryResult);
+                    }
+                    // add the retrieved data to the model
+                    integrationModel.setQueryResults(queryResults);
+                    // Now read the lookup table in the database to see where the provenance graph template is stored
+                    //integrationModel.setProvNFilename();
 
                     //integrationDataModel.setClasses(columnClasses);
                 } catch (IOException e) {
@@ -134,20 +155,17 @@ public class Utils {
                 logger.info("No query specified");
                 break;
         }
+        integrationDataModel.fireTableDataChanged();
+        integrationDataModel.fireTableStructureChanged();
     }
 
-    static public void lookupProvenance(LookupType lookupType, IntegrationModel integrationModel) {
-        // LOOK UP PROVENANCE
-        // Get lookup database url from system.properties
-
-        // Get query provenance template address for png file
-        // e.g. https://openprovenance.org/store/documents/497.png
-
-        //MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-        //MongoCollection<Document> collection = database.getCollection("COLLECTION");
-
-        // For now let's create a json file with the info that should go in the lookup database
-
+    /**
+     *
+     * @param lookupType select from the LookupType Enumeration - JSON, SQLITE, MONGODB
+     * @param integrationModel the model of the GUI
+     * @param querytype the type of the query which is the key in the database to find the location of the template in the provstore, eg. Vehicle Count, Radar
+     */
+    static public void lookupProvenance(LookupType lookupType, IntegrationModel integrationModel, String querytype) {
         switch (lookupType) {
             // The lookup database telling us where to find the provenance is in a json file
             case JSON:
@@ -164,8 +182,6 @@ public class Utils {
                             integrationModel.getProvenancePanel().loadGraph();
                         }
                     });
-
-
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -174,31 +190,13 @@ public class Utils {
             // The lookup database telling us where to find the provenance is in a MongoDB database
             case SQLITE:
                 String sqlitedb = ComponentPointers.getProperty("sqlitedb");
+                // Find the entry in the lookup database that contains the ProvStore entry for the provenance graph
+                integrationModel.setProvNFilename(Connector.retrieveTemplateFromProvStore(querytype));
                 break;
         }
 
 
     }
-
-    /**
-     * Method to convert an input stream from the API into raw string format.
-     *
-     * @param in Input stream to be converted.
-     * @return Raw data string.
-     */
-    public static String readStream(InputStream in) {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in));) {
-            String nextLine;
-            while ((nextLine = reader.readLine()) != null) {
-                sb.append(nextLine).append(System.getProperty("line.separator"));
-            }
-        } catch (IOException ignored) {
-
-        }
-        return sb.toString();
-    }
-
 
     /**
      * Method to convert an input stream from the API into raw string format.

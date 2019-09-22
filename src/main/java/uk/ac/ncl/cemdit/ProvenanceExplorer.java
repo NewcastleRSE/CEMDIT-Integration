@@ -6,6 +6,7 @@ import uk.ac.ncl.cemdit.view.MainPanel;
 import uk.ac.ncl.cemdit.view.MenuBar;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
+import java.awt.*;
 import java.io.InputStream;
 
 public class ProvenanceExplorer extends JFrame {
@@ -19,6 +20,14 @@ public class ProvenanceExplorer extends JFrame {
     private ProvenanceExplorer(String title) {
         super(title);
 
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        try {
+            Image icon = toolkit.getImage(ClassLoader.getSystemResource("ProvExplorerIcon.png"));
+
+            setIconImage(icon);
+        } catch (NullPointerException e) {
+            logger.error("Logo.png not found.");
+        }
         menuBar = new MenuBar();
         mainPanel = new MainPanel(this);
         setJMenuBar(menuBar);
