@@ -1,5 +1,7 @@
 package uk.ac.ncl.cemdit.controller;
 
+import com.google.common.io.Resources;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.graphstream.graph.Graph;
@@ -12,6 +14,7 @@ import uk.ac.ncl.cemdit.view.TextPanes;
 import javax.swing.*;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -54,11 +57,13 @@ public class ComponentPointers {
      */
     private ComponentPointers() {
         try {
-            css = new String(Files.readAllBytes(Paths.get(getClass().getResource("/stylesheet.css").toURI())));
+            URL url = Resources.getResource("stylesheet.css");
+            css = Resources.toString(url, Charsets.UTF_8);
+            //css = new String(Files.readAllBytes(Paths.get(getClass().getResource("stylesheet.css").toURI())));
             loadProperties();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (URISyntaxException e) {
+        //} catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
