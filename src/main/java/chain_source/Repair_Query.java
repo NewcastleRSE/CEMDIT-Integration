@@ -3,17 +3,22 @@
  */
 package chain_source;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
 
-import java.util.*;
-
 /**
  * @author Diana Bental
- * 10 January 2017
+ * @date 10 January 2017
  *
  * Repair a query by replacement of matching properties and removal of
- * non-matching ones.
+ * non-matching ones.n
  * Creates the repaired query from the original query, plus the SPSM matches,
  * plus information about data bindings previously extracted from 
  * the original query.

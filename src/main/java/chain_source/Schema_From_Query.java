@@ -1,21 +1,21 @@
 package chain_source;
+ import java.util.*;
 
 import com.hp.hpl.jena.graph.Node;
+
+/* Author Tanya Howden
+  * Date September 2017
+  * Modified Diana Bental November 2017
+  * - use the property names for schema predicate and parameters instead of variable names
+  */
+
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.sparql.core.TriplePath;
+import com.hp.hpl.jena.sparql.core.Var;
 import com.hp.hpl.jena.sparql.syntax.ElementPathBlock;
 import com.hp.hpl.jena.sparql.syntax.ElementVisitorBase;
 import com.hp.hpl.jena.sparql.syntax.ElementWalker;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
-/* Author Tanya Howden
- * Date September 2017
- * Modified Diana Bental November 2017
- * - use the property names for schema predicate and parameters instead of variable names
- */
 
 /*
  * 
@@ -46,7 +46,6 @@ public class Schema_From_Query {
 		String queryType="dbpedia";
 		
 		Match_Struc res = getSchema.getSchemaFromQuery(query, queryType);
-		
 		// System.out.println("Schema created from query: \n\n"+res.getRepairedSchema());
 		// System.out.println("Query Schema "+ res.getQuerySchema());
 		// System.out.println("Query Schema Head "+ res.getQuerySchemaHead());
@@ -57,11 +56,11 @@ public class Schema_From_Query {
 	
 	//first step to creating schema from query
 	//works out next step based on type of query that is getting passed in
-	public Match_Struc getSchemaFromQuery(String query, String queryType){
+	public Match_Struc getSchemaFromQuery(String query, String queryType){ 
 		//result that will be returned
 		//that will contain the query string
 		//schema string and schema tree
-		Match_Struc result = new Match_Struc();
+		Match_Struc result = new Match_Struc();	
 
 		
 		if(queryType.equals("sepa")){
@@ -158,7 +157,7 @@ public class Schema_From_Query {
 				
 			}catch(Exception e){
 				//invalid query, return null
-				System.out.println("Invalid Query, returning null.\n");
+				System.out.println("Cannot parse this Sparql query, returning null.\n");
 				return null;
 			}
 		}
@@ -184,8 +183,10 @@ public class Schema_From_Query {
 		if(!query.equals("")){
 
 			try{
+			
 				
 				//create query object
+				// Parse with Jena - this will raise an exception if Jena can't parse it
 				Query dbpediaQuery = QueryFactory.create(query);
 				res.setQuery(dbpediaQuery.toString());
 				
@@ -201,7 +202,7 @@ public class Schema_From_Query {
 					            // ...go through all the triples...
 					            Iterator<TriplePath> triples = el.patternElts();
 					            while (triples.hasNext()) {
-					            	
+					            	 
 					                // Get the next triple
 					            	TriplePath triple = triples.next() ;
 					            	// System.out.println(triple) ;
@@ -232,27 +233,31 @@ public class Schema_From_Query {
 					    }
 					);
 				
-				
 				//start schema string
-				predicate = chainPredicates.get(0) ;
-				schema = predicate + "(";
+				if(chainPredicates.isEmpty()) {
+					System.out.println("No schema predicate has been identified.") ;
+					return null ;
+				} else {
+					predicate = chainPredicates.get(0) ;
+					schema = predicate + "(";
 				
-				int size = chainParameters.size() ;
+					int size = chainParameters.size() ;
 				
-				if (size > 0) {
-					for(int i = 1 ; i < size ; i++) {
-						schema = schema + chainParameters.get(i-1) + ",";
+					if (size > 0) {
+						for(int i = 1 ; i < size ; i++) {
+							schema = schema + chainParameters.get(i-1) + ",";
+						}
+						schema = schema + chainParameters.get(size-1) ;
 					}
-					schema = schema + chainParameters.get(size-1) ;
+				
+					schema = schema + ")" ;
+				
+					System.out.println("Chain schema "+schema);
 				}
-				
-				schema = schema + ")" ;
-				
-				System.out.println("Chain schema "+schema);
 				
 			}catch(Exception e){
 				//invalid query, returning null
-				System.out.println("Invalid Query, returning null.\n");
+				System.out.println("Cannot parse this Sparql query, returning null.\n");
 				return null;
 			}
 		}
@@ -261,17 +266,10 @@ public class Schema_From_Query {
 		//and return
 		
 		// res.setRepairedSchema(schema);
-		
-		//Test tom (tree)
-		//The next line was commented before
-		System.out.println("Test tree from schema string:");
-		 res.setRepairedSchemaTree(createTreeFromSchemaString(schema));
-		 System.out.print(res.getRepairedPredicate());
-		 System.out.println(res.getRepairedParams());
-		
+		// res.setRepairedSchemaTree(createTreeFromSchemaString(schema));
 		res.setQuerySchema(schema);
 		res.setQuerySchemaHead(predicate);
-		//System.out.println("Schema head in setter " + res.getQuerySchemaHead()) ;
+		// System.out.println("Schema head in setter " + res.getQuerySchemaHead()) ;
 		
 		return res;
 	}

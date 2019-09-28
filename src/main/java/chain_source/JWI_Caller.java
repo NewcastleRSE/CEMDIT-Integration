@@ -1,14 +1,21 @@
 package chain_source;
 
-import edu.mit.jwi.Dictionary;
-import edu.mit.jwi.IDictionary;
-import edu.mit.jwi.item.*;
-import edu.mit.jwi.morph.WordnetStemmer;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
+import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.IDictionary;
+import edu.mit.jwi.item.IIndexWord;
+import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
+import edu.mit.jwi.item.IWord;
+import edu.mit.jwi.item.IWordID;
+import edu.mit.jwi.item.POS;
+import edu.mit.jwi.item.Pointer;
+import edu.mit.jwi.morph.WordnetStemmer;
+
 /* Author Diana Bental
  * Date November 2017
  * Modified
