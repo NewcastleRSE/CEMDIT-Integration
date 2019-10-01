@@ -1,29 +1,61 @@
 document
-prefix var <http://openprovenance.org/var#>
-prefix vargen <http://openprovenance.org/vargen#>
-prefix tmpl <http://openprovenance.org/tmpl#>
-prefix uo <http://urbanobservatory.ac.uk/uo#>
-
-
-bundle vargen:templ_overall
-	entity(var:templ_image,-,-)
-	entity(var:templ_trainset,-,-)
-	activity(var:produce,-,-)
-	entity(var:templ_model,-,-)
-	activity(var:infer,-,-)
-	entity(var:templ_count,-,-)
-	
-	wasGeneratedBy(var:templ_count,var:infer,-)
-	used(var:infer,var:templ_model,-)
-	wasGeneratedBy(var:templ_model,var:produce,-)
-	used(var:produce,var:templ_trainset,-)
-	wasDerivedFrom(var:templ_trainset,var:templ_image)
-endBundle
-
+  prefix vargen <http://openprovenance.org/vargen#>
+  prefix pre_0 <http://urbanobservatory.ac.uk/>
+  prefix uo <http://urbanobservatory.ac.uk/uo#>
+  prefix var <http://openprovenance.org/var#>
+  
+  bundle vargen:templ_trainset
+    prefix vargen <http://openprovenance.org/vargen#>
+    prefix uo <http://urbanobservatory.ac.uk/>
+    prefix var <http://openprovenance.org/var#>
+    
+    entity(var:image, [uo:value='var:image_filename'])
+    entity(var:annotation, [uo:value='var:ymin', uo:value='var:truncated', uo:value='var:ymax', uo:value='var:xmax', uo:value='var:difficult', uo:value='var:pose', uo:value='var:xmin', uo:value='var:name'])
+    entity(var:trainingset, [uo:value='var:training_image'])
+    used(uo:annotating, var:image, -)
+    wasAssociatedWith(uo:annotating, var:annotator, -)
+    wasDerivedFrom(var:trainingset, var:annotation, -, -, -)
+    activity(uo:annotating, -, -)
+    wasGeneratedBy(var:annotation, uo:annotating, -)
+    agent(var:annotator, [uo:value='var:name'])
+  endBundle
+  bundle vargen:templ_model
+    prefix vargen <http://openprovenance.org/vargen#>
+    prefix uo <http://urbanobservatory.ac.uk/>
+    prefix var <http://openprovenance.org/var#>
+    
+    used(uo:training, var:trainingset, -)
+    used(uo:training, uo:architecture, -)
+    used(uo:training, uo:hyper_params, -)
+    activity(uo:training, -, -)
+    wasGeneratedBy(var:model, uo:training, -)
+    entity(uo:architecture)
+    entity(uo:hyper_params, [uo:value='var:L2_weight', uo:value='var:weight_decays', uo:value='var:epochs', uo:value='var:dropout'])
+    entity(var:trainingset, [uo:value='var:training_image'])
+    entity(var:model, [uo:value='var:model_id'])
+  endBundle
+  bundle vargen:templ_count
+    prefix vargen <http://openprovenance.org/vargen#>
+    prefix uo <http://urbanobservatory.ac.uk/uo#>
+    prefix var <http://openprovenance.org/var#>
+    
+    entity(var:count, [uo:value='var:count_value'])
+    entity(var:image, [uo:value='var:image_filename'])
+    entity(var:model, [uo:value='var:model_id'])
+    used(uo:counting, var:model, -)
+    used(uo:counting, var:image, -)
+    activity(uo:counting, -, -)
+    wasGeneratedBy(var:count, uo:counting, -)
+  endBundle
+  bundle vargen:templ_image
+    prefix vargen <http://openprovenance.org/vargen#>
+    prefix uo <http://urbanobservatory.ac.uk/>
+    prefix var <http://openprovenance.org/var#>
+    
+    entity(var:image, [uo:value='var:ymin', uo:value='var:height', uo:value='var:ymax', uo:value='var:class', uo:value='var:xmax', uo:value='var:filename', uo:value='var:width', uo:value='var:xmin'])
+    entity(var:sensor, [uo:value='var:brokerName', uo:value='var:sensorName', uo:value='var:sensorCentroidLatitude', uo:value='var:thirdParty', uo:value='var:groundHeightAboveSeaLevel', uo:value='var:locationWKT', uo:value='var:sensorCentroidLongitude', uo:value='var:sensorHeightAboveGround'])
+    used(var:acquisition, var:sensor, -)
+    activity(var:acquisition, -, -, [uo:value='var:acquisition_date'])
+    wasGeneratedBy(var:image, var:acquisition, -)
+  endBundle
 endDocument
-
-
-
-
-
-
