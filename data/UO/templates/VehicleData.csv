@@ -1,0 +1,2 @@
+theme,dataType,dataSubType,sensorName,brokerName,units,lowerLimit,upperLimit,latitude,longitude,groundHeightAboveSeaLevel,sensorHeightAboveSeaLevel,isThirdParty,timestamp,value
+Vehicles,Vehicle Count,Vehicle Count,PER_PEOPLE_NT_A188A2,People Counting API,Vehicles,null,null,55.0196062,-1.584876,50.7000007629,2,false,1546304460000,0

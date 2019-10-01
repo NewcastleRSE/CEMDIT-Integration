@@ -1,0 +1,6 @@
+image,image_filename,image_type,size,timestamp
+prov:QUALIFIED_NAME,xsd:string,xsd:string,xsd:int,xsd:string
+uo:image_40e76132-de9f-4080-8d35-29a68711325c,https://file.newcastle.urbanobservatory.ac.uk/camera-feeds/VAISALACCTV59/20190213/100609.jpg,jpeg,33470,1569841645
+uo:image_5c367904-e367-11e9-81b4-2a2ae2dbcce4,https://file.newcastle.urbanobservatory.ac.uk/camera-feeds/VAISALACCTV59/20190213/100610.jpg,jpeg,33470,1569841765
+uo:image_5c367bb6-e367-11e9-81b4-2a2ae2dbcce4,https://file.newcastle.urbanobservatory.ac.uk/camera-feeds/VAISALACCTV59/20190213/100611.jpg,jpg,33470,1569841885
+uo:image_5c367d0a-e367-11e9-81b4-2a2ae2dbcce4,https://file.newcastle.urbanobservatory.ac.uk/camera-feeds/VAISALACCTV59/20190213/100612.jpg,jpg,33470,1569842005

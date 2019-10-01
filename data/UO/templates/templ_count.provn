@@ -1,0 +1,31 @@
+document
+prefix var <http://openprovenance.org/var#>
+prefix vargen <http://openprovenance.org/vargen#>
+prefix tmpl <http://openprovenance.org/tmpl#>
+prefix uo <http://urbanobservatory.ac.uk/uo#>
+
+bundle vargen:templ_count
+	entity(var:count,[uo:value='var:count_value'])	
+	entity(var:image,[uo:value='var:image_filename'])	
+	entity(var:model,[uo:value='var:model_id'])	
+	activity(uo:counting)
+	
+	used(uo:counting,var:model,-)
+	wasGeneratedBy(var:count,uo:counting,-)
+	used(uo:counting,var:image,-)
+endBundle
+endDocument
+
+
+
+
+
+
+
+
+
+
+
+
+
+

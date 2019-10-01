@@ -1,0 +1,29 @@
+document
+prefix var <http://openprovenance.org/var#>
+prefix vargen <http://openprovenance.org/vargen#>
+prefix tmpl <http://openprovenance.org/tmpl#>
+prefix uo <http://urbanobservatory.ac.uk/uo#>
+
+
+bundle vargen:templ_overall
+	entity(var:templ_image,-,-)
+	entity(var:templ_trainset,-,-)
+	activity(var:produce,-,-)
+	entity(var:templ_model,-,-)
+	activity(var:infer,-,-)
+	entity(var:templ_count,-,-)
+	
+	wasGeneratedBy(var:templ_count,var:infer,-)
+	used(var:infer,var:templ_model,-)
+	wasGeneratedBy(var:templ_model,var:produce,-)
+	used(var:produce,var:templ_trainset,-)
+	wasDerivedFrom(var:templ_trainset,var:templ_image)
+endBundle
+
+endDocument
+
+
+
+
+
+

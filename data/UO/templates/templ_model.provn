@@ -1,0 +1,55 @@
+document
+prefix provbook <http://www.provbook.org>
+prefix cemdit <http://www.macs.hw.ac.uhennhfasdfadk/cem-dit/>
+prefix uo <http://urbanobservatory.ac.uk/>
+prefix var <http://openprovenance.org/var#>
+prefix vargen <http://openprovenance.org/vargen#>
+prefix tmpl <http://openprovenance.org/tmpl#>
+bundle vargen:templ_model
+
+	entity(var:model,[uo:value='var:model_id'])
+	entity(var:trainingset,[uo:value='var:training_image'])
+	entity(uo:hyper_params,[uo:value='var:epochs',uo:value='var:weight_decays',uo:value='var:dropout',uo:value='var:L2_weight'])
+	entity(uo:architecture)
+
+	activity(uo:training,-,-)
+
+	used(uo:training,var:trainingset,-)
+	used(uo:training,uo:hyper_params,-)
+	used(uo:training,uo:architecture,-)
+
+	wasGeneratedBy(var:model,uo:training,-)
+
+endBundle
+endDocument
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
