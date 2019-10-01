@@ -11,3 +11,7 @@ server.properties
 *.log
 *.iml
 sqlite/sqlite.db
+data/UO/OUTPUT
+out/
+target/
+src/main/java/META-INF/
