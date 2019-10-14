@@ -1,7 +1,5 @@
 package chain_source;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /* Author Tanya Howden
  * Date September 2017

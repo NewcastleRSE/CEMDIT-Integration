@@ -1,4 +1,16 @@
+/* Author Diana Bental
+ * Date December 2017
+ * Modified
+ */
+
 package chain_source;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.impl.LiteralLabel;
@@ -8,23 +20,6 @@ import com.hp.hpl.jena.sparql.core.TriplePath;
 import com.hp.hpl.jena.sparql.syntax.ElementPathBlock;
 import com.hp.hpl.jena.sparql.syntax.ElementVisitorBase;
 import com.hp.hpl.jena.sparql.syntax.ElementWalker;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
- * Stores the data from the input query that is needed to reconstruct the data
- * matching parts of the query after schema repair. It stores ontologies and
- * prefixes from the query, and maps from schema headings to data values, i.e.
- * from Sparql properties to Sparql objects. Data values are not part of the
- * schema repair process.
- * 
- * @author Diana Bental (Modified December 2017)
- **/
 
 // Build up the information about the query that will be needed to do
 // predicate replacement into the query
@@ -49,18 +44,18 @@ public class Query_Data {
 	public HashMap<String, Node> localPropertyNameToLiteralObjectMaps; // {"date"="2005-01-01T00:00:00Z",
 																		// pages="320",
 																		// subject="Childrens fiction",
-																		//
+																		// 
 																		// ...}
 	public HashMap<String, String> localPropertyNameToURIObjectMaps; // {"City"="http://dbpedia.org/resource/London",
 																		// ...}
 	public HashMap<String, String> localPropertyNameToVariableMaps; // {"City" = "x", "pages"="count", "date"="d"}
-
+	
 	public HashMap<String, String> resolvedURItoPrefixAndLocalNameMaps; // e.g.
 																		// {"http://dbpedia.org/ontology/City"="dbo:City"}
-
-	public HashSet<String> localPropertyNames; // {"location", "elevation" "type"}
-
-	public String originalQuery;
+	
+	public HashSet<String> localPropertyNames ; // {"location", "elevation" "type"}
+	
+	public String originalQuery; 
 
 	public Query_Data() {
 
@@ -72,16 +67,11 @@ public class Query_Data {
 		localPropertyNameToURIObjectMaps = new HashMap<String, String>();
 		resolvedURItoPrefixAndLocalNameMaps = new HashMap<String, String>();
 		localPropertyNameToVariableMaps = new HashMap<String, String>();
-		localPropertyNames = new HashSet<String>();
+		localPropertyNames = new HashSet<String>() ;
 		originalQuery = "";
 
 	}
 
-	/**
-	 * Parses the query and stores the data
-	 * 
-	 * @param query
-	 */
 	public Query_Data(String query) {
 
 		uriObjectValues = new ArrayList<String>();
@@ -91,7 +81,7 @@ public class Query_Data {
 		localPropertyNameToLiteralObjectMaps = new HashMap<String, Node>();
 		localPropertyNameToURIObjectMaps = new HashMap<String, String>();
 		resolvedURItoPrefixAndLocalNameMaps = new HashMap<String, String>();
-		localPropertyNames = new HashSet<String>();
+		localPropertyNames = new HashSet<String>() ;
 		localPropertyNameToVariableMaps = new HashMap<String, String>();
 		originalQuery = "";
 
@@ -102,8 +92,7 @@ public class Query_Data {
 			Query q = QueryFactory.create(query);
 			// System.out.println("\nQuery_Data.java: checkpoint 2");
 			String originalQueryString = q.toString();
-			// System.out.println("\nQuery_Data.java: Original query:\n" +
-			// originalQueryString);
+			// System.out.println("\nQuery_Data.java: Original query:\n" + originalQueryString);
 			originalQuery = originalQueryString;
 
 			findObjectValues(q);
@@ -204,20 +193,20 @@ public class Query_Data {
 							Node sparqlSubject = triple.getSubject();
 							Node sparqlPredicate = triple.getPredicate();
 							Node sparqlObject = triple.getObject();
-
+							
 							if (sparqlPredicate.isURI()) {
 								String localPredName = sparqlPredicate.getLocalName();
 								localPropertyNames.add(localPredName);
-							}
+								}
 
 							// System.out.println(sparqlSubject) ;
 							// System.out.println(sparqlPredicate) ;
 							// System.out.println(sparqlObject) ;
-
+							
 							if (sparqlObject.isVariable()) {
 								if (sparqlPredicate.isURI()) {
 									String localPredName = sparqlPredicate.getLocalName();
-									localPropertyNameToVariableMaps.put(localPredName, sparqlObject.toString());
+									localPropertyNameToVariableMaps.put(localPredName, sparqlObject.toString()) ;
 								}
 							}
 
