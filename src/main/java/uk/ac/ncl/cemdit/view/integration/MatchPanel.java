@@ -64,7 +64,7 @@ public class MatchPanel extends JPanel implements ActionListener {
             else {
                 color= Color.lightGray;
             }
-            logger.debug(queryResults.get(i).getLabel());
+            logger.trace(queryResults.get(i).getLabel());
             DropDownRelationsWidget dropDownRelationsWidget = new DropDownRelationsWidget(queryResults.get(i), color);
             dropDownRelationsWidget.setActionListener(actionListener);
             add(dropDownRelationsWidget);
