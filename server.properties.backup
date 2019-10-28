@@ -10,3 +10,4 @@ dblocation=data/lookup.json
 querydb=data/querytypes.json
 lookupdb=JSON
 sqlitedb=d:/Idea/CEMDIT-Integration/sqlite/sqlite.db
+templateLocationType=SQLITE
