@@ -16,9 +16,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static uk.ac.ncl.cemdit.dao.sqlite.Connector.getSensorReadingsHeadings;
 
 public class Utils {
 
@@ -151,6 +154,27 @@ public class Utils {
                 //Populate
 
                 break;
+            case SQL:
+                String sensorName = "PER_AIRMON_MESH1922150";
+                String themeName;
+                String typeName = "PM2.5";
+                boolean suspect;
+                double value;
+                String units;
+                long startdate = 1543276860000L;
+                long enddate = 1543279560000L;
+
+                String connectionString = "../UrbanObservatoryBasics/UrbanObservatory.db";
+                String headers = getSensorReadingsHeadings(connectionString);
+                integrationDataModel.setColumnNames(headers.split(","));
+                queryResults.clear();
+                ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString, sensorName, typeName, startdate, enddate);
+                results.forEach((line) -> {
+                    System.out.println(line);
+                    data1.add(line);
+                });
+                integrationDataModel.setData(data1);
+                break;
             default:
                 logger.info("No query specified");
                 break;
@@ -160,10 +184,9 @@ public class Utils {
     }
 
     /**
-     *
-     * @param lookupType select from the LookupType Enumeration - JSON, SQLITE, MONGODB
+     * @param lookupType       select from the LookupType Enumeration - JSON, SQLITE, MONGODB
      * @param integrationModel the model of the GUI
-     * @param querytype the type of the query which is the key in the database to find the location of the template in the provstore, eg. Vehicle Count, Radar
+     * @param querytype        the type of the query which is the key in the database to find the location of the template in the provstore, eg. Vehicle Count, Radar
      */
     static public void lookupProvenance(LookupType lookupType, IntegrationModel integrationModel, String querytype) {
         switch (lookupType) {

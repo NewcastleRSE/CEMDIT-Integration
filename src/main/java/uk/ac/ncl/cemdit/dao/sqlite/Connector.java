@@ -40,6 +40,17 @@ public class Connector {
         return conn;
     }
 
+    static public Connection connect(String connectionstring) {
+        String url = "jdbc:sqlite:" + connectionstring;
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return conn;
+    }
+
     static public ResultSet readRecord(String query) {
 
         Connection conn = connect();
@@ -70,6 +81,7 @@ public class Connector {
             }
             conn.close();
         } catch (SQLException e) {
+            logger.error("Error code: " + e.getErrorCode());
             e.printStackTrace();
         }
         provtemplates = provtemp.stream().toArray(String[]::new);
@@ -78,6 +90,7 @@ public class Connector {
 
     /**
      * Retrieve the entry from the lookup table which contains the URI to the provenance template
+     *
      * @param type the type of the provenance template e.g. Vehicle Count
      * @return The URI of the provenance template
      */
@@ -103,5 +116,64 @@ public class Connector {
         return provtemplate;
     }
 
+    static public String getSensorReadingsHeadings(String connectionstring) {
+        String sql = "PRAGMA table_info(SensorReadings)";
+        Connection conn = connect(connectionstring);
+        StringBuilder sb = null;
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            // loop through the result set
+            while (rs.next()) {
+                if (sb == null) {
+                    sb = new StringBuilder();
+                    sb.append(rs.getString("name"));
+                } else {
+                    sb.append(",");
+                    sb.append(rs.getString("name"));
+                }
+             }
+            conn.close();
+        } catch (SQLException e) {
+            logger.error("Error code: " + e.getErrorCode());
+            logger.error(e.getMessage());
+            logger.error(connectionstring);
+        }
+        return sb.toString();
+    }
+
+    static public ArrayList<ArrayList<Object>> readSensorData(String connectionstring, String sensorName, String typeName, long startdate, long enddate) {
+        ArrayList<ArrayList<Object>> returnValues = new ArrayList<>();
+        String query = "SELECT sensorName, themeName, typeName, suspect, value, units, timestamp " +
+                "FROM SensorReadings where sensorname='" + sensorName
+                + "' AND typeName='" + typeName
+                + "' AND timestamp>=" + startdate
+                + " AND timestamp<=" + enddate;
+        Connection conn = connect(connectionstring);
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            // loop through the result set
+            while (rs.next()) {
+                ArrayList<Object> reading = new ArrayList<>();
+                reading.add(rs.getObject("sensorName"));
+                reading.add(rs.getObject("themeName"));
+                reading.add(rs.getObject("typeName"));
+                reading.add(rs.getObject("suspect"));
+                reading.add(rs.getObject("value"));
+                reading.add(rs.getObject("units"));
+                reading.add(rs.getObject("timestamp"));
+                returnValues.add(reading);
+            }
+            conn.close();
+        } catch (SQLException e) {
+            logger.error("Error code: " + e.getErrorCode());
+            logger.error(e.getMessage());
+            logger.error(connectionstring);
+        }
+        return returnValues;
+    }
 
 }

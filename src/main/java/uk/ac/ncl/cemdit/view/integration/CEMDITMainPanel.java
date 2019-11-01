@@ -10,6 +10,7 @@ import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.lookupDB.ProvQueryTypes;
 
+import javax.lang.model.util.Elements;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -50,6 +51,16 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
      * Radio button to select RDF type query
      */
     private JRadioButton rdf = new JRadioButton("RDF");
+
+    /**
+     * Radio button to select RDF type query
+     */
+    private JRadioButton sql = new JRadioButton("SQL");
+
+    /**
+     * Grouping of button
+     */
+    private ButtonGroup buttonGroup = new ButtonGroup();
 
     /**
      * Panel containing the top ranked response (or else the selected response)
@@ -148,15 +159,16 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         responsePanel.getBorder()));
 
-        ButtonGroup buttonGroup = new ButtonGroup();
-        rest.setSelected(true);
+        sql.setSelected(true);
         buttonGroup.add(rest);
         buttonGroup.add(rdf);
+        buttonGroup.add(sql);
         queryPanel.add(provQueryType);
         queryPanel.add(queryTextArea);
         queryPanel.add(queryButton);
         queryPanel.add(rest);
         queryPanel.add(rdf);
+        queryPanel.add(sql);
 
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weighty = 0.20;
@@ -193,17 +205,22 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         switch (e.getActionCommand()) {
             case "Run":
                 setDataPanel();
-                QueryType qtype = rdf.isSelected() ? QueryType.RDF : QueryType.REST;
+                QueryType qtype = QueryType.SQL;
+                if (rdf.isSelected()) qtype = QueryType.RDF;
+                if (rest.isSelected()) qtype = QueryType.REST;
+                if (sql.isSelected()) qtype = QueryType.SQL;
                 logger.debug("Populate model.");
 //                "sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)";
                 String query = queryTextArea.getText();
                 if (query == null || query.equals("")) {
+                    // Just set a default query in case Run is pressed
                     query = "sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)";
                     queryTextArea.setText(query);
                 }
+                // Save the query to the properties file to use as default for next startup
                 ComponentPointers.setProperty("query", query);
                 File dir = new File(System.getProperty("user.home"));
-
+                // populate the Integration model with the results from the query
                 Utils.populateIntegrationModel(query, integrationModel, integrationDataModel, qtype, this);
                 resultPanel.getDataPanel().setDataModel(integrationDataModel);
                 //queryTextArea.setText(integrationModel.getOriginalQuery());
