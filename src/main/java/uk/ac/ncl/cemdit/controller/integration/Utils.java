@@ -21,8 +21,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static uk.ac.ncl.cemdit.dao.sqlite.Connector.getSensorReadingsHeadings;
-
 public class Utils {
 
     static private Logger logger = Logger.getLogger(Utils.class);
@@ -96,12 +94,15 @@ public class Utils {
                 break;
             case REST:
                 //Do REST query
+                HttpURLConnection con = null;
+                URL url = null;
                 try {
+                    url = new URL(query);
                     // Establish connection to TerminalSensor (Urban Observatory Proxy)
                     queryResults.clear();
-                    URL url = new URL(query);
-                    HttpURLConnection con = null;
+
                     con = (HttpURLConnection) url.openConnection();
+
                     // Retrieve data using query entered in TextField
                     ArrayList<String> rawData = readStream2Array(con.getInputStream());
                     data.add(query);
@@ -149,31 +150,30 @@ public class Utils {
                         JOptionPane.showMessageDialog(container, "Connection refused. Please make sure the REST service \n" +
                                 "is running and try running the query again.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
+                } finally {
+                    con.disconnect();
                 }
 
                 //Populate
 
                 break;
             case SQL:
-                String sensorName = "PER_AIRMON_MESH1922150";
-                String themeName;
-                String typeName = "PM2.5";
-                boolean suspect;
-                double value;
-                String units;
-                long startdate = 1543276860000L;
-                long enddate = 1543279560000L;
-
-                String connectionString = "../UrbanObservatoryBasics/UrbanObservatory.db";
-                String headers = getSensorReadingsHeadings(connectionString);
-                integrationDataModel.setColumnNames(headers.split(","));
+                String connectionString = ComponentPointers.getProperty("datadb");
+                ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString, query);
                 queryResults.clear();
-                ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString, sensorName, typeName, startdate, enddate);
-                results.forEach((line) -> {
+                boolean headerline = true;
+                String headers = null;
+                for (int i = 0; i < results.size(); i++) {
+                    ArrayList<Object> line = results.get(i);
                     System.out.println(line);
+                    if (i == 0) {
+                        headers = arrayList2CSVString(line);
+                        headerline = false;
+                    } else
                     data1.add(line);
-                });
+                }
                 integrationDataModel.setData(data1);
+                integrationDataModel.setColumnNames(headers.split(","));
                 break;
             default:
                 logger.info("No query specified");
@@ -181,6 +181,16 @@ public class Utils {
         }
         integrationDataModel.fireTableDataChanged();
         integrationDataModel.fireTableStructureChanged();
+    }
+
+    static public String arrayList2CSVString(ArrayList<Object> arrayList) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (i != 0) sb.append(",");
+            sb.append((String)arrayList.get(i));
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -235,7 +245,7 @@ public class Utils {
                 returns.add(nextLine);
             }
         } catch (IOException ignored) {
-
+            logger.error("IOException: " + ignored.getMessage());
         }
         return returns;
     }
