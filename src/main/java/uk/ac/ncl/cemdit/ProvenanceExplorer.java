@@ -42,7 +42,7 @@ public class ProvenanceExplorer extends JFrame {
                     break;
                 }
             }
-            this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
             getContentPane().add(mainPanel);
 
