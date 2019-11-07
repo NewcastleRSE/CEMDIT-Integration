@@ -1,7 +1,6 @@
 {
   "types":[
     "Vehicle Count",
-    "Temperature",
-    "humidity"
+    "PM2.5"
   ]
 }
