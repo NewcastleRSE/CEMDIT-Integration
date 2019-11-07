@@ -2,6 +2,7 @@ package uk.ac.ncl.cemdit.view.integration;
 
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
+import uk.ac.ncl.cemdit.ProvenanceExplorer;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.integration.LookupType;
 import uk.ac.ncl.cemdit.controller.integration.Utils;
@@ -10,11 +11,9 @@ import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.lookupDB.ProvQueryTypes;
 
-import javax.lang.model.util.Elements;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -115,7 +114,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         System.out.println(templateTypes);
         switch (templateTypes) {
             case SQLITE:
-                provQueryType = new JComboBox<String>(Connector.provenanceTemplates());
+                provQueryType = new JComboBox<>(Connector.provenanceTemplates());
                 break;
             case JSON:
                 // Populate a list from the json file
@@ -124,7 +123,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                     ProvQueryTypes provQueryTypes = gson.fromJson(new FileReader(queryTypesDB), ProvQueryTypes.class);
                     String[] types = provQueryTypes.getTypes().toArray(new String[provQueryTypes.getTypes().size()]);
 
-                    provQueryType = new JComboBox<String>(types);
+                    provQueryType = new JComboBox<>(types);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -192,11 +191,11 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         //resultPanel.setButtons(true, false, false);
     }
 
-    public void setDataPanel() {
+    private void setDataPanel() {
         resultPanel.setButtons(false, true, false);
     }
 
-    public void setMatchPanel() {
+    private void setMatchPanel() {
         resultPanel.setButtons(false, false, true);
     }
 
@@ -236,18 +235,19 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 integrationModel.getProvenancePanel().setLoaded(false);
                 break;
             case "View Provenance":
-                if (e.getActionCommand().equals("View Provenance")) {
-                    if (queryExecuted) {
-                        logger.trace("View Provenance");
-                        String lookup = ComponentPointers.getProperty("lookupdb");
-                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
-                        integrationModel.getProvenancePanel().loadGraph();
-                        // Switch to view Provenance panel
-                        setProvenancePanel();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Execute a query before requesting provenance.");
-                    }
-                }
+                ProvenanceExplorer.main(null);
+//                if (e.getActionCommand().equals("View Provenance")) {
+//                    if (queryExecuted) {
+//                        logger.trace("View Provenance");
+//                        String lookup = ComponentPointers.getProperty("lookupdb");
+//                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
+//                        integrationModel.getProvenancePanel().loadGraph();
+//                        // Switch to view Provenance panel
+//                        setProvenancePanel();
+//                    } else {
+//                        JOptionPane.showMessageDialog(this, "Execute a query before requesting provenance.");
+//                    }
+//                }
                 break;
             case "View Data":
                 setDataPanel();
