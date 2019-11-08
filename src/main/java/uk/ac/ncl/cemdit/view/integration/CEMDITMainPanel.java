@@ -2,7 +2,7 @@ package uk.ac.ncl.cemdit.view.integration;
 
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
-import uk.ac.ncl.cemdit.ProvenanceExplorer;
+import uk.ac.ncl.cemdit.view.ProvenanceExplorer;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.integration.LookupType;
 import uk.ac.ncl.cemdit.controller.integration.Utils;
@@ -17,10 +17,9 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.URL;
+import java.util.Scanner;
 
 public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelectionListener {
     private Logger logger = Logger.getLogger(CEMDITMainPanel.class);
@@ -203,40 +202,70 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Run":
-                setDataPanel();
-                QueryType qtype = QueryType.SQL;
-                if (rdf.isSelected()) qtype = QueryType.RDF;
-                if (rest.isSelected()) qtype = QueryType.REST;
-                if (sql.isSelected()) qtype = QueryType.SQL;
-                logger.debug("Populate model.");
+                if (provQueryType.getSelectedIndex() > 0) {
+                    setDataPanel();
+                    QueryType qtype = QueryType.SQL;
+                    if (rdf.isSelected()) qtype = QueryType.RDF;
+                    if (rest.isSelected()) qtype = QueryType.REST;
+                    if (sql.isSelected()) qtype = QueryType.SQL;
+                    logger.debug("Populate model.");
 //                "sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)";
-                String query = queryTextArea.getText();
-                if (query == null || query.equals("")) {
-                    // Just set a default query in case Run is pressed
-                    query = "sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)";
-                    queryTextArea.setText(query);
-                }
-                // Save the query to the properties file to use as default for next startup
-                ComponentPointers.setProperty("query", query);
-                File dir = new File(System.getProperty("user.home"));
-                // populate the Integration model with the results from the query
-                Utils.populateIntegrationModel(query, integrationModel, integrationDataModel, qtype, this);
-                resultPanel.getDataPanel().setDataModel(integrationDataModel);
-                //queryTextArea.setText(integrationModel.getOriginalQuery());
-                resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
-                resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
-                if (resultPanel.getDataPanel().getRowCount() > 0) {
-                    resultPanel.getBtn_saveData().setEnabled(true);
+                    String query = queryTextArea.getText();
+                    if (query == null || query.equals("")) {
+                        // Just set a default query in case Run is pressed
+                        query = "sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)";
+                        queryTextArea.setText(query);
+                    }
+                    // Save the query to the properties file to use as default for next startup
+                    ComponentPointers.setProperty("query", query);
+                    File dir = new File(System.getProperty("user.home"));
+                    // populate the Integration model with the results from the query
+                    Utils.populateIntegrationModel(query, integrationModel, integrationDataModel, qtype, this);
+                    resultPanel.getDataPanel().setDataModel(integrationDataModel);
+                    //queryTextArea.setText(integrationModel.getOriginalQuery());
+                    resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
+                    resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
+                    if (resultPanel.getDataPanel().getRowCount() > 0) {
+                        resultPanel.getBtn_saveData().setEnabled(true);
+                    } else {
+                        resultPanel.getBtn_saveData().setEnabled(false);
+                    }
+                    responsePanel.populateList(integrationModel.getOtherResponses());
+                    queryExecuted = true;
+                    integrationModel.getProvenancePanel().setLoaded(false);
                 } else {
-                    resultPanel.getBtn_saveData().setEnabled(false);
+                    JOptionPane.showMessageDialog(this, "Select the type of query before running the query.");
                 }
-                responsePanel.populateList(integrationModel.getOtherResponses());
-                queryExecuted = true;
-                integrationModel.getProvenancePanel().setLoaded(false);
                 break;
             case "View Provenance":
-                ProvenanceExplorer.main(null);
-//                if (e.getActionCommand().equals("View Provenance")) {
+                if (queryExecuted) {
+                    ComponentPointers componentPointers = ComponentPointers.getInstance();
+                    try {
+                        // Check in properties file where lookup database is stored
+                        String lookup = ComponentPointers.getProperty("lookupdb");
+                        // What lookup type (i.e. sensor) has been selected from the combo box?
+                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
+                        integrationModel.getProvenancePanel().loadGraph(false);
+                        // Get provstore location
+                        logger.trace("Provn filename: " + integrationModel.getProvNFilename());
+                        logger.trace("Provn filename: " + componentPointers.getProvnfile());
+                        InputStream in = new URL(integrationModel.getProvNFilename()).openStream();
+                        componentPointers.setProvnfile(integrationModel.getProvNFilename());
+                         // Read the provn from the provStore
+                        String loadPROVN = Utils.orderFile(new Scanner(in, "UTF-8").useDelimiter("\\A").next());
+                        // Run ProvenanceExplorer
+                        new ProvenanceExplorer("Provenance Explorer");
+                        // load provn into text pane
+                        componentPointers.getTextPanes().getProvN().setText(loadPROVN);
+                        // load graphs into graphic panes
+                        componentPointers.loadProvnFile(new File(ComponentPointers.getProperty("tempdir") + "/temporary.provn"));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Execute a query before requesting provenance.");
+                }
+                //                if (e.getActionCommand().equals("View Provenance")) {
 //                    if (queryExecuted) {
 //                        logger.trace("View Provenance");
 //                        String lookup = ComponentPointers.getProperty("lookupdb");
