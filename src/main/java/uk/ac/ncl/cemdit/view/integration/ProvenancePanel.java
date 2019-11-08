@@ -9,6 +9,8 @@ import org.apache.batik.swing.svg.GVTTreeBuilderEvent;
 import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
 import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
 import org.apache.log4j.Logger;
+import uk.ac.ncl.cemdit.controller.ComponentPointers;
+import uk.ac.ncl.cemdit.controller.ProvConvertItems;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 
 import javax.swing.*;
@@ -88,21 +90,25 @@ public class ProvenancePanel extends JPanel {
     public void loadGraph(boolean newFrame) {
         IntegrationModel integrationModel = new IntegrationModel();
         String svgFile = integrationModel.getProvNFilename();
-        String tmpFile = "temporary.svg";
-        InputStream in = null;
+        String tmpFile = "temporary.provn";
         try {
+            integrationModel.setProvNFilename(ComponentPointers.getProperty("tempdir") + "/" + tmpFile);
             logger.trace("Retrieving file " + svgFile);
-            in = new URL(svgFile).openStream();
-            logger.trace("Saving file as " + Paths.get(tmpFile));
-            Files.copy(in, Paths.get(tmpFile), StandardCopyOption.REPLACE_EXISTING);
-            logger.trace("Load " + tmpFile + " to SVGCanvas");
-            svgCanvas.setURI(tmpFile);
-            Files.delete(Paths.get(tmpFile));
+            InputStream in = new URL(svgFile).openStream();
+            logger.trace("Saving file as " + Paths.get(ComponentPointers.getProperty("tempdir") + "/" + tmpFile));
+            Files.copy(in, Paths.get(ComponentPointers.getProperty("tempdir") + "/" + tmpFile), StandardCopyOption.REPLACE_EXISTING);
+            // If svg file then convert to svg
+            if (svgFile.endsWith(".provn"))
+                ProvConvertItems.convertProvN(ComponentPointers.getProperty("tempdir") + "/" + tmpFile,
+                        ComponentPointers.getProperty("tempdir") + "/" + tmpFile.replace(".provn", ".svg"));
+            logger.trace("Load " + Paths.get(ComponentPointers.getProperty("tempdir") + "/" + tmpFile) + " to SVGCanvas");
+            svgCanvas.setURI(ComponentPointers.getProperty("tempdir") + "/" + tmpFile.replace(".provn", ".svg"));
+            //Files.delete(Paths.get(tmpFile));
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (newFrame)
-        spawnNewFrame();
+            spawnNewFrame();
     }
 
     private void spawnNewFrame() {
