@@ -9,21 +9,22 @@ import org.apache.batik.swing.svg.GVTTreeBuilderEvent;
 import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
 import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
 import org.apache.log4j.Logger;
+import org.openrdf.query.algebra.Str;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.ProvConvertItems;
+import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Scanner;
 
 public class ProvenancePanel extends JPanel {
     private Logger logger = Logger.getLogger(this.getClass());
@@ -92,20 +93,38 @@ public class ProvenancePanel extends JPanel {
         String svgFile = integrationModel.getProvNFilename();
         String tmpFile = "temporary.provn";
         try {
-            integrationModel.setProvNFilename(ComponentPointers.getProperty("tempdir") + "/" + tmpFile);
             logger.trace("Retrieving file " + svgFile);
             InputStream in = new URL(svgFile).openStream();
             logger.trace("Saving file as " + Paths.get(ComponentPointers.getProperty("tempdir") + "/" + tmpFile));
             Files.copy(in, Paths.get(ComponentPointers.getProperty("tempdir") + "/" + tmpFile), StandardCopyOption.REPLACE_EXISTING);
+            // fix file order
+            StringBuilder sb = new StringBuilder();
+            File file = new File(ComponentPointers.getProperty("tempdir") + "/" + tmpFile);
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()) {
+                sb.append(sc.nextLine() + "\n");
+            }
+            sc.close();
+            String newContent = Utils.orderFile(sb.toString());
+            System.out.println();
+            PrintWriter pw = new PrintWriter(file);
+            pw.print(newContent);
+            pw.close();
             // If svg file then convert to svg
             if (svgFile.endsWith(".provn"))
                 ProvConvertItems.convertProvN(ComponentPointers.getProperty("tempdir") + "/" + tmpFile,
                         ComponentPointers.getProperty("tempdir") + "/" + tmpFile.replace(".provn", ".svg"));
             logger.trace("Load " + Paths.get(ComponentPointers.getProperty("tempdir") + "/" + tmpFile) + " to SVGCanvas");
             svgCanvas.setURI(ComponentPointers.getProperty("tempdir") + "/" + tmpFile.replace(".provn", ".svg"));
+            integrationModel.setProvNFilename(svgFile);
             //Files.delete(Paths.get(tmpFile));
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         if (newFrame)
             spawnNewFrame();
