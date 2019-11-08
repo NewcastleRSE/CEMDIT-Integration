@@ -117,7 +117,6 @@ public class ProvenancePanel extends JPanel {
             logger.trace("Load " + Paths.get(ComponentPointers.getProperty("tempdir") + "/" + tmpFile) + " to SVGCanvas");
             svgCanvas.setURI(ComponentPointers.getProperty("tempdir") + "/" + tmpFile.replace(".provn", ".svg"));
             integrationModel.setProvNFilename(svgFile);
-            //Files.delete(Paths.get(tmpFile));
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
