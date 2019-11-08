@@ -1,9 +1,8 @@
-package uk.ac.ncl.cemdit;
+package uk.ac.ncl.cemdit.view;
 
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
-import uk.ac.ncl.cemdit.view.MainPanel;
-import uk.ac.ncl.cemdit.view.MenuBar;
+
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import java.awt.*;
@@ -17,7 +16,7 @@ public class ProvenanceExplorer extends JFrame {
     private ComponentPointers componentPointers = ComponentPointers.getInstance();
 
 
-    private ProvenanceExplorer(String title) {
+    public ProvenanceExplorer(String title) {
         super(title);
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
