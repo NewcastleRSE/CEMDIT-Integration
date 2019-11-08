@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
+import uk.ac.ncl.cemdit.controller.Exceptions.InvalidDocumentFormatException;
 import uk.ac.ncl.cemdit.dao.sqlite.Connector;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
@@ -27,6 +28,71 @@ public class Utils {
 
     static private Logger logger = Logger.getLogger(Utils.class);
 
+    static public String orderFile(String fileContents) {
+        StringBuilder sb = new StringBuilder();
+        ArrayList<String> elements = new ArrayList<>();
+        ArrayList<String> relations = new ArrayList<>();
+        ArrayList<String> prefixes = new ArrayList<>();
+        String defaultLine = "";
+        String[] lines = fileContents.split("\n");
+
+        // Add bit to get rid of empty lines.
+
+        // Read first line
+        if (lines[0].toLowerCase().equals("document")) {
+            sb.append(lines[0] + "\n");
+        } else {
+            try {
+                throw new InvalidDocumentFormatException("Invalid first line");
+            } catch (InvalidDocumentFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Read rest of the lines
+        for (int l = 1; l < lines.length - 1; l++) {
+            if (lines[l].trim().equals("") || lines[l] == null) {
+                logger.trace("Omit empty line");
+            }
+            if (lines[l].trim().toLowerCase().startsWith("entity") ||
+                    lines[l].trim().toLowerCase().startsWith("agent") ||
+                    lines[l].trim().toLowerCase().startsWith("activity")) {
+                elements.add(lines[l] + "\n");
+            } else if (lines[l].trim().toLowerCase().startsWith("default")) {
+                defaultLine = lines[l] + "\n";
+            } else if (lines[l].trim().toLowerCase().startsWith("prefix")) {
+                prefixes.add(lines[l] + "\n");
+            } else {
+                if (lines[l].trim() != null || !lines[l].trim().equals(""))
+                relations.add(lines[l] + "\n");
+            }
+        }
+
+        // Read last line
+        if (lines[lines.length - 1].trim().toLowerCase().startsWith("enddocument")) {
+
+        } else {
+            try {
+                throw new InvalidDocumentFormatException("Invalid last line");
+            } catch (InvalidDocumentFormatException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        sb.append(defaultLine);
+        for (int i = 0; i < prefixes.size(); i++) {
+            sb.append(prefixes.get(i));
+        }
+        for (int i = 0; i < elements.size(); i++) {
+            sb.append(elements.get(i));
+        }
+        for (int i = 0; i < relations.size(); i++) {
+            sb.append(relations.get(i));
+        }
+        sb.append(lines[lines.length - 1]);
+        return sb.toString();
+    }
 
     static public void populateIntegrationModel(String query, IntegrationModel integrationModel, IntegrationDataModel integrationDataModel, QueryType queryType, Container container) {
         ArrayList<String> data = new ArrayList<>();
@@ -185,6 +251,7 @@ public class Utils {
 
     /**
      * Determines where the lookup table is stored, i.e. in a JSON file, an SQLITE database or whatever
+     *
      * @param lookupType       select from the LookupType Enumeration - JSON, SQLITE, MONGODB
      * @param integrationModel the model of the GUI
      * @param querytype        the type of the query which is the key in the database to find the location of the template in the provstore, eg. Vehicle Count, Radar
