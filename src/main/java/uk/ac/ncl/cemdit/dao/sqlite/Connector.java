@@ -71,6 +71,7 @@ public class Connector {
         List<String> provtemp = new ArrayList<>();
         String query = "SELECT type FROM querytypes";
         Connection conn = connect();
+        provtemp.add("");
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -98,7 +99,6 @@ public class Connector {
         String provtemplate = null;
         List<String> provtemp = new ArrayList<>();
         String query = "SELECT uri FROM lookup WHERE query='" + type + "' AND type='ProvTemplate'";
-        System.out.println("Query: " + query);
         Connection conn = connect();
         try {
             Statement stmt = conn.createStatement();
