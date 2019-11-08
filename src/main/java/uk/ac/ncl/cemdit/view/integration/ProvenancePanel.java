@@ -82,7 +82,10 @@ public class ProvenancePanel extends JPanel {
         });
     }
 
-    public void loadGraph() {
+    /**
+     * Retrieve
+     */
+    public void loadGraph(boolean newFrame) {
         IntegrationModel integrationModel = new IntegrationModel();
         String svgFile = integrationModel.getProvNFilename();
         String tmpFile = "temporary.svg";
@@ -90,7 +93,7 @@ public class ProvenancePanel extends JPanel {
         try {
             logger.trace("Retrieving file " + svgFile);
             in = new URL(svgFile).openStream();
-            logger.trace("Saving file as " + tmpFile);
+            logger.trace("Saving file as " + Paths.get(tmpFile));
             Files.copy(in, Paths.get(tmpFile), StandardCopyOption.REPLACE_EXISTING);
             logger.trace("Load " + tmpFile + " to SVGCanvas");
             svgCanvas.setURI(tmpFile);
@@ -98,7 +101,11 @@ public class ProvenancePanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (newFrame)
+        spawnNewFrame();
+    }
 
+    private void spawnNewFrame() {
         // Spawn new frame for displaying graph
         if (!loaded) {
             newFrame.add(sp_prov);
