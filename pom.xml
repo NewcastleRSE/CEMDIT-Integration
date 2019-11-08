@@ -154,7 +154,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>uk.ac.ncl.cemdit.ProvenanceExplorer</mainClass>
+                            <mainClass>uk.ac.ncl.cemdit.view.ProvenanceExplorer</mainClass>
                             <classpathPrefix>dependency/</classpathPrefix>
                         </manifest>
                     </archive>
