@@ -184,6 +184,7 @@ public class Utils {
     }
 
     /**
+     * Determines where the lookup table is stored, i.e. in a JSON file, an SQLITE database or whatever
      * @param lookupType       select from the LookupType Enumeration - JSON, SQLITE, MONGODB
      * @param integrationModel the model of the GUI
      * @param querytype        the type of the query which is the key in the database to find the location of the template in the provstore, eg. Vehicle Count, Radar
@@ -202,7 +203,7 @@ public class Utils {
                         if (document.getType().equals("ProvTemplate")) {
                             logger.debug("Image file to load: " + document.getUri());
                             integrationModel.setProvNFilename(document.getUri());
-                            integrationModel.getProvenancePanel().loadGraph();
+                            integrationModel.getProvenancePanel().loadGraph(true);
                         }
                     });
                 } catch (FileNotFoundException e) {
@@ -214,6 +215,7 @@ public class Utils {
             case SQLITE:
                 String sqlitedb = ComponentPointers.getProperty("sqlitedb");
                 // Find the entry in the lookup database that contains the ProvStore entry for the provenance graph
+                logger.trace("Query type: " + querytype);
                 integrationModel.setProvNFilename(Connector.retrieveTemplateFromProvStore(querytype));
                 break;
         }
