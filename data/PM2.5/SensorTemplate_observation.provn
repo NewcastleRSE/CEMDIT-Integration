@@ -1,0 +1,17 @@
+document
+  default <http://www.ncl.ac.uk/>
+  prefix var <http://openprovenance.org/var#>
+  prefix sosa <http://www.w3.org/ns/sosa/>
+  prefix sp <http://www.w3.org/ns/sosa/prov/>
+  activity(prov:Observation, -, -, [value='var:startedAtTime', value='var:endedAtTime'])
+  agent(prov:Sensor)
+  entity(prov:Procedure)
+  entity(prov:Result)
+  
+  wasAssociatedWith(prov:Observation, prov:Sensor, -)
+  wasDerivedFrom(prov:Result, prov:Result, -, -, -)
+  wasDerivedFrom(prov:Procedure, prov:Result, -, -, -)
+  wasGeneratedBy(prov:Result, prov:Observation, -)
+  wasAttributedTo(prov:Result, prov:Sensor)
+  used(prov:Observation, prov:Result, -)
+endDocument
