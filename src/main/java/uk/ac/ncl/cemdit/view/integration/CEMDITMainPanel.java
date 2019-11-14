@@ -113,7 +113,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         System.out.println(templateTypes);
         switch (templateTypes) {
             case SQLITE:
-                provQueryType = new JComboBox<>(Connector.provenanceTemplates());
+                provQueryType = new JComboBox<>(Connector.provenanceTemplates(ComponentPointers.getProperty("sqlitedb")));
                 break;
             case JSON:
                 // Populate a list from the json file
