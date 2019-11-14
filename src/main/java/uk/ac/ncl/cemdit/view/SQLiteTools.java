@@ -15,6 +15,8 @@ import java.sql.*;
 public class SQLiteTools {
     final static Logger logger = Logger.getLogger(SQLiteTools.class);
     static String filename = "data/lookup.json";
+    static String connectionString = "jdbc:sqlite:sqlite/sqlite.db";
+    static String[] types = {"Vehicle Count", "Temperature", "humidity", "PM2.5"};
 
     static public void main(String[] args) {
         /**
@@ -41,25 +43,25 @@ public class SQLiteTools {
         try {
             cmd = parser.parse(options, args);
             if (cmd.hasOption("d")) {
-                System.out.println("Creating database ...");
+                logger.trace("Creating database ...");
                 createDatabase();
             }
             if (cmd.hasOption("t")) {
-                System.out.println("Creating tables ...");
+                logger.trace("Creating tables ...");
                 String[] queries = createTableSQLqueries(tables);
                 createNewTables(queries);
             }
             if (cmd.hasOption("i1")) {
-                System.out.println("insert types ...");
+                logger.trace("insert types ...");
                 insertTypes();
             }
             if (cmd.hasOption("i2")) {
-                System.out.println("insert queries ...");
+                logger.trace("insert queries ...");
                 insertQueries();
             }
             if (cmd.hasOption("i3")) {
 
-                System.out.println("insert lookup items ...");
+                logger.trace("insert lookup items ...");
                 insertLookups();
             }
 
@@ -75,8 +77,8 @@ public class SQLiteTools {
      */
     public static void insertLookups() {
         LookupDB lookupDB = lookupItems();
-        Connection conn = Connector.connect();
         try {
+            Connection conn = Connector.connect(connectionString);
             conn.setAutoCommit(false);
             PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO lookup (query, type, uri, description) VALUES(?,?,?,?)");
             lookupDB.getCollection().forEach((item) -> {
@@ -134,55 +136,69 @@ public class SQLiteTools {
     }
 
     public static void insertTypes() {
-        String[] types = {"Vehicle Count", "Temperature", "humidity"};
-        Connection conn = Connector.connect();
+        Connection conn = null;
         try {
+            conn = Connector.connect(connectionString);
             PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO querytypes (type) VALUES(?)");
             conn.setAutoCommit(false);
-            logger.debug("Starting insertion ...");
+            logger.debug("Starting type insertion ...");
             for (int i = 0; i < types.length; i++) {
                 preparedStatement.setString(1, types[i]);
-                System.out.println(types[i]);
+                logger.trace("Type: " + types[i]);
                 preparedStatement.addBatch();
             }
             int[] result = preparedStatement.executeBatch();
             conn.commit();
+            logger.trace("Close database");
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             logger.debug(e.getMessage());
+            logger.trace("Close database");
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+
+            }
         }
     }
 
 
     public static void insertQueries() {
-        String[] types = {"Vehicle Count", "Temperature", "humidity"};
         String querytype = "Vehicle Count";
         String query = "http://localhost:8086/query/?sensor=PER_TRF_CNT_TT2NORTH4&theme=Vehicles&type=Vehicle%20Count&starttime=201901010000&endtime=20190105235959";
-
-        Connection conn = Connector.connect();
+        Connection conn = null;
         try {
+            conn = Connector.connect(connectionString);
             PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO samplequeries (querytype, query) VALUES(?,?)");
             conn.setAutoCommit(false);
-            logger.debug("Starting insertion ...");
+            logger.trace("Starting insertion ...");
             for (int i = 0; i < types.length; i++) {
                 preparedStatement.setString(1, querytype);
                 preparedStatement.setString(2, query);
-                System.out.println(types[i]);
+                logger.trace(types[i]);
                 preparedStatement.addBatch();
             }
             int[] result = preparedStatement.executeBatch();
             System.out.println(result.length);
             conn.commit();
+            logger.trace("Close database.");
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             logger.debug(e.getMessage());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+
+            }
         }
     }
 
     public static void createDatabase() {
-        Connector.connect();
+//        Connector.connect(connectionString);
 //        String url = "jdbc:sqlite:C:/sqlite/db/provenance.db";
 //
 //        try (Connection conn = DriverManager.getConnection(url)) {
@@ -205,12 +221,13 @@ public class SQLiteTools {
         // SQL statement for creating a new table
 
         try (
-                Connection conn = Connector.connect();
+                Connection conn = Connector.connect(connectionString);
                 Statement stmt = conn.createStatement()) {
             // create a new table
             for (int i = 0; i < tables.length; i++) {
                 stmt.execute(tables[i]);
             }
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
