@@ -230,7 +230,7 @@ public class Utils {
                 long startdate = 1543276860000L;
                 long enddate = 1543279560000L;
 
-                String connectionString = "../UrbanObservatoryBasics/UrbanObservatory.db";
+                String connectionString = ComponentPointers.getProperty("datadb"); //"jdbc:sqlite:../UrbanObservatoryBasics/UrbanObservatory.db";
                 String headers = getSensorReadingsHeadings(connectionString);
                 integrationDataModel.setColumnNames(headers.split(","));
                 queryResults.clear();
@@ -283,7 +283,7 @@ public class Utils {
                 String sqlitedb = ComponentPointers.getProperty("sqlitedb");
                 // Find the entry in the lookup database that contains the ProvStore entry for the provenance graph
                 logger.trace("Query type: " + querytype);
-                integrationModel.setProvNFilename(Connector.retrieveTemplateFromProvStore(querytype));
+                integrationModel.setProvNFilename(Connector.retrieveTemplateFromProvStore(querytype, sqlitedb));
                 break;
         }
 
