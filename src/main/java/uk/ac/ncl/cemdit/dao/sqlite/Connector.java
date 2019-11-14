@@ -22,6 +22,10 @@ public class Connector {
         // Prevent instantiation
     }
 
+    /**
+     * Return a pointer to the instance of this singleon class
+     * @return instantiation of this class
+     */
     static public Connector getInstance() {
         if (connector == null) {
             connector = new Connector();
@@ -29,17 +33,27 @@ public class Connector {
         return connector;
     }
 
-    static public Connection connect() {
-        String url = "jdbc:sqlite:" + componentPointers.getProperty("sqlitedb");
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-        return conn;
-    }
+    /**
+     * Connect to the database defined in the properties file
+     * @return The connection
+     */
+//    static public Connection connect() {
+//        String url = "jdbc:sqlite:" + componentPointers.getProperty("sqlitedb");
+//        logger.trace("Connect to database: " + url);
+//        Connection conn = null;
+//        try {
+//            conn = DriverManager.getConnection(url);
+//        } catch (SQLException e) {
+//            logger.error(e.getMessage());
+//        }
+//        return conn;
+//    }
 
+    /**
+     * Connect to the database specified in the connection string
+     * @param connectionstring The database to connect to
+     * @return The connection
+     */
     static public Connection connect(String connectionstring) {
         String url = "jdbc:sqlite:" + connectionstring;
         Connection conn = null;
@@ -51,9 +65,14 @@ public class Connector {
         return conn;
     }
 
-    static public ResultSet readRecord(String query) {
+    /**
+     * Execute the query specified in the parameter and return the resultset
+     * @param query SQL query
+     * @return resultset of the query
+     */
+    static public ResultSet readRecord(String query, String connectionString) {
 
-        Connection conn = connect();
+        Connection conn = connect(connectionString);
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             //preparedStatement.setString(1, name);
@@ -66,11 +85,15 @@ public class Connector {
         }
     }
 
-    static public String[] provenanceTemplates() {
+    /**
+     *
+     * @return
+     */
+    static public String[] provenanceTemplates(String connectionString) {
         String[] provtemplates = null;
         List<String> provtemp = new ArrayList<>();
         String query = "SELECT type FROM querytypes";
-        Connection conn = connect();
+        Connection conn = connect(connectionString);
         provtemp.add("");
         try {
             Statement stmt = conn.createStatement();
@@ -95,11 +118,11 @@ public class Connector {
      * @param type the type of the provenance template e.g. Vehicle Count
      * @return The URI of the provenance template
      */
-    static public String retrieveTemplateFromProvStore(String type) {
+    static public String retrieveTemplateFromProvStore(String type, String connectionString) {
         String provtemplate = null;
         List<String> provtemp = new ArrayList<>();
         String query = "SELECT uri FROM lookup WHERE query='" + type + "' AND type='ProvTemplate'";
-        Connection conn = connect();
+        Connection conn = connect(connectionString);
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
