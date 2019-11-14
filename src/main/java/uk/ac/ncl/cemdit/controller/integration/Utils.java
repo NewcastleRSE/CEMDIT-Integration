@@ -249,6 +249,16 @@ public class Utils {
         integrationDataModel.fireTableStructureChanged();
     }
 
+    static public String arrayList2CSVString(ArrayList<Object> arrayList) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (i != 0) sb.append(",");
+            sb.append((String)arrayList.get(i));
+        }
+
+        return sb.toString();
+    }
+
     /**
      * Determines where the lookup table is stored, i.e. in a JSON file, an SQLITE database or whatever
      *

@@ -147,7 +147,6 @@ public class Connector {
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-
             // loop through the result set
             while (rs.next()) {
                 if (sb == null) {
@@ -157,7 +156,7 @@ public class Connector {
                     sb.append(",");
                     sb.append(rs.getString("name"));
                 }
-             }
+            }
             conn.close();
         } catch (SQLException e) {
             logger.error("Error code: " + e.getErrorCode());
@@ -166,6 +165,39 @@ public class Connector {
         }
         return sb.toString();
     }
+
+    static public ArrayList<ArrayList<Object>> readSensorData(String connectionstring, String sqlQuery) {
+        ArrayList<ArrayList<Object>> returnValues = new ArrayList<>();
+        Connection conn = connect(connectionstring);
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlQuery);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            ArrayList<Object> columns = new ArrayList<>();
+            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                columns.add(rsmd.getColumnName(i));
+            }
+            returnValues.add(columns);
+            // loop through the result set
+            while (rs.next()) {
+                ArrayList<Object> reading = new ArrayList<>();
+                reading.add(rs.getObject("sensorName"));
+                reading.add(rs.getObject("themeName"));
+                reading.add(rs.getObject("typeName"));
+                reading.add(rs.getObject("suspect"));
+                reading.add(rs.getObject("value"));
+                reading.add(rs.getObject("units"));
+                reading.add(rs.getObject("timestamp"));
+                returnValues.add(reading);
+            }
+            conn.close();
+        } catch (SQLException e) {
+            logger.error("Error code: " + e.getErrorCode());
+            logger.error(e.getMessage());
+            logger.error(connectionstring);
+        }
+        return returnValues;
+   }
 
     static public ArrayList<ArrayList<Object>> readSensorData(String connectionstring, String sensorName, String typeName, long startdate, long enddate) {
         ArrayList<ArrayList<Object>> returnValues = new ArrayList<>();
