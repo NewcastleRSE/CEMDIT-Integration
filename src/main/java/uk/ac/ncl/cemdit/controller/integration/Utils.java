@@ -40,7 +40,8 @@ public class Utils {
 
         // Read first line
         if (lines[0].toLowerCase().equals("document")) {
-            sb.append(lines[0] + "\n");
+            sb.append(lines[0]);
+            sb.append("\n");
         } else {
             try {
                 throw new InvalidDocumentFormatException("Invalid first line");
@@ -63,7 +64,6 @@ public class Utils {
             } else if (lines[l].trim().toLowerCase().startsWith("prefix")) {
                 prefixes.add(lines[l] + "\n");
             } else {
-                if (lines[l].trim() != null || !lines[l].trim().equals(""))
                 relations.add(lines[l] + "\n");
             }
         }
