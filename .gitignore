@@ -10,8 +10,10 @@ target/.
 server.properties
 *.log
 *.iml
-sqlite/sqlite.db
+sqlite/*
 data/UO/OUTPUT
 out/
 target/
 src/main/java/META-INF/
+outputs/*
+*.svg
