@@ -53,9 +53,10 @@ public class Connector {
      * Connect to the database specified in the connection string
      * @param connectionstring The database to connect to
      * @return The connection
+     * "jdbc:sqlite:" +
      */
     static public Connection connect(String connectionstring) {
-        String url = "jdbc:sqlite:" + connectionstring;
+        String url = connectionstring;
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
