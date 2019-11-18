@@ -11,5 +11,6 @@ querydb=data/querytypes.json
 lookupdb=JSON
 sqlitedb=d:/Idea/CEMDIT-Integration/sqlite/sqlite.db
 templateLocationType=SQLITE
-datadb=../UrbanObservatoryBasics/UrbanObservatory.db
+datadb=jdbc\:sqlite\:d\:/Idea/CEMDIT-Integration/sqlite/UrbanObservatory.db
+tempdir=d:/Idea/CEMDIT-Integration/temp
 # http://uoweb3.ncl.ac.uk/api/v1.1/sensors/PER_BEE_54610/data/csv/?starttime=20180117&endtime=20180118
