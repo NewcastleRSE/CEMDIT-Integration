@@ -234,7 +234,7 @@ public class Utils {
                 String headers = getSensorReadingsHeadings(connectionString);
                 integrationDataModel.setColumnNames(headers.split(","));
                 queryResults.clear();
-                ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString, sensorName, typeName, startdate, enddate);
+                ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString, query);
                 results.forEach((line) -> {
                     System.out.println(line);
                     data1.add(line);
