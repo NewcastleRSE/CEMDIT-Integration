@@ -303,11 +303,10 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 "File exists.",
                                 JOptionPane.YES_NO_OPTION);
                     }
-                    System.out.println(writeFile);
                     if (writeFile == 0) {
                         try {
                             PrintWriter pw = new PrintWriter(new File(file.getAbsolutePath()));
-                            pw.println(integrationDataModel.getColumnNamesAsCSV());
+                            //pw.println(integrationDataModel.getColumnNamesAsCSV());
                             int rows = integrationDataModel.getRowCount();
                             for (int row = 0; row < rows; row++) {
                                 pw.println(integrationDataModel.getRowAsCSV(row));
