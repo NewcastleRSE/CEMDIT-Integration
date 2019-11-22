@@ -24,6 +24,7 @@ public class Connector {
 
     /**
      * Return a pointer to the instance of this singleon class
+     *
      * @return instantiation of this class
      */
     static public Connector getInstance() {
@@ -51,6 +52,7 @@ public class Connector {
 
     /**
      * Connect to the database specified in the connection string
+     *
      * @param connectionstring The database to connect to
      * @return The connection
      * "jdbc:sqlite:" +
@@ -68,6 +70,7 @@ public class Connector {
 
     /**
      * Execute the query specified in the parameter and return the resultset
+     *
      * @param query SQL query
      * @return resultset of the query
      */
@@ -87,7 +90,6 @@ public class Connector {
     }
 
     /**
-     *
      * @return
      */
     static public String[] provenanceTemplates(String connectionString) {
@@ -174,20 +176,18 @@ public class Connector {
             ResultSet rs = stmt.executeQuery(sqlQuery);
             ResultSetMetaData rsmd = rs.getMetaData();
             ArrayList<Object> columns = new ArrayList<>();
-            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                columns.add(rsmd.getColumnName(i));
+            logger.trace("Column count: " + rsmd.getColumnCount());
+            for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                columns.add(rsmd.getColumnName(i+1));
             }
             returnValues.add(columns);
             // loop through the result set
             while (rs.next()) {
                 ArrayList<Object> reading = new ArrayList<>();
-                reading.add(rs.getObject("sensorName"));
-                reading.add(rs.getObject("themeName"));
-                reading.add(rs.getObject("typeName"));
-                reading.add(rs.getObject("suspect"));
-                reading.add(rs.getObject("value"));
-                reading.add(rs.getObject("units"));
-                reading.add(rs.getObject("timestamp"));
+                int columnCount = rs.getMetaData().getColumnCount();
+                for (int c = 1; c <= columnCount; c++) {
+                    reading.add(rs.getObject(c));
+                }
                 returnValues.add(reading);
             }
             conn.close();
@@ -197,7 +197,7 @@ public class Connector {
             logger.error(connectionstring);
         }
         return returnValues;
-   }
+    }
 
     static public ArrayList<ArrayList<Object>> readSensorData(String connectionstring, String sensorName, String typeName, long startdate, long enddate) {
         ArrayList<ArrayList<Object>> returnValues = new ArrayList<>();
