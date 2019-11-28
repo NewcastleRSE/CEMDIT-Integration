@@ -1,0 +1,21 @@
+document
+bundle uuid:036ddae5-52b0-471c-b582-263b9a0a77df
+default <http://www.ncl.ac.uk/>
+prefix cx <xa>
+prefix pre_0 <http://www.ncl.ac.uk/>
+prefix var <http://openprovenance.org/var#>
+prefix uuid <urn:uuid:>
+
+activity(var:Observation,-,-)
+agent(var:Sensor)
+entity(var:Procedure)
+entity(var:Result,[value = "3" %% cx:xb])
+entity(var:FeatureOfInterest,[value = "Vehicles" %% cx:xb, value = "Vehicle Count" %% cx:xb])
+wasAssociatedWith(var:Observation,var:Sensor,-)
+wasDerivedFrom(var:Result, var:Result)
+wasGeneratedBy(var:Result,var:Observation,-)
+used(var:Observation,var:Result,-)
+used(var:Observation,var:Procedure,-)
+used(var:Observation,var:FeatureOfInterest,-)
+endBundle
+endDocument
