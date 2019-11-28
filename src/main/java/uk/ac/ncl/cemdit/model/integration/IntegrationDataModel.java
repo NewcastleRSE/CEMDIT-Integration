@@ -62,7 +62,14 @@ public class IntegrationDataModel extends AbstractTableModel {
         this.columnNames = columnNames;
     }
 
-    // The method that must actually return the value of each cell
+    public void setColumnNames(ArrayList columnNames) {
+        this.columnNames = new String[columnNames.size()];
+        columnNames.forEach((name)->logger.trace((String)name));
+        for (int i = 0; i < columnNames.size(); i++) {
+            this.columnNames[i] = (String)columnNames.get(i);
+        }
+    }
+
     @Override
     public Object getValueAt(int row, int col) {
         if (getRowCount() > 0 && getColumnCount() > 0) {
