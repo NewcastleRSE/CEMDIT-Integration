@@ -3,6 +3,7 @@ package uk.ac.ncl.cemdit.dao.sqlite;
 
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
+import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -141,6 +142,8 @@ public class Connector {
         provtemplate = provtemp.get(0);
         return provtemplate;
     }
+
+
 
     static public String getSensorReadingsHeadings(String connectionstring) {
         String sql = "PRAGMA table_info(SensorReadings)";
