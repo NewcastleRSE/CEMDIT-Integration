@@ -1,0 +1,11 @@
+{"var": {
+"sensor": [{"@id":"uo:sensor"}],
+"sensorName": [{"@value": "PER_PEOPLE_SL_HLRA1", "@type": "xsd:string"}],
+"location": [{"@value": "POINT (-1.412562 54.9038925)", "@type": "xsd:string"}],
+"result": [{"@id":"uo:result"}],
+"value": [{"@value": "1", "@type": "xsd:string"}],
+"feature": [{"@id":"uo:feature"}],
+"theme": [{"@value": "Vehicles", "@type": "xsd:string"}],
+"type": [{"@value": "Vehicle Count", "@type": "xsd:string"}]},
+"context":{"ex": "http://example.org/","uo": "http://urbanobservatory.ac.uk/"}
+}

@@ -227,8 +227,10 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                     resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
                     if (resultPanel.getDataPanel().getRowCount() > 0) {
                         resultPanel.getBtn_saveData().setEnabled(true);
+                        resultPanel.getBtn_saveJSON().setEnabled(true);
                     } else {
                         resultPanel.getBtn_saveData().setEnabled(false);
+                        resultPanel.getBtn_saveJSON().setEnabled(false);
                     }
                     responsePanel.populateList(integrationModel.getOtherResponses());
                     queryExecuted = true;
@@ -251,7 +253,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                         logger.trace("Provn filename: " + componentPointers.getProvnfile());
                         InputStream in = new URL(integrationModel.getProvNFilename()).openStream();
                         componentPointers.setProvnfile(integrationModel.getProvNFilename());
-                         // Read the provn from the provStore
+                        // Read the provn from the provStore
                         String loadPROVN = Utils.orderFile(new Scanner(in, "UTF-8").useDelimiter("\\A").next());
                         // Run ProvenanceExplorer
                         new ProvenanceExplorer("Provenance Explorer");
@@ -303,16 +305,56 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 "File exists.",
                                 JOptionPane.YES_NO_OPTION);
                     }
-                    System.out.println(writeFile);
                     if (writeFile == 0) {
                         try {
                             PrintWriter pw = new PrintWriter(new File(file.getAbsolutePath()));
-                            pw.println(integrationDataModel.getColumnNamesAsCSV());
+                            //pw.println(integrationDataModel.getColumnNamesAsCSV());
                             int rows = integrationDataModel.getRowCount();
                             for (int row = 0; row < rows; row++) {
                                 pw.println(integrationDataModel.getRowAsCSV(row));
                             }
                             pw.close();
+                        } catch (FileNotFoundException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+
+                break;
+            case "Save Binding Data":
+                final JFileChooser fc2 = new JFileChooser(ComponentPointers.getLastDir());
+                fc2.setCurrentDirectory(new java.io.File(ComponentPointers.getLastDir()));
+                int returnVal2 = fc2.showOpenDialog(this);
+                if (returnVal2 == JFileChooser.APPROVE_OPTION) {
+                    File file = fc2.getSelectedFile();
+                    int writeFile = 0;
+                    if (file.exists()) {
+                        writeFile = JOptionPane.showConfirmDialog(
+                                this,
+                                file.getName() + " exists. Do you want to overwrite it?",
+                                "File exists.",
+                                JOptionPane.YES_NO_OPTION);
+                    }
+                    if (writeFile == 0) {
+                        String filename=file.getAbsolutePath();
+                        try {
+                            int rows = integrationDataModel.getRowCount();
+                            for (int row = 0; row < rows; row++) {
+                                PrintWriter pw = new PrintWriter(new File(file.getAbsolutePath() + "_" + row + ".json"));
+                                pw.println("{\"var\": {");
+                                String[] csvrow = integrationDataModel.getRowAsCSV(row).split(",");
+                                pw.format("\"sensor\": [{\"@id\":\"uo:sensor\"}],\n",csvrow[2]);
+                                pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[2]);
+                                pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[3]);
+                                pw.format("\"result\": [{\"@id\":\"uo:result\"}],\n",csvrow[2]);
+                                pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[4]);
+                                pw.format("\"feature\": [{\"@id\":\"uo:feature\"}],\n",csvrow[2]);
+                                pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[1]);
+                                pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n",csvrow[0]);
+                                pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
+                                pw.println("}");
+                                pw.close();
+                            }
                         } catch (FileNotFoundException e1) {
                             e1.printStackTrace();
                         }

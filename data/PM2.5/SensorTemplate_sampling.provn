@@ -1,0 +1,20 @@
+document
+	default <http://www.ncl.ac.uk/>
+	prefix var <http://openprovenance.org/var#>
+	prefix prov <http://www.w3.org/ns/prov#>
+	prefix sosa <http://www.w3.org/ns/sosa/>
+	prefix sp <http://www.w3.org/ns/sosa/prov/>
+
+ 	activity(prov:Sampling,-,-,[value='var:startedAtTime', value='var:endedAtTime'])
+ 	agent(prov:Sampler,[])
+ 	entity(prov:Sample,[])
+	entity(prov:Procedure,[])
+	entity(prov:FeatureOfInterest,[])
+
+	wasAssociatedWith(prov:Sampling,prov:Sampler,-)
+	used(prov:Sampling,prov:Sample,-)   
+	used(prov:Sampling,prov:Procedure,-)   
+	used(prov:Sampling,prov:FeatureOfInterest,-)
+	wasGeneratedBy(prov:Sample,prov:Sampling,-)
+	wasDerivedFrom(prov:Sample,prov:FeatureOfInterest)
+ endDocument

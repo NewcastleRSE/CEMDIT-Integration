@@ -30,13 +30,14 @@ public class CEMDIT extends JFrame  {
 
     CEMDIT() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        String logo = "CEMDITLogo3.png";
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         try {
-            Image icon = toolkit.getImage(ClassLoader.getSystemResource("CEMDITLogo3.png"));
+            Image icon = toolkit.getImage(ClassLoader.getSystemResource(logo));
 
             setIconImage(icon);
         } catch (NullPointerException e) {
-            logger.error("Logo.png not found.");
+            logger.error(logo + " not found.");
         }
 
 //        Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel,integrationDataModel);

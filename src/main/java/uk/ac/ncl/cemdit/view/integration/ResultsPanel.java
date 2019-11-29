@@ -17,6 +17,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
     private JButton btn_viewData = new JButton("View Data");
     private JButton btn_viewMatches = new JButton("View Matches");
     private JButton btn_saveData = new JButton("Save Results");
+    private JButton btn_saveJSON = new JButton("Save Binding Data");
     private JPanel viewButtonsHorizontalPanel = new JPanel();
     private JPanel repairedQueryPanel = new JPanel();
     private JTextArea repairedQuery = new JTextArea(4, 80);
@@ -40,12 +41,14 @@ public class ResultsPanel extends JPanel implements ActionListener {
         btn_viewData.addActionListener(actionListener);
         btn_viewMatches.addActionListener(actionListener);
         btn_saveData.addActionListener(actionListener);
+        btn_saveJSON.addActionListener(actionListener);
 
         viewButtonsHorizontalPanel.setLayout(new FlowLayout());
         viewButtonsHorizontalPanel.add(btn_viewProvenance);
         viewButtonsHorizontalPanel.add(btn_viewData);
         viewButtonsHorizontalPanel.add(btn_viewMatches);
         viewButtonsHorizontalPanel.add(btn_saveData);
+        viewButtonsHorizontalPanel.add(btn_saveJSON);
         viewButtonsHorizontalPanel.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
@@ -83,6 +86,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
         holdAll.add(provenancePanel, 1);
         holdAll.add(sp_dataPanel, 2);
         btn_saveData.setEnabled(false);
+        btn_saveJSON.setEnabled(false);
         add(viewButtonsHorizontalPanel, BorderLayout.NORTH);
         add(repairedQueryPanel, BorderLayout.CENTER);
         add(holdAll, BorderLayout.SOUTH);
@@ -94,6 +98,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
         btn_viewProvenance.setEnabled(!prov);
         btn_viewMatches.setEnabled(!matches);
         btn_viewData.setEnabled(!data);
+        btn_saveJSON.setEnabled(!data);
         holdAll.getComponent(0).setVisible(matches);
         holdAll.getComponent(1).setVisible(prov);
         holdAll.getComponent(2).setVisible(data);
@@ -124,4 +129,11 @@ public class ResultsPanel extends JPanel implements ActionListener {
         this.btn_saveData = btn_saveData;
     }
 
+    public JButton getBtn_saveJSON() {
+        return btn_saveJSON;
+    }
+
+    public void setBtn_saveJSON(JButton btn_saveJSON) {
+        this.btn_saveJSON = btn_saveJSON;
+    }
 }

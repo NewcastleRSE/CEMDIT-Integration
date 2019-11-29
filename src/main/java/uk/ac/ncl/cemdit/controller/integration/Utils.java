@@ -221,22 +221,23 @@ public class Utils {
 
                 break;
             case SQL:
-                String sensorName = "PER_AIRMON_MESH1922150";
-                String themeName;
-                String typeName = "PM2.5";
-                boolean suspect;
-                double value;
-                String units;
-                long startdate = 1543276860000L;
-                long enddate = 1543279560000L;
+
 
                 String connectionString = ComponentPointers.getProperty("datadb"); //"jdbc:sqlite:../UrbanObservatoryBasics/UrbanObservatory.db";
-                String headers = getSensorReadingsHeadings(connectionString);
-                integrationDataModel.setColumnNames(headers.split(","));
+                // Set headings/column names
+                //String headers = getSensorReadingsHeadings(connectionString);
+                //integrationDataModel.setColumnNames(headers.split(","));
                 queryResults.clear();
+<<<<<<< HEAD
                 ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString, query);
+=======
+                // get sensor data from database
+                ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString,query);
+                // the first row should be the column names
+                integrationDataModel.setColumnNames(results.get(0));
+                results.remove(0);
+>>>>>>> data_binding
                 results.forEach((line) -> {
-                    System.out.println(line);
                     data1.add(line);
                 });
                 integrationDataModel.setData(data1);

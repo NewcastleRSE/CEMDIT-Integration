@@ -1,0 +1,23 @@
+document
+  default <http://www.ncl.ac.uk/>
+  prefix var <http://openprovenance.org/var#>
+  prefix sosa <http://www.w3.org/ns/sosa/>
+  prefix sp <http://www.w3.org/ns/sosa/prov/>
+prefix vargen <http://openprovenance.org/vargen#>
+
+  bundle vargen:templ_observation
+
+  activity(var:Observation, -, -, [value='var:timestamp'])
+  agent(var:Sensor, [value='var:sensorname'])
+  entity(var:Procedure)
+  entity(var:Result,[value='var:value'])
+  entity(var:FeatureOfInterest,[value='var:theme',value='var:type'])
+  
+  wasAssociatedWith(var:Observation, var:Sensor, -)
+  wasDerivedFrom(var:Result, var:Result, -, -, -)
+  wasGeneratedBy(var:Result, var:Observation, -)
+  used(var:Observation, var:Result, -)
+  used(var:Observation, var:Procedure, -)
+  used(var:Observation, var:FeatureOfInterest, -)
+endBundle
+endDocument
