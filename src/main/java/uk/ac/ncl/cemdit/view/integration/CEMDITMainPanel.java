@@ -267,18 +267,6 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 } else {
                     JOptionPane.showMessageDialog(this, "Execute a query before requesting provenance.");
                 }
-                //                if (e.getActionCommand().equals("View Provenance")) {
-//                    if (queryExecuted) {
-//                        logger.trace("View Provenance");
-//                        String lookup = ComponentPointers.getProperty("lookupdb");
-//                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
-//                        integrationModel.getProvenancePanel().loadGraph();
-//                        // Switch to view Provenance panel
-//                        setProvenancePanel();
-//                    } else {
-//                        JOptionPane.showMessageDialog(this, "Execute a query before requesting provenance.");
-//                    }
-//                }
                 break;
             case "View Data":
                 setDataPanel();
