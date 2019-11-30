@@ -256,7 +256,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                         // Read the provn from the provStore
                         String loadPROVN = Utils.orderFile(new Scanner(in, "UTF-8").useDelimiter("\\A").next());
                         // Run ProvenanceExplorer
-                        new ProvenanceExplorer("Provenance Explorer");
+                        ProvenanceExplorer provenanceExplorer = new ProvenanceExplorer("Provenance Explorer");
+                        provenanceExplorer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                         // load provn into text pane
                         componentPointers.getTextPanes().getProvN().setText(loadPROVN);
                         // load graphs into graphic panes
@@ -331,12 +332,12 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 PrintWriter pw = new PrintWriter(new File(file.getAbsolutePath() + "_" + row + ".json"));
                                 pw.println("{\"var\": {");
                                 String[] csvrow = integrationDataModel.getRowAsCSV(row).split(",");
-                                pw.format("\"sensor\": [{\"@id\":\"uo:sensor\"}],\n",csvrow[2]);
+                                pw.format("\"sensor\": [{\"@id\":\"uo:sensor\"}],\n");
                                 pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[2]);
                                 pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[3]);
-                                pw.format("\"result\": [{\"@id\":\"uo:result\"}],\n",csvrow[2]);
+                                pw.format("\"result\": [{\"@id\":\"uo:result\"}],\n");
                                 pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[4]);
-                                pw.format("\"feature\": [{\"@id\":\"uo:feature\"}],\n",csvrow[2]);
+                                pw.format("\"feature\": [{\"@id\":\"uo:feature\"}],\n");
                                 pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[1]);
                                 pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n",csvrow[0]);
                                 pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
