@@ -228,15 +228,11 @@ public class Utils {
                 //String headers = getSensorReadingsHeadings(connectionString);
                 //integrationDataModel.setColumnNames(headers.split(","));
                 queryResults.clear();
-<<<<<<< HEAD
-                ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString, query);
-=======
                 // get sensor data from database
                 ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString,query);
                 // the first row should be the column names
                 integrationDataModel.setColumnNames(results.get(0));
                 results.remove(0);
->>>>>>> data_binding
                 results.forEach((line) -> {
                     data1.add(line);
                 });
