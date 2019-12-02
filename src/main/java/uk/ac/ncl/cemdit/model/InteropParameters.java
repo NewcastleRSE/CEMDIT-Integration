@@ -1,6 +1,6 @@
 package uk.ac.ncl.cemdit.model;
 
-public class InteropParameters{
+public class InteropParameters {
     private String verbose = null;
     private String debug = null;
     private String logfile = null;
@@ -28,211 +28,240 @@ public class InteropParameters{
     private boolean allexpanded = false;
     private String lastdir = "";
 
-    public  String getVerbose() {
+    public String getVerbose() {
         return verbose;
     }
 
-    public  void setVerbose(String verbose) {
+    public void setVerbose(String verbose) {
         verbose = verbose;
     }
 
-    public  String getDebug() {
+    public String getDebug() {
         return debug;
     }
 
-    public  void setDebug(String debug) {
+    public void setDebug(String debug) {
         debug = debug;
     }
 
-    public  String getLogfile() {
+    public String getLogfile() {
         return logfile;
     }
 
-    public  void setLogfile(String logfile) {
+    public void setLogfile(String logfile) {
         logfile = logfile;
     }
 
-    public  String getInfile() {
+    public String getInfile() {
         return infile;
     }
 
-    public  void setInfile(String infile) {
+    public void setInfile(String infile) {
         infile = infile;
     }
 
-    public  String getInformat() {
+    public String getInformat() {
         return informat;
     }
 
-    public  void setInformat(String informat) {
+    public void setInformat(String informat) {
         informat = informat;
     }
 
-    public  String getOutfile() {
+    public String getOutfile() {
         return outfile;
     }
 
-    public  void setOutfile(String outfile) {
+    public void setOutfile(String outfile) {
         outfile = outfile;
     }
 
-    public  String getOutformat() {
+    public String getOutformat() {
         return outformat;
     }
 
-    public  void setOutformat(String outformat) {
+    public void setOutformat(String outformat) {
         outformat = outformat;
     }
 
-    public  String getNamespaces() {
+    public String getNamespaces() {
         return namespaces;
     }
 
-    public  void setNamespaces(String namespaces) {
+    public void setNamespaces(String namespaces) {
         namespaces = namespaces;
     }
 
-    public  String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public  void setTitle(String title) {
+    public void setTitle(String title) {
         title = title;
     }
 
-    public  String getLayout() {
+    public String getLayout() {
         return layout;
     }
 
-    public  void setLayout(String layout) {
+    public void setLayout(String layout) {
         layout = layout;
     }
 
-    public  String getBindings() {
+    public String getBindings() {
         return bindings;
     }
 
-    public  void setBindings(String bindings) {
+    public void setBindings(String bindings) {
         bindings = bindings;
     }
 
-    public  String getBindingformat() {
+    public String getBindingformat() {
         return bindingformat;
     }
 
-    public  void setBindingformat(String bindingformat) {
+    public void setBindingformat(String bindingformat) {
         bindingformat = bindingformat;
     }
 
-    public  String getGenerator() {
+    public String getGenerator() {
         return generator;
     }
 
-    public  void setGenerator(String generator) {
+    public void setGenerator(String generator) {
         generator = generator;
     }
 
-    public  String getIndex() {
+    public String getIndex() {
         return index;
     }
 
-    public  void setIndex(String index) {
+    public void setIndex(String index) {
         index = index;
     }
 
-    public  String getFlatten() {
+    public String getFlatten() {
         return flatten;
     }
 
-    public  void setFlatten(String flatten) {
+    public void setFlatten(String flatten) {
         flatten = flatten;
     }
 
-    public  String getMerge() {
+    public String getMerge() {
         return merge;
     }
 
-    public  void setMerge(String merge) {
+    public void setMerge(String merge) {
         merge = merge;
     }
 
-    public  String getCompare() {
+    public String getCompare() {
         return compare;
     }
 
-    public  void setCompare(String compare) {
+    public void setCompare(String compare) {
         compare = compare;
     }
 
-    public  String getCompareOut() {
+    public String getCompareOut() {
         return compareOut;
     }
 
-    public  void setCompareOut(String compareOut) {
+    public void setCompareOut(String compareOut) {
         compareOut = compareOut;
     }
 
-    public  String getTemplate() {
+    public String getTemplate() {
         return template;
     }
 
-    public  void setTemplate(String template) {
+    public void setTemplate(String template) {
         template = template;
     }
 
-    public  String getBpackage() {
+    public String getBpackage() {
         return bpackage;
     }
 
-    public  void setBpackage(String bpackage) {
+    public void setBpackage(String bpackage) {
         bpackage = bpackage;
     }
 
-    public  String getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public  void setLocation(String location) {
+    public void setLocation(String location) {
         location = location;
     }
 
-    public  int getBindingsVersion() {
+    public int getBindingsVersion() {
         return bindingsVersion;
     }
 
-    public  void setBindingsVersion(int bindingsVersion) {
+    public void setBindingsVersion(int bindingsVersion) {
         bindingsVersion = bindingsVersion;
     }
 
-    public  boolean isAddOrderp() {
+    public boolean isAddOrderp() {
         return addOrderp;
     }
 
-    public  void setAddOrderp(boolean addOrderp) {
+    public void setAddOrderp(boolean addOrderp) {
         addOrderp = addOrderp;
     }
 
-    public  boolean isListFormatsp() {
+    public boolean isListFormatsp() {
         return listFormatsp;
     }
 
-    public  void setListFormatsp(boolean listFormatsp) {
+    public void setListFormatsp(boolean listFormatsp) {
         listFormatsp = listFormatsp;
     }
 
-    public  boolean isAllexpanded() {
+    public boolean isAllexpanded() {
         return allexpanded;
     }
 
-    public  void setAllexpanded(boolean allexpanded) {
+    public void setAllexpanded(boolean allexpanded) {
         allexpanded = allexpanded;
     }
 
-    public  String getLastdir() {
+    public String getLastdir() {
         return lastdir;
     }
 
-    public  void setLastdir(String lastdir) {
+    public void setLastdir(String lastdir) {
         lastdir = lastdir;
+    }
+
+    public void resetValues() {
+        verbose = null;
+        debug = null;
+        logfile = null;
+        infile = null;
+        informat = null;
+        outfile = null;
+        outformat = null;
+        namespaces = null;
+        title = null;
+        layout = null;
+        bindings = null;
+        bindingformat = null;
+        generator = null;
+        index = null;
+        flatten = null;
+        merge = null;
+        compare = null;
+        compareOut = null;
+        template = null;
+        bpackage = null;
+        location = null;
+        bindingsVersion = 3;
+        addOrderp = false;
+        listFormatsp = false;
+        allexpanded = false;
+        lastdir = "";
     }
 }
