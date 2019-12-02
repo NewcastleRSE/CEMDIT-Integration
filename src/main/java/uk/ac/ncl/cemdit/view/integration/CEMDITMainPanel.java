@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -326,57 +327,68 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 JOptionPane.YES_NO_OPTION);
                     }
                     if (writeFile == 0) {
-                        String filename=file.getAbsolutePath();
+                        // Lookup template
+                        // Check in properties file where lookup database is stored
+                        ComponentPointers componentPointers = ComponentPointers.getInstance();
+                        String lookup = ComponentPointers.getProperty("lookupdb");
+                        // What lookup type (i.e. sensor) has been selected from the combo box?
+                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
+                        integrationModel.getProvenancePanel().loadGraph(false);
+                        // Get provstore location
                         try {
-                            String directory = file.getParent();
-                            logger.trace("Canon: " + directory);
-                            // Save data
-                            int rows = integrationDataModel.getRowCount();
-                            for (int row = 0; row < rows; row++) {
-                                PrintWriter pw = new PrintWriter(new File(file.getAbsolutePath() + "_" + row + ".json"));
-                                pw.println("{\"var\": {");
-                                String[] csvrow = integrationDataModel.getRowAsCSV(row).split(",");
-                                pw.format("\"sensor\": [{\"@id\":\"uo:sensor\"}],\n");
-                                pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[2]);
-                                pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[3]);
-                                pw.format("\"result\": [{\"@id\":\"uo:result\"}],\n");
-                                pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[4]);
-                                pw.format("\"feature\": [{\"@id\":\"uo:feature\"}],\n");
-                                pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[1]);
-                                pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n",csvrow[0]);
-                                pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
-                                pw.println("}");
-                                pw.close();
-                            }
-                            // Lookup template
-                            // Check in properties file where lookup database is stored
-                            ComponentPointers componentPointers = ComponentPointers.getInstance();
-                            String lookup = ComponentPointers.getProperty("lookupdb");
-                            // What lookup type (i.e. sensor) has been selected from the combo box?
-                            Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
-                            integrationModel.getProvenancePanel().loadGraph(false);
-                            // Get provstore location
                             InputStream in = new URL(integrationModel.getProvNFilename()).openStream();
                             componentPointers.setProvnfile(integrationModel.getProvNFilename());
+                            logger.trace("provn filename: " + integrationModel.getProvNFilename());
                             // Read the provn from the provStore
                             String loadPROVN = Utils.orderFile(new Scanner(in, "UTF-8").useDelimiter("\\A").next());
 
-                            // Bind data to template
-                            // Merge files
+                            String filename = file.getAbsolutePath();
+                            try {
+                                String directory = file.getParent();
+                                // Save data
+                                int rows = integrationDataModel.getRowCount();
+                                for (int row = 0; row < rows; row++) {
+                                    File bindingdatafile = new File(file.getAbsolutePath() + "_" + row + ".json");
+                                    PrintWriter pw = new PrintWriter(bindingdatafile);
+                                    pw.println("{\"var\": {");
+                                    String[] csvrow = integrationDataModel.getRowAsCSV(row).split(",");
+                                    pw.format("\"sensor\": [{\"@id\":\"uo:sensor\"}],\n");
+                                    pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[2]);
+                                    pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[3]);
+                                    pw.format("\"result\": [{\"@id\":\"uo:result\"}],\n");
+                                    pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[4]);
+                                    pw.format("\"feature\": [{\"@id\":\"uo:feature\"}],\n");
+                                    pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[1]);
+                                    pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n", csvrow[0]);
+                                    pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
+                                    pw.println("}");
+                                    pw.close();
+                                    File outputbounddata = new File(file.getAbsolutePath() + "_bound_" + row + ".provn");
+                                    logger.trace("Input: " + bindingdatafile.getAbsolutePath());
+                                    logger.trace("output: " + outputbounddata.getAbsolutePath());
+                                    logger.trace("binding: " + ComponentPointers.getProperty("tempdir") + "/temporary.provn");
+                                    bindDataToTemplate(ComponentPointers.getProperty("tempdir") + "/temporary.provn", outputbounddata.getAbsolutePath(), bindingdatafile.getAbsolutePath());
+                                }
 
-                            // Run ProvenanceExplorer
-                            ProvenanceExplorer provenanceExplorer = new ProvenanceExplorer("Provenance Explorer");
-                            provenanceExplorer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                            // load provn into text pane
-                            componentPointers.getTextPanes().getProvN().setText(loadPROVN);
-                            // load graphs into graphic panes
-                            componentPointers.loadProvnFile(new File(ComponentPointers.getProperty("tempdir") + "/temporary.provn"));
+
+                                // Bind data to template
+
+                                // Merge files
+
+                                // Run ProvenanceExplorer
+                                ProvenanceExplorer provenanceExplorer = new ProvenanceExplorer("Provenance Explorer");
+                                provenanceExplorer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                                // load provn into text pane
+                                componentPointers.getTextPanes().getProvN().setText(loadPROVN);
+                                // load graphs into graphic panes
+                                componentPointers.loadProvnFile(new File(ComponentPointers.getProperty("tempdir") + "/temporary.provn"));
 
 
-                        } catch (FileNotFoundException e1) {
-                            e1.printStackTrace();
+                            } catch (FileNotFoundException e1) {
+                                logger.trace("File not found: "  + e1.getMessage());
+                          }
                         } catch (IOException e1) {
-                            e1.printStackTrace();
+                            logger.trace("IOException: " + e1.getMessage());
                         }
                     }
                 }
@@ -386,45 +398,45 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
     }
 
     private void bindDataToTemplate(String infile, String outfile, String bindings) {
-            InteropFramework interop = new InteropFramework("",
-                    "",
-                    "",
-                    infile,
-                    "provn",
-                    outfile,
-                    "provn",
-                    "",
-                    "",
-                    "",
-                    bindings,
-                    "provn",
-                    3,
-                    false,
-                    false,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    org.openprovenance.prov.xml.ProvFactory.getFactory());
-            try {
-                interop.run();
-            } catch (IllegalArgumentException e) {
-                logger.error(e);
+        InteropFramework interop = new InteropFramework("",
+                "",
+                "",
+                infile,
+                "provn",
+                outfile,
+                "provn",
+                "",
+                "",
+                "",
+                bindings,
+                "provn",
+                3,
+                false,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                org.openprovenance.prov.xml.ProvFactory.getFactory());
+        try {
+            interop.run();
+        } catch (IllegalArgumentException e) {
+            logger.error(e);
 
-            } catch (UnsupportedOperationException e) {
-                logger.error(e);
-            } catch (Exception e) {
-                logger.error(e);
-            }
-
+        } catch (UnsupportedOperationException e) {
+            logger.error(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e);
         }
 
     }
+
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
