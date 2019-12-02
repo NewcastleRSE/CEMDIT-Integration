@@ -53,7 +53,7 @@ public class Utils {
         // Read rest of the lines
         for (int l = 1; l < lines.length - 1; l++) {
             if (lines[l].trim().equals("") || lines[l] == null) {
-                logger.trace("Omit empty line");
+                //logger.trace("Omit empty line");
             }
             if (lines[l].trim().toLowerCase().startsWith("entity") ||
                     lines[l].trim().toLowerCase().startsWith("agent") ||

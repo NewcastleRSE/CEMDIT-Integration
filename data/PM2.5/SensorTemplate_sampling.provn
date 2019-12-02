@@ -5,6 +5,7 @@ document
 	prefix sosa <http://www.w3.org/ns/sosa/>
 	prefix sp <http://www.w3.org/ns/sosa/prov/>
 
+    bundle
  	activity(prov:Sampling,-,-,[value='var:startedAtTime', value='var:endedAtTime'])
  	agent(prov:Sampler,[])
  	entity(prov:Sample,[])
