@@ -3,6 +3,7 @@ package uk.ac.ncl.cemdit.view.integration;
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 import org.openprovenance.prov.interop.InteropFramework;
+import uk.ac.ncl.cemdit.model.InteropParameters;
 import uk.ac.ncl.cemdit.view.ProvenanceExplorer;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.integration.LookupType;
@@ -336,6 +337,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                         integrationModel.getProvenancePanel().loadGraph(false);
                         // Get provstore location
                         try {
+                            String indexFileName = file.getAbsolutePath() + "_MergeIndex.txt";
+                            PrintWriter indexfile = new PrintWriter(indexFileName);
                             InputStream in = new URL(integrationModel.getProvNFilename()).openStream();
                             componentPointers.setProvnfile(integrationModel.getProvNFilename());
                             logger.trace("provn filename: " + integrationModel.getProvNFilename());
@@ -344,6 +347,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
 
                             String filename = file.getAbsolutePath();
                             try {
+                                InteropParameters interopParameters = new InteropParameters();
                                 String directory = file.getParent();
                                 // Save data
                                 int rows = integrationDataModel.getRowCount();
@@ -363,17 +367,33 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                     pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
                                     pw.println("}");
                                     pw.close();
-                                    File outputbounddata = new File(file.getAbsolutePath() + "_bound_" + row + ".provn");
-                                    logger.trace("Input: " + bindingdatafile.getAbsolutePath());
-                                    logger.trace("output: " + outputbounddata.getAbsolutePath());
-                                    logger.trace("binding: " + ComponentPointers.getProperty("tempdir") + "/temporary.provn");
-                                    bindDataToTemplate(ComponentPointers.getProperty("tempdir") + "/temporary.provn", outputbounddata.getAbsolutePath(), bindingdatafile.getAbsolutePath());
                                 }
-
-
-                                // Bind data to template
-
+                                for (int row = 0; row < rows; row++) {
+                                    File bindingdatafile = new File(file.getAbsolutePath() + "_" + row + ".json");
+                                    File outputbounddata = new File(file.getAbsolutePath() + "_bound_" + row + ".provn");
+                                    // Bind data to template
+                                    interopParameters.setInfile(ComponentPointers.getProperty("tempdir") + "\\temporary.provn");
+                                    interopParameters.setInformat("provn");
+                                    interopParameters.setOutfile(outputbounddata.getAbsolutePath());
+                                    interopParameters.setOutformat("provn");
+                                    interopParameters.setBindings(bindingdatafile.getAbsolutePath());
+                                    interopParameters.setBindingformat("");
+                                    interopParameters.setBindingsVersion(3);
+                                    Utils.bindDataToTemplate(interopParameters);
+                                    if (row == rows - 1) indexfile.format("file, %s, provn\n", outputbounddata);
+                                    else indexfile.format("file, %s, provn,\n", outputbounddata);
+                                }
+                                indexfile.close();
                                 // Merge files
+                                interopParameters.resetValues();
+                                interopParameters.setMerge(indexFileName);
+                                interopParameters.setOutfile(file.getAbsolutePath() + "_mergedFile.provn");
+                                logger.trace(interopParameters.toString());
+                                Utils.bindDataToTemplate(interopParameters);
+                                interopParameters.setFlatten("flatten");
+                                interopParameters.setOutfile(file.getAbsolutePath() + "_MergedFile_Flattened.provn");
+                                logger.trace(interopParameters.toString());
+                                Utils.bindDataToTemplate(interopParameters);
 
                                 // Run ProvenanceExplorer
                                 ProvenanceExplorer provenanceExplorer = new ProvenanceExplorer("Provenance Explorer");
@@ -382,11 +402,9 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 componentPointers.getTextPanes().getProvN().setText(loadPROVN);
                                 // load graphs into graphic panes
                                 componentPointers.loadProvnFile(new File(ComponentPointers.getProperty("tempdir") + "/temporary.provn"));
-
-
                             } catch (FileNotFoundException e1) {
-                                logger.trace("File not found: "  + e1.getMessage());
-                          }
+                                logger.trace("File not found: " + e1.getMessage());
+                            }
                         } catch (IOException e1) {
                             logger.trace("IOException: " + e1.getMessage());
                         }
@@ -397,45 +415,6 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         }
     }
 
-    private void bindDataToTemplate(String infile, String outfile, String bindings) {
-        InteropFramework interop = new InteropFramework("",
-                "",
-                "",
-                infile,
-                "provn",
-                outfile,
-                "provn",
-                "",
-                "",
-                "",
-                bindings,
-                "provn",
-                3,
-                false,
-                false,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                org.openprovenance.prov.xml.ProvFactory.getFactory());
-        try {
-            interop.run();
-        } catch (IllegalArgumentException e) {
-            logger.error(e);
-
-        } catch (UnsupportedOperationException e) {
-            logger.error(e);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
-
-    }
 
 
     @Override

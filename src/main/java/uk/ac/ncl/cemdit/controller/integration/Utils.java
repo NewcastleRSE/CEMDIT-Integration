@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.apache.log4j.Logger;
+import org.openprovenance.prov.interop.InteropFramework;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.Exceptions.InvalidDocumentFormatException;
 import uk.ac.ncl.cemdit.dao.sqlite.Connector;
+import uk.ac.ncl.cemdit.model.InteropParameters;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.QueryResults;
@@ -27,6 +29,53 @@ import static uk.ac.ncl.cemdit.dao.sqlite.Connector.getSensorReadingsHeadings;
 public class Utils {
 
     static private Logger logger = Logger.getLogger(Utils.class);
+
+
+    static public void bindDataToTemplate(InteropParameters interopParameters) {
+        logger.trace(interopParameters.getInfile());
+        logger.trace(interopParameters.getOutfile());
+        logger.trace(interopParameters.getBindings());
+        logger.trace(interopParameters.toString());
+        InteropFramework interop = new InteropFramework(interopParameters.getVerbose(),
+                interopParameters.getDebug(),
+                interopParameters.getLogfile(),
+                interopParameters.getInfile(),
+                interopParameters.getInformat(),
+                interopParameters.getOutfile(),
+                interopParameters.getOutformat(),
+                interopParameters.getNamespaces(),
+                interopParameters.getTitle(),
+                interopParameters.getLayout(),
+                interopParameters.getBindings(),
+                interopParameters.getBindingformat(),
+                interopParameters.getBindingsVersion(),
+                interopParameters.isAddOrderp(),
+                interopParameters.isAllexpanded(),
+                interopParameters.getTemplate(),
+                interopParameters.getBpackage(),
+                interopParameters.getLocation(),
+                interopParameters.getGenerator(),
+                interopParameters.getIndex(),
+                interopParameters.getMerge(),
+                interopParameters.getFlatten(),
+                interopParameters.getCompare(),
+                interopParameters.getCompareOut(),
+                org.openprovenance.prov.xml.ProvFactory.getFactory());
+        try {
+            interop.run();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            logger.error(e);
+
+        } catch (UnsupportedOperationException e) {
+            e.printStackTrace();
+            logger.error(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e);
+        }
+
+    }
 
     /**
      * The provn file seems to get disordered when save to the provnstore. This methods saves the file with entities,
