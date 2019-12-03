@@ -33,7 +33,7 @@ public class InteropParameters {
     }
 
     public void setVerbose(String verbose) {
-        verbose = verbose;
+        this.verbose = verbose;
     }
 
     public String getDebug() {
@@ -41,7 +41,7 @@ public class InteropParameters {
     }
 
     public void setDebug(String debug) {
-        debug = debug;
+        this.debug = debug;
     }
 
     public String getLogfile() {
@@ -49,7 +49,7 @@ public class InteropParameters {
     }
 
     public void setLogfile(String logfile) {
-        logfile = logfile;
+        this.logfile = logfile;
     }
 
     public String getInfile() {
@@ -57,7 +57,7 @@ public class InteropParameters {
     }
 
     public void setInfile(String infile) {
-        infile = infile;
+        this.infile = infile;
     }
 
     public String getInformat() {
@@ -65,7 +65,7 @@ public class InteropParameters {
     }
 
     public void setInformat(String informat) {
-        informat = informat;
+        this.informat = informat;
     }
 
     public String getOutfile() {
@@ -73,7 +73,7 @@ public class InteropParameters {
     }
 
     public void setOutfile(String outfile) {
-        outfile = outfile;
+        this.outfile = outfile;
     }
 
     public String getOutformat() {
@@ -81,7 +81,7 @@ public class InteropParameters {
     }
 
     public void setOutformat(String outformat) {
-        outformat = outformat;
+        this.outformat = outformat;
     }
 
     public String getNamespaces() {
@@ -89,7 +89,7 @@ public class InteropParameters {
     }
 
     public void setNamespaces(String namespaces) {
-        namespaces = namespaces;
+        this.namespaces = namespaces;
     }
 
     public String getTitle() {
@@ -97,7 +97,7 @@ public class InteropParameters {
     }
 
     public void setTitle(String title) {
-        title = title;
+        this.title = title;
     }
 
     public String getLayout() {
@@ -105,7 +105,7 @@ public class InteropParameters {
     }
 
     public void setLayout(String layout) {
-        layout = layout;
+        this.layout = layout;
     }
 
     public String getBindings() {
@@ -113,7 +113,7 @@ public class InteropParameters {
     }
 
     public void setBindings(String bindings) {
-        bindings = bindings;
+        this.bindings = bindings;
     }
 
     public String getBindingformat() {
@@ -121,7 +121,7 @@ public class InteropParameters {
     }
 
     public void setBindingformat(String bindingformat) {
-        bindingformat = bindingformat;
+        this.bindingformat = bindingformat;
     }
 
     public String getGenerator() {
@@ -129,7 +129,7 @@ public class InteropParameters {
     }
 
     public void setGenerator(String generator) {
-        generator = generator;
+        this.generator = generator;
     }
 
     public String getIndex() {
@@ -137,7 +137,7 @@ public class InteropParameters {
     }
 
     public void setIndex(String index) {
-        index = index;
+        this.index = index;
     }
 
     public String getFlatten() {
@@ -145,7 +145,7 @@ public class InteropParameters {
     }
 
     public void setFlatten(String flatten) {
-        flatten = flatten;
+        this.flatten = flatten;
     }
 
     public String getMerge() {
@@ -153,7 +153,7 @@ public class InteropParameters {
     }
 
     public void setMerge(String merge) {
-        merge = merge;
+        this.merge = merge;
     }
 
     public String getCompare() {
@@ -161,7 +161,7 @@ public class InteropParameters {
     }
 
     public void setCompare(String compare) {
-        compare = compare;
+        this.compare = compare;
     }
 
     public String getCompareOut() {
@@ -169,7 +169,7 @@ public class InteropParameters {
     }
 
     public void setCompareOut(String compareOut) {
-        compareOut = compareOut;
+        this.compareOut = compareOut;
     }
 
     public String getTemplate() {
@@ -177,7 +177,7 @@ public class InteropParameters {
     }
 
     public void setTemplate(String template) {
-        template = template;
+        this.template = template;
     }
 
     public String getBpackage() {
@@ -185,7 +185,7 @@ public class InteropParameters {
     }
 
     public void setBpackage(String bpackage) {
-        bpackage = bpackage;
+        this.bpackage = bpackage;
     }
 
     public String getLocation() {
@@ -193,7 +193,7 @@ public class InteropParameters {
     }
 
     public void setLocation(String location) {
-        location = location;
+        this.location = location;
     }
 
     public int getBindingsVersion() {
@@ -201,7 +201,7 @@ public class InteropParameters {
     }
 
     public void setBindingsVersion(int bindingsVersion) {
-        bindingsVersion = bindingsVersion;
+        this.bindingsVersion = bindingsVersion;
     }
 
     public boolean isAddOrderp() {
@@ -209,7 +209,7 @@ public class InteropParameters {
     }
 
     public void setAddOrderp(boolean addOrderp) {
-        addOrderp = addOrderp;
+        this.addOrderp = addOrderp;
     }
 
     public boolean isListFormatsp() {
@@ -217,7 +217,7 @@ public class InteropParameters {
     }
 
     public void setListFormatsp(boolean listFormatsp) {
-        listFormatsp = listFormatsp;
+        this.listFormatsp = listFormatsp;
     }
 
     public boolean isAllexpanded() {
@@ -225,7 +225,7 @@ public class InteropParameters {
     }
 
     public void setAllexpanded(boolean allexpanded) {
-        allexpanded = allexpanded;
+        this.allexpanded = allexpanded;
     }
 
     public String getLastdir() {
@@ -233,7 +233,7 @@ public class InteropParameters {
     }
 
     public void setLastdir(String lastdir) {
-        lastdir = lastdir;
+        this.lastdir = lastdir;
     }
 
     public void resetValues() {
@@ -263,5 +263,32 @@ public class InteropParameters {
         listFormatsp = false;
         allexpanded = false;
         lastdir = "";
+    }
+
+    public String toString() {
+        return("-verbose: " + verbose +
+                "\n" + "-debug " + debug +
+                "\n" + "-logfile" + logfile +
+                "\n" + "-flatten " + flatten +
+                "\n" + "-index " + index +
+                "\n" + "-merge " + merge +
+                "\n" + "-informat " + informat +
+                "\n" + "-infile " + infile +
+                "\n" + "-outformat " + outformat +
+                "\n" + "-outfile " + outfile +
+                "\n" + "-namespaces " + namespaces +
+                "\n" + "-title " + title +
+                "\n" + "-layout " + layout +
+                "\n" + "-bindings " + bindings +
+                "\n" + "-bindformat " + bindingformat +
+                "\n" + "-generator " + generator +
+                "\n" + "-genorder " + (generator == null ? "" : generator) +
+                "\n" + "-allexpanded " + allexpanded +
+                "\n" + "-bindver " + bindingsVersion +
+                "\n" + "-template " + template +
+                "\n" + "-package " + bpackage +
+                "\n" + "-location " + location +
+                "\n" + "-compare " + compare +
+                "\n" + "-compareOut " + compareOut);
     }
 }
