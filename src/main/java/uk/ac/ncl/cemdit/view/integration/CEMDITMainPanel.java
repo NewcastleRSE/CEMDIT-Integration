@@ -363,7 +363,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                     pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[4]);
                                     pw.format("\"FeatureOfInterest\": [{\"@id\":\"uo:FeatureOfInterest\"}],\n");
                                     pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[1]);
-                                    pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n", csvrow[0]);
+                                    pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[0]);
                                     pw.format("\"Observation\": [{\"@id\":\"uo:Observation\"}],\n");
                                     pw.format("\"timestamp\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n", csvrow[5]);
                                     pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
