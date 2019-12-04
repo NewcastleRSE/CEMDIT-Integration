@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 public class FileFormatWidget extends JPanel implements ActionListener {
 
-    private String[] fileFormats = {null, "provn", "ttl", "provx", "xml", "pdf","svg"};
+    private String[] fileFormats = {null, "json", "provn", "ttl", "provx", "xml", "pdf","svg"};
     private String returnString = null;
     JComboBox fileFormatCB;
 
