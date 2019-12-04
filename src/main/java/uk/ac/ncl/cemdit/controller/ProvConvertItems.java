@@ -4,6 +4,9 @@ import org.apache.log4j.Logger;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.Document;
 
+/**
+ * https://lucmoreau.wordpress.com/2017/03/30/prov-template-a-quick-start/
+ */
 public class ProvConvertItems {
     static private Logger logger = Logger.getLogger(ProvConvertItems.class);
     /**
