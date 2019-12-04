@@ -96,7 +96,7 @@ public class ToolboxFrame extends JFrame implements ActionListener {
         String[] infiletypes = getFileTypes("input"); //{null, "provn", "ttl", "provx", "xml", "pdf", "svg"};
         String[] outfiletypes = getFileTypes("output"); //{null, "provn", "ttl", "provx", "xml", "pdf", "svg", "png"};
         String[] dotlayouts = {"dot", "circo", "fdp", "neato", "osage", "sfdp", "twopi"};
-        String[] bindingformats = {};
+        String[] bindingformats = getFileTypes("input");
         mergeIndexFileSelectWidget = new FileSelectWidget("Select index file for merging", lastdir, "txt");
         logfileSelectWidget = new FileFormatWidget("Select log file");
         fileinSelectWidget = new FileSelectWidget("Select input file", lastdir, null);
@@ -206,25 +206,25 @@ public class ToolboxFrame extends JFrame implements ActionListener {
         compareOut = compareOutFileSelectWidget.getReturnString();
         System.out.println("-verbose: " + verbose +
                 "\n" + "-debug:" + debug +
-                "\n" + "-logfile" + logfile +
+                "\n" + "-logfile: " + logfile +
                 "\n" + "-flatten: " + flatten +
                 "\n" + "-index: " + index +
                 "\n" + "-merge " + merge +
-                "\n" + "-informat " + informat +
-                "\n" + "-infile " + infile +
-                "\n" + "-outformat " + outformat +
-                "\n" + "-outfile " + outfile +
-                "\n" + "-namespaces " + namespaces +
-                "\n" + "-title " + title +
+                "\n" + "-informat: " + informat +
+                "\n" + "-infile: " + infile +
+                "\n" + "-outformat: " + outformat +
+                "\n" + "-outfile: " + outfile +
+                "\n" + "-namespaces: " + namespaces +
+                "\n" + "-title: " + title +
                 "\n" + "-layout " + layout +
                 "\n" + "-bindings " + bindings +
                 "\n" + "-bindformat " + bindingformat +
-                "\n" + "-generator " + generator +
-                "\n" + "-genorder " + (generator.equals("On") ? "ordered" : "unordered") +
+                "\n" + "-generator " + (generator.equals("")?null:generator) +
+                "\n" + "-genorder " + null + //(generator.equals("On") ? "ordered" : "unordered") +
                 "\n" + "-allexpanded " + allexpanded +
-                "\n" + "-bind version " + bindingsVersion +
+                "\n" + "-bindversion " + bindingsVersion +
                 "\n" + "-template " + template +
-                "\n" + "-package " + bpackage +
+                "\n" + "-package " + (bpackage.equals("")?null:bpackage) +
                 "\n" + "-location " + location +
                 "\n" + "-compare " + compare +
                 "\n" + "-compareOut " + compareOut
@@ -260,6 +260,7 @@ public class ToolboxFrame extends JFrame implements ActionListener {
             interop.run();
             resetVariables();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             logger.error(e);
             JOptionPane.showMessageDialog(this,
                     "You can't do that!",
