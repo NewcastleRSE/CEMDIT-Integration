@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.apache.log4j.Logger;
+import org.openprovenance.prov.interop.InteropFramework;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.Exceptions.InvalidDocumentFormatException;
 import uk.ac.ncl.cemdit.dao.sqlite.Connector;
+import uk.ac.ncl.cemdit.model.InteropParameters;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.QueryResults;
@@ -28,11 +30,66 @@ public class Utils {
 
     static private Logger logger = Logger.getLogger(Utils.class);
 
+
+    static public void bindDataToTemplate(InteropParameters interopParameters) {
+        logger.trace(interopParameters.getInfile());
+        logger.trace(interopParameters.getOutfile());
+        logger.trace(interopParameters.getBindings());
+        logger.trace(interopParameters.toString());
+        InteropFramework interop = new InteropFramework(interopParameters.getVerbose(),
+                interopParameters.getDebug(),
+                interopParameters.getLogfile(),
+                interopParameters.getInfile(),
+                interopParameters.getInformat(),
+                interopParameters.getOutfile(),
+                interopParameters.getOutformat(),
+                interopParameters.getNamespaces(),
+                interopParameters.getTitle(),
+                interopParameters.getLayout(),
+                interopParameters.getBindings(),
+                interopParameters.getBindingformat(),
+                interopParameters.getBindingsVersion(),
+                interopParameters.isAddOrderp(),
+                interopParameters.isAllexpanded(),
+                interopParameters.getTemplate(),
+                interopParameters.getBpackage(),
+                interopParameters.getLocation(),
+                interopParameters.getGenerator(),
+                interopParameters.getIndex(),
+                interopParameters.getMerge(),
+                interopParameters.getFlatten(),
+                interopParameters.getCompare(),
+                interopParameters.getCompareOut(),
+                org.openprovenance.prov.xml.ProvFactory.getFactory());
+        try {
+            interop.run();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            logger.error(e);
+
+        } catch (UnsupportedOperationException e) {
+            e.printStackTrace();
+            logger.error(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e);
+        }
+
+    }
+
+    /**
+     * The provn file seems to get disordered when save to the provnstore. This methods saves the file with entities,
+     * agents and activities being declared before relationships.
+     * It does not yet handle more than one bundle and prefixes declared in a bundle.
+     * @param fileContents The contents of the provn file as a string
+     * @return The contents of the provn file in ordered fashion.
+     */
     static public String orderFile(String fileContents) {
         StringBuilder sb = new StringBuilder();
         ArrayList<String> elements = new ArrayList<>();
         ArrayList<String> relations = new ArrayList<>();
         ArrayList<String> prefixes = new ArrayList<>();
+        ArrayList<String> bundles = new ArrayList<>();
         String defaultLine = "";
         String[] lines = fileContents.split("\n");
 
@@ -53,7 +110,7 @@ public class Utils {
         // Read rest of the lines
         for (int l = 1; l < lines.length - 1; l++) {
             if (lines[l].trim().equals("") || lines[l] == null) {
-                logger.trace("Omit empty line");
+                //logger.trace("Omit empty line");
             }
             if (lines[l].trim().toLowerCase().startsWith("entity") ||
                     lines[l].trim().toLowerCase().startsWith("agent") ||
@@ -63,6 +120,8 @@ public class Utils {
                 defaultLine = lines[l] + "\n";
             } else if (lines[l].trim().toLowerCase().startsWith("prefix")) {
                 prefixes.add(lines[l] + "\n");
+            } else if (lines[l].trim().toLowerCase().startsWith("bundle") || lines[l].trim().toLowerCase().startsWith("endbundle")) {
+                bundles.add(lines[l] + "\n");
             } else {
                 relations.add(lines[l] + "\n");
             }
@@ -84,16 +143,30 @@ public class Utils {
         for (int i = 0; i < prefixes.size(); i++) {
             sb.append(prefixes.get(i));
         }
+        if (bundles.size() > 0) {
+            sb.append(bundles.get(0));
+        }
         for (int i = 0; i < elements.size(); i++) {
             sb.append(elements.get(i));
         }
         for (int i = 0; i < relations.size(); i++) {
             sb.append(relations.get(i));
         }
+        if (bundles.size() > 1) {
+            sb.append(bundles.get(1));
+        }
         sb.append(lines[lines.length - 1]);
         return sb.toString();
     }
 
+    /**
+     * Populating the integration model
+     * @param query
+     * @param integrationModel
+     * @param integrationDataModel
+     * @param queryType
+     * @param container
+     */
     static public void populateIntegrationModel(String query, IntegrationModel integrationModel, IntegrationDataModel integrationDataModel, QueryType queryType, Container container) {
         ArrayList<String> data = new ArrayList<>();
         ArrayList<ArrayList<Object>> data1 = new ArrayList<>();

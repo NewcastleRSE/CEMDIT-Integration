@@ -1,19 +1,21 @@
 document
-  default <http://www.ncl.ac.uk/>
-  prefix var <http://openprovenance.org/var#>
-  prefix sosa <http://www.w3.org/ns/sosa/>
-  prefix sp <http://www.w3.org/ns/sosa/prov/>
+    default <http://www.ncl.ac.uk/>
+    prefix var <http://openprovenance.org/var#>
+    prefix sosa <http://www.w3.org/ns/sosa/>
+    prefix sp <http://www.w3.org/ns/sosa/prov/>
 
-  activity(prov:Observation, -, -, [value='var:startedAtTime', value='var:endedAtTime'])
-  agent(prov:Sensor)
-  entity(prov:Procedure)
-  entity(prov:Result)
-  entity(prov:FeatureOfInterest)
-  
-  wasAssociatedWith(prov:Observation, prov:Sensor, -)
-  wasDerivedFrom(prov:Result, prov:Result, -, -, -)
-  wasGeneratedBy(prov:Result, prov:Observation, -)
-  used(prov:Observation, prov:Result, -)
-  used(prov:Observation, prov:Procedure, -)
-  used(prov:Observation, prov:FeatureOfInterest, -)
+    bundle prov:ObservationBundle
+        activity(prov:Observation, -, -, [value='var:startedAtTime', value='var:endedAtTime'])
+        agent(prov:Sensor)
+        entity(prov:Procedure)
+        entity(prov:Result)
+        entity(prov:FeatureOfInterest)
+
+        wasAssociatedWith(prov:Observation, prov:Sensor, -)
+        wasDerivedFrom(prov:Result, prov:Result, -, -, -)
+        wasGeneratedBy(prov:Result, prov:Observation, -)
+        used(prov:Observation, prov:Result, -)
+        used(prov:Observation, prov:Procedure, -)
+        used(prov:Observation, prov:FeatureOfInterest, -)
+    endBundle
 endDocument

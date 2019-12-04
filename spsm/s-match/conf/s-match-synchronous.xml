@@ -82,7 +82,7 @@
 
     <bean id="linguisticOracle" class="it.unitn.disi.smatch.oracles.wordnet.WordNet">
         <!--default config tokenizes too much, so we have to use our own config -->
-        <constructor-arg name="jwnlPropertiesPath" value="../conf/wn31resource.xml"/>
+        <constructor-arg name="jwnlPropertiesPath" value="spsm/s-match/conf/wn31resource.xml"/>
     </bean>
     <alias name="linguisticOracle" alias="senseMatcher"/>
 

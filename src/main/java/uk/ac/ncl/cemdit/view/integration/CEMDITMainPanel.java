@@ -2,6 +2,8 @@ package uk.ac.ncl.cemdit.view.integration;
 
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
+import org.openprovenance.prov.interop.InteropFramework;
+import uk.ac.ncl.cemdit.model.InteropParameters;
 import uk.ac.ncl.cemdit.view.ProvenanceExplorer;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.integration.LookupType;
@@ -18,6 +20,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -256,7 +259,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                         // Read the provn from the provStore
                         String loadPROVN = Utils.orderFile(new Scanner(in, "UTF-8").useDelimiter("\\A").next());
                         // Run ProvenanceExplorer
-                        new ProvenanceExplorer("Provenance Explorer");
+                        ProvenanceExplorer provenanceExplorer = new ProvenanceExplorer("Provenance Explorer");
+                        provenanceExplorer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                         // load provn into text pane
                         componentPointers.getTextPanes().getProvN().setText(loadPROVN);
                         // load graphs into graphic panes
@@ -267,18 +271,6 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 } else {
                     JOptionPane.showMessageDialog(this, "Execute a query before requesting provenance.");
                 }
-                //                if (e.getActionCommand().equals("View Provenance")) {
-//                    if (queryExecuted) {
-//                        logger.trace("View Provenance");
-//                        String lookup = ComponentPointers.getProperty("lookupdb");
-//                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
-//                        integrationModel.getProvenancePanel().loadGraph();
-//                        // Switch to view Provenance panel
-//                        setProvenancePanel();
-//                    } else {
-//                        JOptionPane.showMessageDialog(this, "Execute a query before requesting provenance.");
-//                    }
-//                }
                 break;
             case "View Data":
                 setDataPanel();
@@ -336,27 +328,87 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                 JOptionPane.YES_NO_OPTION);
                     }
                     if (writeFile == 0) {
-                        String filename=file.getAbsolutePath();
+                        // Lookup template
+                        // Check in properties file where lookup database is stored
+                        ComponentPointers componentPointers = ComponentPointers.getInstance();
+                        String lookup = ComponentPointers.getProperty("lookupdb");
+                        // What lookup type (i.e. sensor) has been selected from the combo box?
+                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
+                        integrationModel.getProvenancePanel().loadGraph(false);
+                        // Get provstore location
                         try {
-                            int rows = integrationDataModel.getRowCount();
-                            for (int row = 0; row < rows; row++) {
-                                PrintWriter pw = new PrintWriter(new File(file.getAbsolutePath() + "_" + row + ".json"));
-                                pw.println("{\"var\": {");
-                                String[] csvrow = integrationDataModel.getRowAsCSV(row).split(",");
-                                pw.format("\"sensor\": [{\"@id\":\"uo:sensor\"}],\n",csvrow[2]);
-                                pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[2]);
-                                pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[3]);
-                                pw.format("\"result\": [{\"@id\":\"uo:result\"}],\n",csvrow[2]);
-                                pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[4]);
-                                pw.format("\"feature\": [{\"@id\":\"uo:feature\"}],\n",csvrow[2]);
-                                pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n",csvrow[1]);
-                                pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n",csvrow[0]);
-                                pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
-                                pw.println("}");
-                                pw.close();
+                            String indexFileName = file.getAbsolutePath() + "_MergeIndex.txt";
+                            PrintWriter indexfile = new PrintWriter(indexFileName);
+                            InputStream in = new URL(integrationModel.getProvNFilename()).openStream();
+                            componentPointers.setProvnfile(integrationModel.getProvNFilename());
+                            logger.trace("provn filename: " + integrationModel.getProvNFilename());
+                            // Read the provn from the provStore
+                            String loadPROVN = Utils.orderFile(new Scanner(in, "UTF-8").useDelimiter("\\A").next());
+
+                            String filename = file.getAbsolutePath();
+                            try {
+                                InteropParameters interopParameters = new InteropParameters();
+                                String directory = file.getParent();
+                                // Save data
+                                int rows = integrationDataModel.getRowCount();
+                                for (int row = 0; row < rows; row++) {
+                                    File bindingdatafile = new File(file.getAbsolutePath() + "_" + row + ".json");
+                                    PrintWriter pw = new PrintWriter(bindingdatafile);
+                                    pw.println("{\"var\": {");
+                                    String[] csvrow = integrationDataModel.getRowAsCSV(row).split(",");
+                                    pw.format("\"Sensor\": [{\"@id\":\"uo:%s\"}],\n", csvrow[0]);
+                                    pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[2]);
+                                    pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[3]);
+                                    pw.format("\"Result\": [{\"@id\":\"uo:result\"}],\n");
+                                    pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[4]);
+                                    pw.format("\"FeatureOfInterest\": [{\"@id\":\"uo:FeatureOfInterest\"}],\n");
+                                    pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[1]);
+                                    pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[0]);
+                                    pw.format("\"Observation\": [{\"@id\":\"uo:Observation\"}],\n");
+                                    pw.format("\"timestamp\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n", csvrow[5]);
+                                    pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
+                                    pw.println("}");
+                                    pw.close();
+                                }
+                                for (int row = 0; row < rows; row++) {
+                                    File bindingdatafile = new File(file.getAbsolutePath() + "_" + row + ".json");
+                                    File outputbounddata = new File(file.getAbsolutePath() + "_bound_" + row + ".provn");
+                                    // Bind data to template
+                                    interopParameters.setInfile(ComponentPointers.getProperty("tempdir") + "\\temporary.provn");
+                                    interopParameters.setInformat("provn");
+                                    interopParameters.setOutfile(outputbounddata.getAbsolutePath());
+                                    interopParameters.setOutformat("provn");
+                                    interopParameters.setBindings(bindingdatafile.getAbsolutePath());
+                                    interopParameters.setBindingformat("");
+                                    interopParameters.setBindingsVersion(3);
+                                    Utils.bindDataToTemplate(interopParameters);
+                                    if (row == rows - 1) indexfile.format("file, %s, provn\n", outputbounddata);
+                                    else indexfile.format("file, %s, provn,\n", outputbounddata);
+                                }
+                                indexfile.close();
+                                // Merge files
+                                interopParameters.resetValues();
+                                interopParameters.setMerge(indexFileName);
+                                interopParameters.setOutfile(file.getAbsolutePath() + "_mergedFile.provn");
+                                logger.trace(interopParameters.toString());
+                                Utils.bindDataToTemplate(interopParameters);
+                                interopParameters.setFlatten("flatten");
+                                interopParameters.setOutfile(file.getAbsolutePath() + "_MergedFile_Flattened.provn");
+                                logger.trace(interopParameters.toString());
+                                Utils.bindDataToTemplate(interopParameters);
+
+                                // Run ProvenanceExplorer
+                                ProvenanceExplorer provenanceExplorer = new ProvenanceExplorer("Provenance Explorer");
+                                provenanceExplorer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                                // load provn into text pane
+                                componentPointers.getTextPanes().getProvN().setText(loadPROVN);
+                                // load graphs into graphic panes
+                                componentPointers.loadProvnFile(new File(ComponentPointers.getProperty("tempdir") + "/temporary.provn"));
+                            } catch (FileNotFoundException e1) {
+                                logger.trace("File not found: " + e1.getMessage());
                             }
-                        } catch (FileNotFoundException e1) {
-                            e1.printStackTrace();
+                        } catch (IOException e1) {
+                            logger.trace("IOException: " + e1.getMessage());
                         }
                     }
                 }
@@ -364,6 +416,8 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 break;
         }
     }
+
+
 
     @Override
     public void valueChanged(ListSelectionEvent e) {

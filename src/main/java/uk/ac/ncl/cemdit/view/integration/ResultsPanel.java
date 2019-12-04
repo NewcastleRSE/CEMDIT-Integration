@@ -17,7 +17,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
     private JButton btn_viewData = new JButton("View Data");
     private JButton btn_viewMatches = new JButton("View Matches");
     private JButton btn_saveData = new JButton("Save Results");
-    private JButton btn_saveJSON = new JButton("Save Binding Data");
+    private JButton btn_saveJSON = new JButton("Save and View Binding Data");
     private JPanel viewButtonsHorizontalPanel = new JPanel();
     private JPanel repairedQueryPanel = new JPanel();
     private JTextArea repairedQuery = new JTextArea(4, 80);
@@ -42,6 +42,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
         btn_viewMatches.addActionListener(actionListener);
         btn_saveData.addActionListener(actionListener);
         btn_saveJSON.addActionListener(actionListener);
+        btn_saveJSON.setActionCommand("Save Binding Data");
 
         viewButtonsHorizontalPanel.setLayout(new FlowLayout());
         viewButtonsHorizontalPanel.add(btn_viewProvenance);

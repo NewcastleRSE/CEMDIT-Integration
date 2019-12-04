@@ -16,6 +16,9 @@ import org.apache.log4j.Logger;
 import org.openprovenance.prov.interop.ErrorCodes;
 import org.openprovenance.prov.interop.InteropFramework;
 
+/**
+ * https://lucmoreau.wordpress.com/2017/03/30/prov-template-a-quick-start/
+ */
 public class CommandLineArguments implements ErrorCodes {
 
     static Logger logger=Logger.getLogger(CommandLineArguments.class);
