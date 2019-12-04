@@ -6,6 +6,7 @@ import javax.swing.table.AbstractTableModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * This model sits behind the JTable that displays the data returned by the REST query
@@ -86,6 +87,15 @@ public class IntegrationDataModel extends AbstractTableModel {
                 returnValue += ",";
         }
         return returnValue;
+    }
+
+    public HashMap<String, Object> getRowAsHashMap(int row) {
+        HashMap<String, Object> returnValue = new HashMap();
+        for (int col = 0; col < getColumnCount(); col++) {
+            returnValue.put(getColumnName(col),getValueAt(row, col));
+        }
+        return returnValue;
+
     }
 
     public String getColumnNamesAsCSV() {

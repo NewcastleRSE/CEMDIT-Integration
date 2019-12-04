@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelectionListener {
@@ -355,17 +356,21 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                     File bindingdatafile = new File(file.getAbsolutePath() + "_" + row + ".json");
                                     PrintWriter pw = new PrintWriter(bindingdatafile);
                                     pw.println("{\"var\": {");
-                                    String[] csvrow = integrationDataModel.getRowAsCSV(row).split(",");
-                                    pw.format("\"Sensor\": [{\"@id\":\"uo:%s\"}],\n", csvrow[0]);
-                                    pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[2]);
-                                    pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[3]);
+                                    HashMap<String,Object> hashMap = integrationDataModel.getRowAsHashMap(row);
+                                    //Populate dynamically from HashMap
+//                                    hashMap.forEach((K,V)->{
+//                                        pw.format("\"Sensor\": [{\"@id\":\"uo:%s\"}],\n", hashMap.get(K));
+//                                    });
+                                    pw.format("\"Sensor\": [{\"@id\":\"uo:%s\"}],\n", hashMap.get("sensor"));
+                                    pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("sensor"));
+                                    pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("location"));
                                     pw.format("\"Result\": [{\"@id\":\"uo:result\"}],\n");
-                                    pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[4]);
+                                    pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("value"));
                                     pw.format("\"FeatureOfInterest\": [{\"@id\":\"uo:FeatureOfInterest\"}],\n");
-                                    pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[1]);
-                                    pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", csvrow[0]);
+                                    pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("themeName"));
+                                    pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("typeName"));
                                     pw.format("\"Observation\": [{\"@id\":\"uo:Observation\"}],\n");
-                                    pw.format("\"timestamp\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n", csvrow[5]);
+                                    pw.format("\"timestamp\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n", hashMap.get("timestamp"));
                                     pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
                                     pw.println("}");
                                     pw.close();
