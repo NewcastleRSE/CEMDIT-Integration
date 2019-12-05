@@ -12,7 +12,7 @@ document
 
     entity(var:Result, [value='var:value'])
     entity(var:Procedure)
-    entity(var:FeatureOfInterest, [value='var:theme', value='var:type'])
+    entity(var:FeatureOfInterest, [value='var:theme', value='var:units'])
     activity(var:Observation, [value='var:timestamp'])
     used(var:Observation, var:FeatureOfInterest, -)
     used(var:Observation, var:Procedure, -)

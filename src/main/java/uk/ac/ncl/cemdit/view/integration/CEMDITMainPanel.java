@@ -2,16 +2,15 @@ package uk.ac.ncl.cemdit.view.integration;
 
 import com.google.gson.Gson;
 import org.apache.log4j.Logger;
-import org.openprovenance.prov.interop.InteropFramework;
-import uk.ac.ncl.cemdit.model.InteropParameters;
-import uk.ac.ncl.cemdit.view.ProvenanceExplorer;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.controller.integration.LookupType;
 import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.dao.sqlite.Connector;
+import uk.ac.ncl.cemdit.model.InteropParameters;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.lookupDB.ProvQueryTypes;
+import uk.ac.ncl.cemdit.view.ProvenanceExplorer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -20,10 +19,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelectionListener {
     private Logger logger = Logger.getLogger(CEMDITMainPanel.class);
@@ -356,23 +356,32 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                                     File bindingdatafile = new File(file.getAbsolutePath() + "_" + row + ".json");
                                     PrintWriter pw = new PrintWriter(bindingdatafile);
                                     pw.println("{\"var\": {");
-                                    HashMap<String,Object> hashMap = integrationDataModel.getRowAsHashMap(row);
+                                    LinkedHashMap<String, Object> hashMap = integrationDataModel.getRowAsHashMap(row);
                                     //Populate dynamically from HashMap
-//                                    hashMap.forEach((K,V)->{
-//                                        pw.format("\"Sensor\": [{\"@id\":\"uo:%s\"}],\n", hashMap.get(K));
-//                                    });
-                                    pw.format("\"Sensor\": [{\"@id\":\"uo:%s\"}],\n", hashMap.get("sensor"));
-                                    pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("sensor"));
-                                    pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("location"));
-                                    pw.format("\"Result\": [{\"@id\":\"uo:result\"}],\n");
-                                    pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("value"));
-                                    pw.format("\"FeatureOfInterest\": [{\"@id\":\"uo:FeatureOfInterest\"}],\n");
-                                    pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("themeName"));
-                                    pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("typeName"));
-                                    pw.format("\"Observation\": [{\"@id\":\"uo:Observation\"}],\n");
-                                    pw.format("\"timestamp\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n", hashMap.get("timestamp"));
+                                    //Give elements names starting with a capital and attributes a name start with lower case
+                                    // Use this feature to distinguish between id and value
+                                    Set keys = hashMap.keySet();
+                                    for (Iterator iterator = keys.iterator(); iterator.hasNext();) {
+                                        String K = (String)iterator.next();
+                                        Object V = hashMap.get(K);
+                                        pw.format("\"%s\": [{\"" + ((int)K.toString().charAt(0) < 90
+                                                ?"@id\":\"uo:%s\""
+                                                :"@value\":\"%s\", \"@type\": \"xsd:string\"")
+                                                + "}]" + (iterator.hasNext()?",":"") + "\n", K,V);
+                                    }
+                                    pw.format("},\n");
+//                                    pw.format("\"Sensor\": [{\"@id\":\"uo:%s\"}],\n", hashMap.get("sensor"));
+//                                    pw.format("\"sensorName\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("sensor"));
+//                                    pw.format("\"location\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("location"));
+//                                    pw.format("\"Result\": [{\"@id\":\"uo:result\"}],\n");
+//                                    pw.format("\"value\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("value"));
+//                                    pw.format("\"FeatureOfInterest\": [{\"@id\":\"uo:FeatureOfInterest\"}],\n");
+//                                    pw.format("\"theme\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("themeName"));
+//                                    pw.format("\"type\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}],\n", hashMap.get("typeName"));
+//                                    pw.format("\"Observation\": [{\"@id\":\"uo:Observation\"}],\n");
+//                                    pw.format("\"timestamp\": [{\"@value\": \"%s\", \"@type\": \"xsd:string\"}]},\n", hashMap.get("timestamp"));
                                     pw.println("\"context\":{\"ex\": \"http://example.org/\",\"uo\": \"http://urbanobservatory.ac.uk/\"}");
-                                    pw.println("}");
+                                    pw.println("\n}\"");
                                     pw.close();
                                 }
                                 for (int row = 0; row < rows; row++) {
