@@ -7,10 +7,8 @@ JWI/*
 lib/*
 old/*
 target/.
-server.properties
 *.log
 *.iml
-sqlite/*
 data/UO/OUTPUT
 out/
 target/
