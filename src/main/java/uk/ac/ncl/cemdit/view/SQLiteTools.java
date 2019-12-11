@@ -5,18 +5,20 @@ import com.google.gson.GsonBuilder;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.dao.sqlite.Connector;
-import uk.ac.ncl.cemdit.model.integration.lookupDB.DBEntry;
 import uk.ac.ncl.cemdit.model.integration.lookupDB.LookupDB;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SQLiteTools {
     final static Logger logger = Logger.getLogger(SQLiteTools.class);
     static String filename = "data/lookup.json";
     static String connectionString = "jdbc:sqlite:sqlite/sqlite.db";
-    static String[] types = {"Vehicle Count", "Temperature", "humidity", "PM2.5"};
+    static String[] types = {"PM2.5"};
 
     static public void main(String[] args) {
         /**
