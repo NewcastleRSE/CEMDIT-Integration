@@ -10,14 +10,14 @@ document
     prefix vargen <http://openprovenance.org/vargen#>
     prefix var <http://openprovenance.org/var#>
 
-    entity(var:Result, [value='var:value'])
-    entity(var:Procedure)
-    entity(var:FeatureOfInterest, [value='var:theme', value='var:units'])
-    activity(var:Observation, [value='var:timestamp'])
-    used(var:Observation, var:FeatureOfInterest, -)
-    used(var:Observation, var:Procedure, -)
-    wasAssociatedWith(var:Observation, var:Sensor, -)
-    wasGeneratedBy(var:Result, var:Observation, -)
-    agent(var:Sensor, [value='var:sensorname'])
+    entity(sosa:Result, [value='var:value'])
+    entity(sosa:Procedure, [value='var:template'])
+    entity(sosa:FeatureOfInterest, [value='var:theme', value='var:units'])
+    activity(sosa:Observation, [value='var:timestamp'])
+    used(sosa:Observation, sosa:FeatureOfInterest, -)
+    used(sosa:Observation, sosa:Procedure, -)
+    wasAssociatedWith(sosa:Observation, sosa:Sensor, -)
+    wasGeneratedBy(sosa:Result, sosa:Observation, -)
+    agent(sosa:Sensor, [value='var:sensorname'])
   endBundle
 endDocument
