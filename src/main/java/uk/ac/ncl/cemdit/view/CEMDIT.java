@@ -5,11 +5,16 @@ import uk.ac.ncl.cemdit.controller.ComponentPointers;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.view.integration.CEMDITMainPanel;
+import uk.ac.ncl.cemdit.view.integration.QueryPanel;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class CEMDIT extends JFrame  {
+public class CEMDIT extends JFrame  implements ActionListener, ListSelectionListener {
     private Logger logger = Logger.getLogger(this.getClass());
     ComponentPointers cp = ComponentPointers.getInstance();
 
@@ -17,6 +22,12 @@ public class CEMDIT extends JFrame  {
      * The main panel containing all the other panels
      */
     private CEMDITMainPanel mainPanel ;
+
+    /**
+     * A tabbed pane for all the subpanels
+     */
+    private JTabbedPane tabbedpane = new JTabbedPane();
+
     /**
      * Model for data table
      */
@@ -42,8 +53,10 @@ public class CEMDIT extends JFrame  {
 
 //        Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel,integrationDataModel);
         mainPanel = new CEMDITMainPanel();
-
-        getContentPane().add(mainPanel);
+        QueryPanel queryPanel = new QueryPanel(integrationModel, integrationDataModel, this);
+        tabbedpane.add(queryPanel, "Query");
+//        getContentPane().add(mainPanel);
+        getContentPane().add(tabbedpane);
         pack();
         setVisible(true);
         //setSize(1024, 768);
@@ -54,5 +67,14 @@ public class CEMDIT extends JFrame  {
         CEMDIT mockup = new CEMDIT();
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+
+    }
 }
 
