@@ -9,7 +9,7 @@ public class IntegrationModel {
 
     // String containing the repaired query
     private static String originalQuery = "";
-    // String contining the top ranked query
+    // String containing the top ranked query
     private static String topRankedQuery = "";
     // ArrayList of Query results
     private static ArrayList<QueryResults> queryResults = new ArrayList<>();
