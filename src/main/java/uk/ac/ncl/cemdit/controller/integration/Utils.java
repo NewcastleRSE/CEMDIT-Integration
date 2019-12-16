@@ -31,7 +31,7 @@ public class Utils {
     static private Logger logger = Logger.getLogger(Utils.class);
 
 
-    static public void bindDataToTemplate(InteropParameters interopParameters) {
+    static public boolean bindDataToTemplate(InteropParameters interopParameters) {
         logger.trace(interopParameters.getInfile());
         logger.trace(interopParameters.getOutfile());
         logger.trace(interopParameters.getBindings());
@@ -63,6 +63,7 @@ public class Utils {
                 org.openprovenance.prov.xml.ProvFactory.getFactory());
         try {
             interop.run();
+            return true;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             logger.error(e);
@@ -74,7 +75,7 @@ public class Utils {
             e.printStackTrace();
             logger.error(e);
         }
-
+        return false;
     }
 
     /**
@@ -96,11 +97,12 @@ public class Utils {
         // Add bit to get rid of empty lines.
 
         // Read first line
-        if (lines[0].toLowerCase().equals("document")) {
+        if (lines[0].trim().toLowerCase().equals("document")) {
             sb.append(lines[0]);
             sb.append("\n");
         } else {
             try {
+                logger.debug(lines[0]);
                 throw new InvalidDocumentFormatException("Invalid first line");
             } catch (InvalidDocumentFormatException e) {
                 e.printStackTrace();

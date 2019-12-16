@@ -3,10 +3,8 @@ package uk.ac.ncl.cemdit.model.integration;
 import org.apache.log4j.Logger;
 
 import javax.swing.table.AbstractTableModel;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * This model sits behind the JTable that displays the data returned by the REST query
@@ -89,8 +87,8 @@ public class IntegrationDataModel extends AbstractTableModel {
         return returnValue;
     }
 
-    public HashMap<String, Object> getRowAsHashMap(int row) {
-        HashMap<String, Object> returnValue = new HashMap();
+    public LinkedHashMap<String, Object> getRowAsHashMap(int row) {
+        LinkedHashMap returnValue = new LinkedHashMap();
         for (int col = 0; col < getColumnCount(); col++) {
             returnValue.put(getColumnName(col),getValueAt(row, col));
         }
