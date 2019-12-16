@@ -16,7 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 public class QueryPanel extends JPanel implements ActionListener {
-    private Logger logger = Logger.getLogger(CEMDITMainPanel.class);
+    private Logger logger = Logger.getLogger(QueryPanel.class);
 
     /**
      * Text area containing the original query
@@ -51,16 +51,33 @@ public class QueryPanel extends JPanel implements ActionListener {
      */
     private ButtonGroup buttonGroup = new ButtonGroup();
 
+    /**
+     * Panel for grouping buttons
+     */
+    private JPanel buttonPanel = new JPanel();
+
+    /**
+     * Action listener to use for components
+     */
+    private ActionListener actionListener = this;
+
+    /**
+     * Constructor
+     * @param integrationModel
+     * @param integrationDataModel
+     * @param eventsListener
+     */
+
     public QueryPanel(IntegrationModel integrationModel, IntegrationDataModel integrationDataModel, Object eventsListener) {
 
-//        FlowLayout queryLayout = new FlowLayout();
+        actionListener = (ActionListener) eventsListener;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        queryButton.addActionListener(this);
+        queryButton.addActionListener(actionListener);
         queryTextArea.setLineWrap(true);
         queryTextArea.setText(ComponentPointers.getProperty("query"));
         queryTextArea.setColumns(80);
         queryTextArea.setRows(40);
-        JScrollPane sc_queryTextArea = new JScrollPane();
+        JScrollPane sc_queryTextArea = new JScrollPane(queryTextArea);
         sc_queryTextArea.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         sc_queryTextArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -90,15 +107,55 @@ public class QueryPanel extends JPanel implements ActionListener {
         buttonGroup.add(rest);
         buttonGroup.add(rdf);
         buttonGroup.add(sql);
-        add(provQueryType);
-        add(queryButton);
-        add(rest);
-        add(rdf);
-        add(sql);
+        buttonPanel.add(provQueryType);
+        buttonPanel.add(queryButton);
+        buttonPanel.add(rest);
+        buttonPanel.add(rdf);
+        buttonPanel.add(sql);
+        buttonPanel.add(queryButton);
 
-        add(queryButton);
-        sc_queryTextArea.add(queryTextArea);
-        add(queryTextArea);
+        add(buttonPanel);
+        add(sc_queryTextArea);
+    }
+
+    public JRadioButton getRest() {
+        return rest;
+    }
+
+    public void setRest(JRadioButton rest) {
+        this.rest = rest;
+    }
+
+    public JRadioButton getRdf() {
+        return rdf;
+    }
+
+    public void setRdf(JRadioButton rdf) {
+        this.rdf = rdf;
+    }
+
+    public JRadioButton getSql() {
+        return sql;
+    }
+
+    public void setSql(JRadioButton sql) {
+        this.sql = sql;
+    }
+
+    public JComboBox<String> getProvQueryType() {
+        return provQueryType;
+    }
+
+    public void setProvQueryType(JComboBox<String> provQueryType) {
+        this.provQueryType = provQueryType;
+    }
+
+    public JTextArea getQueryTextArea() {
+        return queryTextArea;
+    }
+
+    public void setQueryTextArea(JTextArea queryTextArea) {
+        this.queryTextArea = queryTextArea;
     }
 
     @Override
