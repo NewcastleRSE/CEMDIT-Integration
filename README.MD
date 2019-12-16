@@ -1,3 +1,9 @@
+# CEMDIT-Integration
+
+* In IntelliJ, add the project as a maven project
+* Set an SDK. If you don't you will be prompted the first time you try to build the project.
+* Add spsm as a library from the directory spsm/spsm-match/lib
+
 # Provenance Explorer
 
 # URLs
