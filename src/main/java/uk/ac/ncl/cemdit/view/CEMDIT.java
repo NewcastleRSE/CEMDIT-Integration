@@ -79,6 +79,7 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
         tabbedpane.add("Query Results", sp_dataPanel);
         getContentPane().add(tabbedpane);
         pack();
+        setTitle("Communication in Emergency Management through Data Integration and Trust");
         setVisible(true);
         //setSize(1024, 768);
         setSize(getWidth(), getHeight());
