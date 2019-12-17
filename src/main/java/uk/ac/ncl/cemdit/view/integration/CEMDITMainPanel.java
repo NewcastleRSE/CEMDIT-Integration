@@ -225,11 +225,11 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                     File dir = new File(System.getProperty("user.home"));
                     // populate the Integration model with the results from the query
                     Utils.populateIntegrationModel(query, integrationModel, integrationDataModel, qtype, this);
-                    resultPanel.getDataPanel().setDataModel(integrationDataModel);
+                    resultPanel.getDataTable().setDataModel(integrationDataModel);
                     //queryTextArea.setText(integrationModel.getOriginalQuery());
                     resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
                     resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
-                    if (resultPanel.getDataPanel().getRowCount() > 0) {
+                    if (resultPanel.getDataTable().getRowCount() > 0) {
                         resultPanel.getBtn_saveData().setEnabled(true);
                         resultPanel.getBtn_saveJSON().setEnabled(true);
                     } else {
@@ -276,7 +276,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                 break;
             case "View Data":
                 setDataPanel();
-                resultPanel.getDataPanel().revalidate();
+                resultPanel.getDataTable().revalidate();
                 this.revalidate();
                 break;
             case "View Matches":

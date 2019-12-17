@@ -24,7 +24,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
     private MatchPanel matchPanel = new MatchPanel();
     private ProvenancePanel provenancePanel = new ProvenancePanel();
     //private GraphStreamPanel graphStreamPanel = new GraphStreamPanel(null);
-    private DataPanel dataPanel = new DataPanel();
+    private DataTable dataTable = new DataTable();
     ;
     private ActionListener actionListener = this;
     private JScrollPane sp_matchPanel;
@@ -33,7 +33,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
 
     public ResultsPanel(IntegrationModel integrationModel, IntegrationDataModel integrationDataModel, Object eventsListener) {
         super();
-        dataPanel.setDataModel(integrationDataModel);
+        dataTable.setDataModel(integrationDataModel);
         actionListener = (ActionListener) eventsListener;
         setLayout(new BorderLayout());
 
@@ -76,7 +76,7 @@ public class ResultsPanel extends JPanel implements ActionListener {
         sp_matchPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         sp_matchPanel.setPreferredSize(new Dimension(900, 250));
 
-        sp_dataPanel = new JScrollPane(dataPanel);
+        sp_dataPanel = new JScrollPane(dataTable);
         sp_dataPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         sp_dataPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         sp_dataPanel.setPreferredSize(new Dimension(900, 250));
@@ -118,8 +118,8 @@ public class ResultsPanel extends JPanel implements ActionListener {
         return repairedQuery;
     }
 
-    public DataPanel getDataPanel() {
-        return dataPanel;
+    public DataTable getDataTable() {
+        return dataTable;
     }
 
     public JButton getBtn_saveData() {

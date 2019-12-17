@@ -50,7 +50,7 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
      * Panel containing all the returned results
      */
     private JScrollPane sp_dataPanel;
-    private DataPanel dataPanel = new DataPanel();
+    private DataTable dataTable = new DataTable();
 
     /**
      * Model for data table
@@ -81,8 +81,8 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
         mainPanel = new CEMDITMainPanel();
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
         queryPanel = new QueryPanel(integrationModel, integrationDataModel, this);
-        dataPanel.setDataModel(integrationDataModel);
-        sp_dataPanel = new JScrollPane(dataPanel);
+        dataTable.setDataModel(integrationDataModel);
+        sp_dataPanel = new JScrollPane(dataTable);
         sp_dataPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         sp_dataPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         sp_dataPanel.setPreferredSize(new Dimension(900, 250));
@@ -122,11 +122,11 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
                         File dir = new File(System.getProperty("user.home"));
                         // populate the Integration model with the results from the query
                         Utils.populateIntegrationModel(query, integrationModel, integrationDataModel, qtype, this);
-                        resultPanel.getDataPanel().setDataModel(integrationDataModel);
+                        resultPanel.getDataTable().setDataModel(integrationDataModel);
                         //queryTextArea.setText(integrationModel.getOriginalQuery());
                         resultPanel.getRepairedQuery().setText(integrationModel.getTopRankedQuery());
                         resultPanel.getMatchPanel().populateMatchPanel(integrationModel.getQueryResults());
-                        if (resultPanel.getDataPanel().getRowCount() > 0) {
+                        if (resultPanel.getDataTable().getRowCount() > 0) {
                             resultPanel.getBtn_saveData().setEnabled(true);
                             resultPanel.getBtn_saveJSON().setEnabled(true);
                         } else {
