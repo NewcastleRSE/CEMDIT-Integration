@@ -306,12 +306,17 @@ public class Utils {
                 // get sensor data from database
                 ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString,query);
                 // the first row should be the column names
-                integrationDataModel.setColumnNames(results.get(0));
-                results.remove(0);
-                results.forEach((line) -> {
-                    data1.add(line);
-                });
-                integrationDataModel.setData(data1);
+                if (results.size() > 0) {
+                    integrationDataModel.setColumnNames(results.get(0));
+                    results.remove(0);
+                    results.forEach((line) -> {
+                        data1.add(line);
+                    });
+                    integrationDataModel.setData(data1);
+                } else {
+                    // TODO - Return some error code to display message to user
+                    logger.debug("No results returned from database");
+                }
                 break;
             default:
                 logger.info("No query specified");
