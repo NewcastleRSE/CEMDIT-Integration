@@ -234,17 +234,13 @@ public class Utils {
                 row1.add(6, "6");
                 data1.add(1, row1);
 
-                String[] tmp = {"Theme", "Sensor Name", "Sensor centroid latitud", "Sensor centroid longitude", "Timestamp", "Units", "Count"};
+                String[] tmp = {"Theme", "Sensor Name", "Sensor centroid latitude", "Sensor centroid longitude", "Timestamp", "Units", "Count"};
                 columnNames = tmp;
                 Class[] tmp2 = {String.class, String.class, Float.class, Float.class, Date.class, String.class, Integer.class};
                 columnClasses = tmp2;
                 integrationDataModel.setColumnNames(columnNames);
                 integrationDataModel.setData(data1);
                 integrationDataModel.setClasses(columnClasses);
-
-
-                System.out.println("Set data.");
-
 
                 integrationModel.setOtherResponses(data);
                 integrationModel.setOriginalQuery("sensor(type(traffic), id, time(154630), measure, location(latitude,longitude), units)");
