@@ -3,6 +3,7 @@ package uk.ac.ncl.cemdit.view;
 
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
+import uk.ac.ncl.cemdit.controller.integration.LookupType;
 import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
@@ -15,6 +16,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Scanner;
 
 public class CEMDIT extends JFrame implements ActionListener, ListSelectionListener {
     private Logger logger = Logger.getLogger(this.getClass());
@@ -34,6 +39,11 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
      * Panel containing the top ranked response (or else the selected response)
      */
     private ResultsPanel resultPanel;
+
+    /**
+     * Panel containing the text area for the query, radio buttons for the query type and
+     * a combobox for selecting the provenance template to be used to bind the results to.
+     */
     private QueryPanel queryPanel;
 
     /**
@@ -127,12 +137,41 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
                         tabbedpane.setSelectedIndex(1);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Select the type of query before running the query.");
+                    JOptionPane.showMessageDialog(this, "Select the provenance template before running the query.");
                 }
                 break;
             case "comboBoxChanged":
 
                 logger.debug("Selected item: " + queryPanel.getProvQueryType().getSelectedItem());
+                break;
+            case "View Prov Template":
+                if (queryPanel.getProvQueryType().getSelectedIndex() > 0) {
+                    ComponentPointers componentPointers = ComponentPointers.getInstance();
+                    try {
+                        // Check in properties file where lookup database is stored
+                        String lookup = ComponentPointers.getProperty("lookupdb");
+                        // What lookup type (i.e. sensor) has been selected from the combo box?
+                        logger.debug("Prov query type: " + queryPanel.getProvQueryType().getSelectedItem().toString());
+                        Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, queryPanel.getProvQueryType().getSelectedItem().toString());
+                        integrationModel.getProvenancePanel().loadGraph(false);
+                        // Get provstore location
+                        InputStream in = new URL(integrationModel.getProvNFilename()).openStream();
+                        componentPointers.setProvnfile(integrationModel.getProvNFilename());
+                        // Read the provn from the provStore
+                        String loadPROVN = Utils.orderFile(new Scanner(in, "UTF-8").useDelimiter("\\A").next());
+                        // Run ProvenanceExplorer
+                        ProvenanceExplorer provenanceExplorer = new ProvenanceExplorer("Provenance Explorer");
+                        provenanceExplorer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                        // load provn into text pane
+                        componentPointers.getTextPanes().getProvN().setText(loadPROVN);
+                        // load graphs into graphic panes
+                        componentPointers.loadProvnFile(new File(ComponentPointers.getProperty("tempdir") + "/temporary.provn"));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Select the provenance template before running the query.");
+                }
                 break;
         }
     }
@@ -142,4 +181,5 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
 
     }
 }
+
 
