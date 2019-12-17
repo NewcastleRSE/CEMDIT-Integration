@@ -47,6 +47,11 @@ public class QueryPanel extends JPanel implements ActionListener {
     private JRadioButton sql = new JRadioButton("SQL");
 
     /**
+     * Radio button to select RDF type query
+     */
+    private JRadioButton chain = new JRadioButton("CHAIn");
+
+    /**
      * Grouping of button
      */
     private ButtonGroup buttonGroup = new ButtonGroup();
@@ -141,6 +146,14 @@ public class QueryPanel extends JPanel implements ActionListener {
 
     public void setSql(JRadioButton sql) {
         this.sql = sql;
+    }
+
+    public JRadioButton getChain() {
+        return chain;
+    }
+
+    public void setChain(JRadioButton chain) {
+        this.chain = chain;
     }
 
     public JComboBox<String> getProvQueryType() {
