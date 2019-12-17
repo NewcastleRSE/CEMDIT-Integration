@@ -26,10 +26,16 @@ public class QueryPanel extends JPanel implements ActionListener {
      * Provenance query types - for looking up provenance
      */
     private JComboBox<String> provQueryType;
+
     /**
      * Button to submit query
      */
     private JButton queryButton = new JButton("Run");
+
+    /**
+     * Button to open provenance explorer with the selected template
+     */
+    private JButton openProvExp = new JButton("View Prov Template");
 
     /**
      * Radio button to select REST type query
@@ -110,15 +116,19 @@ public class QueryPanel extends JPanel implements ActionListener {
                 break;
         }
         provQueryType.addActionListener(actionListener);
+        openProvExp.addActionListener(actionListener);
         buttonGroup.add(rest);
         buttonGroup.add(rdf);
         buttonGroup.add(sql);
+        sql.setSelected(true); //default select sql
         buttonPanel.add(provQueryType);
         buttonPanel.add(queryButton);
         buttonPanel.add(rest);
         buttonPanel.add(rdf);
         buttonPanel.add(sql);
+        buttonPanel.add(chain);
         buttonPanel.add(queryButton);
+        buttonPanel.add(openProvExp);
 
         add(buttonPanel);
         add(sc_queryTextArea);
