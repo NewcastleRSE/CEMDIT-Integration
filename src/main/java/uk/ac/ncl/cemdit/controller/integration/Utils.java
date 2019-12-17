@@ -296,12 +296,11 @@ public class Utils {
 
                 break;
             case SQL:
-
-
                 String connectionString = ComponentPointers.getProperty("datadb"); //"jdbc:sqlite:../UrbanObservatoryBasics/UrbanObservatory.db";
                 // Set headings/column names
                 //String headers = getSensorReadingsHeadings(connectionString);
                 //integrationDataModel.setColumnNames(headers.split(","));
+                logger.trace("Clear data");
                 queryResults.clear();
                 // get sensor data from database
                 ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString,query);
