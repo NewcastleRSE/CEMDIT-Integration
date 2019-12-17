@@ -1,8 +1,27 @@
 # CEMDIT-Integration
 
 * In IntelliJ, add the project as a maven project
-* Set an SDK. If you don't you will be prompted the first time you try to build the project.
-* Add spsm as a library from the directory spsm/spsm-match/lib
+* Set an SDK. If you don't, you will be prompted the first time you try to build the project.
+* Add SPSM as a library from the directory spsm/spsm-match/lib
+
+# GUI structure
+* The GUI has the following panels:
+
+1. Query: A query has to be typed into the text area. The last query entered will be 
+saved to the properties file and reloaded the next time the program runs. A template 
+has to be selected and the type of query that needs to be executed, i.e. REST, RDF, SQL 
+and CHAIn (for the moment). When the "Run" button is pressed the query is executed and
+the results displayed in the "Query Results" tab.
+1. Query Results: The result of an executed query is displayed on this tab in table
+format. The "Bind Data to Template" above the table will bind all the rows in the 
+returned data set to the selected template. The following files are created:
+    2. A .json file for each row
+    2. A .provn file for each row (data bound to provn template)
+    2. An index file of all the .provn files
+    2. A merged provn file
+    2. A flattened merged provn file
+1. Matches: The matches tab display the matches of the returned data and the operator 
+(This is CHAIn stuff that needs to be explained in detail by Heriott-Watt)
 
 # Provenance Explorer
 
