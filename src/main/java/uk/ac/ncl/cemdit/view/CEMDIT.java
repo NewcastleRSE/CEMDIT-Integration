@@ -52,6 +52,9 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
     static private IntegrationModel integrationModel = new IntegrationModel();
 
 
+    /**
+     * Constructor
+     */
     private CEMDIT() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         String logo = "CEMDITLogo3.png";
@@ -64,7 +67,6 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
             logger.error(logo + " not found.");
         }
 
-//        Utils.populateIntegrationModel("sensor(theme(Vehicles),Sensor_name, sensor_centroid_latitude, sensor_centroid_longitude, timestamp, units, count)",integrationModel,integrationDataModel);
         mainPanel = new CEMDITMainPanel();
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
         queryPanel = new QueryPanel(integrationModel, integrationDataModel, this);
@@ -75,7 +77,6 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
         sp_dataPanel.setPreferredSize(new Dimension(900, 250));
         tabbedpane.add("Query", queryPanel);
         tabbedpane.add("Query Results", sp_dataPanel);
-//        getContentPane().add(mainPanel);
         getContentPane().add(tabbedpane);
         pack();
         setVisible(true);
@@ -120,9 +121,16 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
                             resultPanel.getBtn_saveJSON().setEnabled(false);
                         }
                         integrationModel.getProvenancePanel().setLoaded(false);
+                        tabbedpane.setSelectedIndex(1);
                     }
-                    break;
+                } else {
+                    JOptionPane.showMessageDialog(this, "Select the type of query before running the query.");
                 }
+                break;
+            case "comboBoxChanged":
+
+                logger.debug("Selected item: " + queryPanel.getProvQueryType().getSelectedItem());
+                break;
         }
     }
 
