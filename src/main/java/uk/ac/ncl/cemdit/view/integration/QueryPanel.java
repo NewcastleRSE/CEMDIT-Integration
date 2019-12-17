@@ -10,6 +10,7 @@ import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
 import uk.ac.ncl.cemdit.model.integration.lookupDB.ProvQueryTypes;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -68,6 +69,11 @@ public class QueryPanel extends JPanel implements ActionListener {
     private JPanel buttonPanel = new JPanel();
 
     /**
+     * Panel for holding text area
+     */
+    private JPanel textPanel = new JPanel(new BorderLayout());
+
+    /**
      * Action listener to use for components
      */
     private ActionListener actionListener = this;
@@ -86,11 +92,12 @@ public class QueryPanel extends JPanel implements ActionListener {
         queryButton.addActionListener(actionListener);
         queryTextArea.setLineWrap(true);
         queryTextArea.setText(ComponentPointers.getProperty("query"));
-        queryTextArea.setColumns(80);
-        queryTextArea.setRows(40);
+//        queryTextArea.setColumns(80);
+//        queryTextArea.setRows(100);
         JScrollPane sc_queryTextArea = new JScrollPane(queryTextArea);
         sc_queryTextArea.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         sc_queryTextArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        textPanel.add(sc_queryTextArea);
 
         // Find the database where the query types are stored. Get the location in the system.properties file
         // For now it is just stored in a json file
@@ -131,7 +138,7 @@ public class QueryPanel extends JPanel implements ActionListener {
         buttonPanel.add(openProvExp);
 
         add(buttonPanel);
-        add(sc_queryTextArea);
+        add(textPanel);
     }
 
     public JRadioButton getRest() {
