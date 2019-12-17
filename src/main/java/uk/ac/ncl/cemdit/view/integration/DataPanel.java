@@ -2,20 +2,15 @@ package uk.ac.ncl.cemdit.view.integration;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DataPanel extends JPanel{
-    /**
-     * This class won't handle its own events. Use this actionListener to do it.
-     */
-    ActionListener actionListener;
 
-    JPanel buttons = new JPanel();
-    JButton openProvExpl = new JButton("Bind Data to Template");
+    private JPanel buttons = new JPanel();
+    private JButton openProvExpl = new JButton("Bind Data to Template");
 
-    JPanel tablePanel = new JPanel(new BorderLayout());
-    DataTable dataTable = new DataTable();
+    private JPanel tablePanel = new JPanel(new BorderLayout());
+    private DataTable dataTable = new DataTable();
     private JScrollPane sp_dataPanel;
 
 
@@ -24,7 +19,7 @@ public class DataPanel extends JPanel{
      */
     public DataPanel(ActionListener actionListener) {
         super();
-        this.actionListener = actionListener;
+        // This class won't handle its own events. Use this actionListener to do it.
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         openProvExpl.addActionListener(actionListener);
         sp_dataPanel = new JScrollPane(dataTable);
