@@ -49,8 +49,12 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
     /**
      * Panel containing all the returned results
      */
-    private JScrollPane sp_dataPanel;
-    private DataTable dataTable = new DataTable();
+    private DataPanel dataPanel;
+
+    /**
+     * Panel containing all the matches
+     */
+    MatchPanel matchPanel = new MatchPanel();
 
     /**
      * Model for data table
@@ -79,15 +83,13 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
         }
 
         mainPanel = new CEMDITMainPanel();
+        dataPanel = new DataPanel(this);
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
         queryPanel = new QueryPanel(integrationModel, integrationDataModel, this);
-        dataTable.setDataModel(integrationDataModel);
-        sp_dataPanel = new JScrollPane(dataTable);
-        sp_dataPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        sp_dataPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        sp_dataPanel.setPreferredSize(new Dimension(900, 250));
+        dataPanel.getDataTable().setDataModel(integrationDataModel);
         tabbedpane.add("Query", queryPanel);
-        tabbedpane.add("Query Results", sp_dataPanel);
+        tabbedpane.add("Query Results", dataPanel);
+        tabbedpane.add("Matches", matchPanel);
         getContentPane().add(tabbedpane);
         pack();
         setTitle("Communication in Emergency Management through Data Integration and Trust");
