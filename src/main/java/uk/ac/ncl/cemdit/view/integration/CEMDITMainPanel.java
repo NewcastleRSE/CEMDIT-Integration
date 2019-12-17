@@ -114,7 +114,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
         String queryTypesDB = ComponentPointers.getProperty("querydb");
         logger.trace("Where to find available query types: " + queryTypesDB);
         LookupType templateTypes = Enum.valueOf(LookupType.class, ComponentPointers.getProperty("templateLocationType").trim().toUpperCase());
-        System.out.println(templateTypes);
+        logger.trace("Template types: " + templateTypes);
         switch (templateTypes) {
             case SQLITE:
                 provQueryType = new JComboBox<>(Connector.provenanceTemplates(ComponentPointers.getProperty("sqlitedb")));
@@ -250,6 +250,7 @@ public class CEMDITMainPanel extends JPanel implements ActionListener, ListSelec
                         // Check in properties file where lookup database is stored
                         String lookup = ComponentPointers.getProperty("lookupdb");
                         // What lookup type (i.e. sensor) has been selected from the combo box?
+                        logger.debug("Prov query type: " + provQueryType.getSelectedItem().toString());
                         Utils.lookupProvenance(Enum.valueOf(LookupType.class, lookup), integrationModel, provQueryType.getSelectedItem().toString());
                         integrationModel.getProvenancePanel().loadGraph(false);
                         // Get provstore location
