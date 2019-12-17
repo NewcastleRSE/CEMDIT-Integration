@@ -104,6 +104,7 @@ public class QueryPanel extends JPanel implements ActionListener {
                 }
                 break;
         }
+        provQueryType.addActionListener(actionListener);
         buttonGroup.add(rest);
         buttonGroup.add(rdf);
         buttonGroup.add(sql);
