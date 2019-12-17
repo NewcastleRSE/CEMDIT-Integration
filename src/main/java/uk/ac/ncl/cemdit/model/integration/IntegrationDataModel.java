@@ -15,9 +15,7 @@ public class IntegrationDataModel extends AbstractTableModel {
     protected Object[] columnClasses;
     protected String[] columnNames = {};
 
-    // This table model works for any one given directory
     public IntegrationDataModel() {
-        // Store a list of files in the directory
     }
 
     public void setData(ArrayList<ArrayList<Object>> data) {
@@ -39,14 +37,11 @@ public class IntegrationDataModel extends AbstractTableModel {
         return columnNames.length;
     }
 
-    // A constant for this model
     @Override
     public int getRowCount() {
         return data.size();
     }
 
-    // # of files in dir
-    // Information about each column
     @Override
     public String getColumnName(int col) {
         return columnNames[col];
