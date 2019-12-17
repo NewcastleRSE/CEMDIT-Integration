@@ -35,6 +35,7 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
      */
     private ResultsPanel resultPanel;
     private QueryPanel queryPanel;
+
     /**
      * Panel containing all the returned results
      */
@@ -99,6 +100,7 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
                     if (queryPanel.getRdf().isSelected()) qtype = QueryType.RDF;
                     if (queryPanel.getRest().isSelected()) qtype = QueryType.REST;
                     if (queryPanel.getSql().isSelected()) qtype = QueryType.SQL;
+                    if (queryPanel.getChain().isSelected()) qtype = QueryType.CHAIn;
                     logger.debug("Populate model.");
                     String query = queryPanel.getQueryTextArea().getText();
                     if (query == null || query.equals("")) {
