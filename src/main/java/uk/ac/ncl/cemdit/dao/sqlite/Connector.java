@@ -202,37 +202,5 @@ public class Connector {
         return returnValues;
     }
 
-    static public ArrayList<ArrayList<Object>> readSensorData(String connectionstring, String sensorName, String typeName, long startdate, long enddate) {
-        ArrayList<ArrayList<Object>> returnValues = new ArrayList<>();
-        String query = "SELECT sensorName, themeName, typeName, suspect, value, units, timestamp " +
-                "FROM SensorReadings where sensorname='" + sensorName
-                + "' AND typeName='" + typeName
-                + "' AND timestamp>=" + startdate
-                + " AND timestamp<=" + enddate;
-        Connection conn = connect(connectionstring);
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-
-            // loop through the result set
-            while (rs.next()) {
-                ArrayList<Object> reading = new ArrayList<>();
-                reading.add(rs.getObject("sensorName"));
-                reading.add(rs.getObject("themeName"));
-                reading.add(rs.getObject("typeName"));
-                reading.add(rs.getObject("suspect"));
-                reading.add(rs.getObject("value"));
-                reading.add(rs.getObject("units"));
-                reading.add(rs.getObject("timestamp"));
-                returnValues.add(reading);
-            }
-            conn.close();
-        } catch (SQLException e) {
-            logger.error("Error code: " + e.getErrorCode());
-            logger.error(e.getMessage());
-            logger.error(connectionstring);
-        }
-        return returnValues;
-    }
 
 }
