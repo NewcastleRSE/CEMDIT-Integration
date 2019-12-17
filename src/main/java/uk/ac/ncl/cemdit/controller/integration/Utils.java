@@ -177,8 +177,33 @@ public class Utils {
         String[] columnNames;
         Class[] columnClasses;
         ArrayList<QueryResults> queryResults = new ArrayList<>();
+        ArrayList<ArrayList<Object>> results;
 
         switch (queryType) {
+            case CHAIn:
+                // TODO Code to send query to CHAIn should go in here
+                // Clear the existing data from the model
+                queryResults.clear();
+                // get sensor data from database
+                results = new ArrayList<>(); // Populate this with the data from CHAIn
+                // the first row should be the column names
+                if (results.size() > 0) {
+                    // Populate the data model
+                    // The first row should be the column names
+                    integrationDataModel.setColumnNames(results.get(0));
+                    // Remove the first row
+                    results.remove(0);
+                    // Iterate through the rest of the rows and add them to the data
+                    results.forEach((line) -> {
+                        data1.add(line);
+                    });
+                    // Populate the integration model with the data
+                    integrationDataModel.setData(data1);
+                } else {
+                    // TODO - Return some error code to display message to user
+                    logger.debug("No results returned from database");
+                }
+                break;
             case RDF:
 
                 // read data for other results
@@ -297,13 +322,10 @@ public class Utils {
                 break;
             case SQL:
                 String connectionString = ComponentPointers.getProperty("datadb"); //"jdbc:sqlite:../UrbanObservatoryBasics/UrbanObservatory.db";
-                // Set headings/column names
-                //String headers = getSensorReadingsHeadings(connectionString);
-                //integrationDataModel.setColumnNames(headers.split(","));
                 logger.trace("Clear data");
                 queryResults.clear();
                 // get sensor data from database
-                ArrayList<ArrayList<Object>> results = Connector.readSensorData(connectionString,query);
+                results = Connector.readSensorData(connectionString,query);
                 // the first row should be the column names
                 if (results.size() > 0) {
                     integrationDataModel.setColumnNames(results.get(0));
