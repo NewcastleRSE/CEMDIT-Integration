@@ -1,7 +1,7 @@
 package uk.ac.ncl.cemdit.model.integration;
 
 /**
- *
+ * This class is used to hold the CHAIn match result operator
  */
 public class QueryResults {
     private String label;
