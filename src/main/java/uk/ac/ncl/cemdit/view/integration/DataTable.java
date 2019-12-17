@@ -8,9 +8,9 @@ import javax.swing.table.TableModel;
 /**
  * A table for holding and displaying the results returned by a query
  */
-public class DataPanel extends JTable {
+public class DataTable extends JTable {
 
-    public DataPanel() {
+    public DataTable() {
         super();
     }
 
