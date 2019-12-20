@@ -127,6 +127,7 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
                         // populate the Integration model with the results from the query
                         Utils.populateIntegrationModel(query, integrationModel, integrationDataModel, qtype, this);
                         matchPanel.populateMatchPanel(integrationModel.getQueryResults());
+                        matchPanel.getSimilarityScore().setText("Similarity Score: " + integrationModel.getSimilarityScore());
                         integrationModel.getProvenancePanel().setLoaded(false);
                         tabbedpane.setSelectedIndex(1);
                     }

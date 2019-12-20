@@ -7,11 +7,13 @@ public class QueryResults {
     private String label;
     private String operator;
     private String value;
+    private String newoperator;
 
     public QueryResults(String label, String operator, String value) {
         this.label = label;
         this.operator = operator;
         this.value = value;
+        this.newoperator = "";
     }
 
     public String getLabel() {
@@ -36,5 +38,13 @@ public class QueryResults {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getNewoperator() {
+        return newoperator;
+    }
+
+    public void setNewoperator(String newoperator) {
+        this.newoperator = newoperator;
     }
 }

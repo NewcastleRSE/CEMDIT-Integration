@@ -1,5 +1,6 @@
 package uk.ac.ncl.cemdit.view.integration;
 
+import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.model.integration.MatchTableModel;
 import uk.ac.ncl.cemdit.model.integration.QueryResults;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class MatchPanelNew extends JPanel {
+    private Logger logger = Logger.getLogger(this.getClass());
 
     JLabel similarityScore = new JLabel("Similarity Score: " );
 
@@ -32,6 +34,7 @@ public class MatchPanelNew extends JPanel {
         MatchTableModel matchTableModel = new MatchTableModel();
         matchTableModel.setData(queryResults);
         matchTable.setDataModel(matchTableModel);
+        matchTableModel.fireTableStructureChanged();
         matchTable.updateUI();
     }
 

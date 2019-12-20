@@ -2,7 +2,6 @@ package uk.ac.ncl.cemdit.controller.integration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import org.apache.log4j.Logger;
 import org.openprovenance.prov.interop.InteropFramework;
 import uk.ac.ncl.cemdit.controller.ComponentPointers;
@@ -19,12 +18,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-
-import static uk.ac.ncl.cemdit.dao.sqlite.Connector.getSensorReadingsHeadings;
 
 public class Utils {
 
@@ -330,6 +326,8 @@ public class Utils {
                         data1.add(line);
                     });
                     integrationDataModel.setData(data1);
+                    integrationModel.setSimilarityScore(1.0);
+
                 } else {
                     // TODO - Return some error code to display message to user
                     logger.debug("No results returned from database");

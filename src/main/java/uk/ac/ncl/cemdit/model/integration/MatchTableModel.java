@@ -11,6 +11,10 @@ public class MatchTableModel extends AbstractTableModel {
 
     ArrayList<QueryResults> data = new ArrayList<>();
 
+    public MatchTableModel() {
+        super();
+    }
+
     public void setData(ArrayList<QueryResults> data) {
         this.data = data;
     }
@@ -34,6 +38,7 @@ public class MatchTableModel extends AbstractTableModel {
                 return data.get(rowIndex).getOperator();
             case 2:
                 return data.get(rowIndex).getValue();
+
         }
         return null;
     }
