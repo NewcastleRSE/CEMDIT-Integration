@@ -20,9 +20,9 @@ class MatchTable extends JTable {
     /**
      * Set the datamodel for the table
      *
-     * @param matchTableModel
+     * @param matchTableModel A TableModel for the MatchTable
      */
-    public void setDataModel(TableModel matchTableModel) {
+    void setDataModel(TableModel matchTableModel) {
         this.setModel(matchTableModel);
         logger.trace("Cell editor set");
    }
