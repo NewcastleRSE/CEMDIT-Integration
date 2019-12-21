@@ -8,6 +8,7 @@ import uk.ac.ncl.cemdit.controller.integration.Utils;
 import uk.ac.ncl.cemdit.model.InteropParameters;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
+import uk.ac.ncl.cemdit.model.integration.QueryResults;
 import uk.ac.ncl.cemdit.view.integration.*;
 
 import javax.swing.*;
@@ -18,10 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class CEMDIT extends JFrame implements ActionListener, ListSelectionListener {
     private Logger logger = Logger.getLogger(this.getClass());
@@ -56,7 +54,7 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
     /**
      * Panel containing all the matches
      */
-    MatchPanelNew matchPanel = new MatchPanelNew();
+    private MatchPanelNew matchPanel;
 
     /**
      * Model for data table
@@ -89,6 +87,7 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
         resultPanel = new ResultsPanel(integrationModel, integrationDataModel, this);
         queryPanel = new QueryPanel(integrationModel, integrationDataModel, this);
         dataPanel.getDataTable().setDataModel(integrationDataModel);
+        matchPanel = new MatchPanelNew(this);
         tabbedpane.add("Query", queryPanel);
         tabbedpane.add("Query Results", dataPanel);
         tabbedpane.add("Matches", matchPanel);
@@ -185,7 +184,7 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
                                     for (Iterator iterator = keys.iterator(); iterator.hasNext(); ) {
                                         String K = (String) iterator.next();
                                         Object V = hashMap.get(K);
-                                        pw.format("\"%s\": [{\"" + ((int) K.toString().charAt(0) < 90
+                                        pw.format("\"%s\": [{\"" + ((int) K.charAt(0) < 90
                                                 ? "@id\":\"uo:%s\""
                                                 : "@value\":\"%s\", \"@type\": \"xsd:string\"")
                                                 + "}]" + (iterator.hasNext() ? "," : "") + "\n", K, V);
@@ -266,6 +265,13 @@ public class CEMDIT extends JFrame implements ActionListener, ListSelectionListe
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "Select the provenance template before running the query.");
+                }
+                break;
+            case "Re-submit":
+                ArrayList<QueryResults> queryResults = integrationModel.getQueryResults();
+                for (int i = 0; i < queryResults.size(); i++) {
+                    QueryResults queryResult = queryResults.get(i);
+                    // TODO This now has to be linked to CHAIn
                 }
                 break;
         }
