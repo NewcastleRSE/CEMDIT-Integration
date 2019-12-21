@@ -394,7 +394,7 @@ public class Utils {
      * @param in Input stream to be converted.
      * @return Raw data string.
      */
-    public static ArrayList<String> readStream2Array(InputStream in) {
+    static ArrayList<String> readStream2Array(InputStream in) {
         ArrayList<String> returns = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
             String nextLine;
