@@ -107,9 +107,7 @@ public class Utils {
 
         // Read rest of the lines
         for (int l = 1; l < lines.length - 1; l++) {
-            if (lines[l].trim().equals("") || lines[l] == null) {
-                //logger.trace("Omit empty line");
-            }
+
             if (lines[l].trim().toLowerCase().startsWith("entity") ||
                     lines[l].trim().toLowerCase().startsWith("agent") ||
                     lines[l].trim().toLowerCase().startsWith("activity")) {
@@ -126,9 +124,7 @@ public class Utils {
         }
 
         // Read last line
-        if (lines[lines.length - 1].trim().toLowerCase().startsWith("enddocument")) {
-
-        } else {
+        if (!lines[lines.length - 1].trim().toLowerCase().startsWith("enddocument")) {
             try {
                 throw new InvalidDocumentFormatException("Invalid last line");
             } catch (InvalidDocumentFormatException e) {
@@ -211,7 +207,7 @@ public class Utils {
 
                 Date date = new Date();
                 long t = 1546301013;
-                date.setTime((long) t * 1000);
+                date.setTime(t * 1000);
                 row.add(0, "Vehicle");
                 row.add(1, "VEHICLE_COUNT_01");
                 row.add(2, "43.8499984741");
@@ -246,7 +242,7 @@ public class Utils {
                 integrationModel.setSimilarityScore(0.7);
                 queryResults.clear();
                 for (int i = 0; i < sourceLabel.length; i++) {
-                    QueryResults queryResult = new QueryResults(sourceLabel[i], operators[i], targetLabel[i]);
+                    QueryResults queryResult = new QueryResults(sourceLabel[i], operators[i], targetLabel[i], operators[i]=="X"?" ":operators[i]);
                     queryResults.add(queryResult);
                 }
                 integrationModel.setQueryResults(queryResults);
@@ -292,7 +288,7 @@ public class Utils {
                     targetLabel = headers.split(",");
                     //ArrayList<QueryResults> queryResults1 = new ArrayList<>();
                     for (int i = 0; i < sourceLabel.length; i++) {
-                        QueryResults queryResult = new QueryResults(sourceLabel[i], "=", targetLabel[i]);
+                        QueryResults queryResult = new QueryResults(sourceLabel[i], "=", targetLabel[i], "");
                         queryResults.add(queryResult);
                     }
                     // add the retrieved data to the model
