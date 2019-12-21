@@ -9,11 +9,11 @@ public class QueryResults {
     private String value;
     private String newoperator;
 
-    public QueryResults(String label, String operator, String value) {
+    public QueryResults(String label, String operator, String value,String newoperator) {
         this.label = label;
         this.operator = operator;
         this.value = value;
-        this.newoperator = "";
+        this.newoperator = newoperator;
     }
 
     public String getLabel() {
@@ -40,11 +40,11 @@ public class QueryResults {
         this.value = value;
     }
 
-    public String getNewoperator() {
+    String getNewoperator() {
         return newoperator;
     }
 
-    public void setNewoperator(String newoperator) {
+    void setNewoperator(String newoperator) {
         this.newoperator = newoperator;
     }
 }
