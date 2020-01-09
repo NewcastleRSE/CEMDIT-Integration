@@ -4,7 +4,7 @@
 * Set an SDK. If you don't, you will be prompted the first time you try to build the project.
 * Add SPSM as a library from the directory spsm/spsm-match/lib
 
-# GUI structure
+## GUI structure
 * The GUI has the following panels:
 
 1. Query: A query has to be typed into the text area. The last query entered will be 
@@ -23,13 +23,15 @@ returned data set to the selected template. The following files are created:
 1. Matches: The matches tab display the matches of the returned data and the operator 
 (This is CHAIn stuff that needs to be explained in detail by Heriott-Watt)
 
-# Provenance Explorer
+## Configuration
 
-# URLs
-## MongoDB Atlas
+## Provenance Explorer
+
+### URLs
+#### MongoDB Atlas
 https://cloud.mongodb.com
 
-## ProvStore
+#### ProvStore
 https://openprovenance.org/store
 
 ISCRAM Journal
@@ -39,13 +41,13 @@ Tasks before Dec:
 * Full integration of CHAIn with GUI
 * Show provenance template
 
-# MongoDB Database for lookup
+#### MongoDB Database for lookup
 * Set up MongoDB Docker container
 * Create database CEMDIT (use CEMDIT)
 * Insert into COLLECTION:
 > db.COLLECTION.insert({query:'Vehicle Count',type:'ProvTemplate',uri:'https://openprovenance.org/store/documents/498.json'})
 
-# Add SPSM 2.0.0 to local maven repository
+# How to add SPSM 2.0.0 to local maven repository
 
 mvn install:install-file -Dfile=spsm/s-match/lib/s-match-core-2.0.0-SNAPSHOT.jar -Dit.unitn.disi -DartifactId=smatch-core -Dversion=2.0.0 -Dpackaging=jar -DgeneratePom=true
 
