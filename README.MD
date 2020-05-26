@@ -28,6 +28,10 @@ Tasks before Dec:
 
 # Add SPSM 2.0.0 to local maven repository
 
+If, for whatever reason, the lines below do not work, try the lines in the next section:
+
+## Option 1 
+
 mvn install:install-file -Dfile=spsm/s-match/lib/s-match-core-2.0.0-SNAPSHOT.jar -Dit.unitn.disi -DartifactId=smatch-core -Dversion=2.0.0 -Dpackaging=jar -DgeneratePom=true
 
 mvn install:install-file -Dfile=spsm/s-match/lib/s-match-io-2.0.0-SNAPSHOT.jar -Dit.unitn.disi -DartifactId=smatch-io -Dversion=2.0.0 -Dpackaging=jar -DgeneratePom=true
@@ -47,3 +51,21 @@ mvn install:install-file -Dfile=spsm/s-match/lib/s-match-spsm-prolog-2.0.0-SNAPS
 mvn install:install-file -Dfile=spsm/s-match/lib/s-match-utils-2.0.0-SNAPSHOT.jar -Dit.unitn.disi -DartifactId=smatch-utils -Dversion=2.0.0 -Dpackaging=jar -DgeneratePom=true
 
 mvn install:install-file -Dfile=spsm/s-match/lib/s-match-wordnet-2.0.0-SNAPSHOT.jar -Dit.unitn.disi -DartifactId=smatch-wordnet -Dversion=2.0.0 -Dpackaging=jar -DgeneratePom=true
+
+
+## Option 2
+```
+git clone https://github.com/s-match/s-match-parent/
+git clone https://github.com/s-match/s-match-core/
+git clone https://github.com/s-match/s-match-io/
+git clone https://github.com/s-match/s-match-logic/
+git clone https://github.com/s-match/s-match-nlp/
+git clone https://github.com/s-match/s-match-nlp-annotation/
+git clone https://github.com/s-match/s-match-nlp-opennlp/
+git clone https://github.com/s-match/s-match-spsm/
+git clone https://github.com/s-match/s-match-wordnet/
+git clone https://github.com/s-match/s-match-examples/
+git clone https://github.com/s-match/s-match-utils/
+
+for i in s-match-parent s-match-core s-match-io s-match-logic s-match-nlp s-match-nlp-annotation s-match-nlp-opennlp s-match-spsm s-match-wordnet; do cd $i && mvn clean install clean -Dmaven.test.skip && cd ..; done
+```
