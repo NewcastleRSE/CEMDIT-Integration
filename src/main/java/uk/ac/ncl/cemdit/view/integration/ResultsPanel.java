@@ -1,6 +1,4 @@
 package uk.ac.ncl.cemdit.view.integration;
-
-import com.borland.jbcl.layout.VerticalFlowLayout;
 import org.apache.log4j.Logger;
 import uk.ac.ncl.cemdit.model.integration.IntegrationDataModel;
 import uk.ac.ncl.cemdit.model.integration.IntegrationModel;
@@ -82,7 +80,6 @@ public class ResultsPanel extends JPanel implements ActionListener {
         sp_dataPanel.setPreferredSize(new Dimension(900, 250));
         logger.debug("Length of query results: " + integrationModel.getQueryResults().size());
 
-        holdAll.setLayout(new VerticalFlowLayout());
         holdAll.add(sp_matchPanel, 0);
         holdAll.add(provenancePanel, 1);
         holdAll.add(sp_dataPanel, 2);
