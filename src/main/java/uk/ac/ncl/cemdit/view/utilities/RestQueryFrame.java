@@ -17,7 +17,6 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import uk.ac.ncl.cemdit.model.urbanobservatory.Sensor;
 import uk.ac.ncl.cemdit.model.urbanobservatory.vehicles.VehiclesSchema;
 import uk.ac.ncl.cemdit.view.widgets.TextWidget;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,9 +25,14 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.util.Properties;
-
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+/**
+ * @author Jannetta S Steyn
+ * This is a utility program to execute a single query against the Urban Observatory and then enter the results
+ * into a MongoDB database
+ */
 
 public class RestQueryFrame extends JFrame implements ActionListener {
     Logger logger = Logger.getRootLogger();
