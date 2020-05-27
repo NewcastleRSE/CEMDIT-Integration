@@ -3,6 +3,9 @@
 * In IntelliJ, add the project as a maven project
 * Set an SDK. If you don't, you will be prompted the first time you try to build the project.
 * Add SPSM as a library from the directory spsm/spsm-match/lib
+* Before running the CEMDIT class, run Create from the UrbanObservatoryBasics GitHub repository to 
+populate the SQLite database.
+* Make sure the properties in server.properties are set appropriately.
 
 ## GUI structure
 * The GUI has the following panels:
