@@ -1,0 +1,10 @@
+
+SQL example:
+select replace(SensorReadings.typeName,' ','') as Sensor, SensorReadings.typeName as sensor, SensorReadings.themeName, SensorReadings.sensorName,
+sensors.locationWKT, SensorReadings.VALUE, SensorReadings.timestamp,
+sensors.themeName as theme,
+sensors.typeName as type,
+sensorReadings.units
+from SensorReadings
+join sensors on SensorReadings.sensorName=sensors.sensorName and SensorReadings.typeName=sensors.typeName
+where SensorReadings.typeName='Vehicle Count' and timestamp="1542067320000"
