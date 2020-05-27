@@ -24,6 +24,8 @@ returned data set to the selected template. The following files are created:
 (This is CHAIn stuff that needs to be explained in detail by Heriott-Watt)
 
 ## Configuration
+Requires a SQLite database for SQL queries. See project: https://github.com/NewcastleRSE/UrbanObservatoryBasics
+Execute ```insert 1``` and ```insert 2``` to populate database with PM2.5 and vehicle count data
 
 ## Provenance Explorer
 
